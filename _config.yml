@@ -7,4 +7,3 @@ future: true
 jailed: false
 theme: jekyll-theme-midnight
 gfm_quirks: paragraph_end
-show_header: false
