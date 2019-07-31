@@ -3,3 +3,9 @@
 <style/>
 
 ## index file
+
+<table>
+    <tr>
+        <td>Foo</td>
+    </tr>
+</table>
