@@ -5,5 +5,5 @@ kramdown:
  hard_wrap: false
 future: true
 jailed: false
-theme:
+theme: minima
 gfm_quirks: paragraph_end
