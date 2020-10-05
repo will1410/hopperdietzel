@@ -2,6 +2,16 @@
 
 ## Records / Singles
 
+### Since I've Been Loving You [Led Zeppelin](https://open.spotify.com/track/27Mq86KAZ9O4V6DQ6gbSR9?si=P25k-SOiSZK49aEshDkmgg)
+
+Today is the 50th anniversary of the release of LED ZEPPELIN III which I have owned since about 1983 or 1984.  I got a bunch of Led Zeppelin albums when I was in high school from the Columbia Record and Tape Club and this song has always been one of my favorites on this album.  The song was written by     John Paul Jones, Jimmy Page, and Robert Plant.
+
+I've always loved this song, but for me it will also be remembered because, when Persephone was little, I used to sit with her almost every night and rock her to sleep in our apartment in Boise while this song played on our stereo.  It's a perfect dark nighttime songs.  Like most Led Zeppelin songs, it sounds like it was recorded in the middle of the night.  It's also early enough in Led Zeppelin's career that the song on the album could easily be recreated on stage with the exact same instrumentation.  It's just Page, Paul, Plant, and Bonham.  No helpers playing bass or an extra guitar part.  John Paul Jones does play the organ, but he's also playing the bass line on the organ pedals.  Jimmy Page's guitar solo on this song is often on lists of the 100 greatest guitar solos of all time.
+
+Happy anniversary Led Zeppelin III.
+
+2020.10.05
+
 ### Giddyup Do-nut - [Don Bowman](https://www.discogs.com/Don-Bowman-Giddyup-Do-Nut-/master/1668153)
 
 I first encountered this song on the [November 18, 2007, episode of The Doctor Demento Show](http://dmdb.org/cgi-bin/plinfo.pl?drd07.1118.html) which you can stream at [his website](https://www.drdemento.com/online.html?c=2007&s=s) for $3.00.  The song was written by Don Bowman, Noel Confer, Red Sovine, and Tommy Hill and it's a parody of "Giddy Up Go" by Red Sovine.
