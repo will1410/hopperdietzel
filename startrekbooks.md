@@ -5,231 +5,106 @@
 - January
   - STAR TREK 1
   - James Blish
-- February
-- March
-- April
-- May
-- June
-- July
-- August
-- September
-- October
-- November
-- December
 
 ## 1968
 
-- January
 - February
   - STAR TREK 2
   - James Blish
-- March
-- April
-- May
-- June
-- July
-- August
-- September
-- October
-- November
-- December
 
-- -
+- Date unclear
   - MISSION TO HORATIUS
   - Mack Reynolds
 
 ## 1969
 
-- January
-- February
-- March
 - April
   - STAR TREK 3
   - James Blish
-- May
-- June
-- July
-- August
-- September
-- October
-- November
-- December
 
 ## 1970
 
 - January
   - SPOCK MUST DIE!
   - James Blish
-- February
-- March
-- April
-- May
-- June
-- July
-- August
-- September
-- October
-- November
-- December
 
 ## 1971
 
-- January
-- February
-- March
-- April
-- May
-- June
 - July
   - STAR TREK 4
   - James Blish
-- August
-- September
-- October
-- November
-- December
 
 ## 1972
 
-- January
 - February
   - STAR TREK 5
   - James Blish
-- March
 - April
   - STAR TREK 6
   - James Blish
-- May
-- June
 - July
   - STAR TREK 7
   - James Blish
-- August
-- September
-- October
 - November
   - STAR TREK 8
   - James Blish
-- December
 
 ## 1973
 
-- January
-- February
-- March
-- April
-- May
-- June
-- July
 - August
   - STAR TREK 9
   - James Blish
-- September
-- October
-- November
-- December
 
 ## 1974
 
-- January
 - February
   - STAR TREK 10
   - James Blish
-- March
-- April
-- May
-- June
-- July
-- August
-- September
-- October
-- November
-- December
 
 ## 1975
 
-- January
-- February
-- March
 - April
   - STAR TREK 11
   - James Blish
-- May
-- June
-- July
-- August
-- September
-- October
-- November
-- December
 
 ## 1976
 
-- January
-- February
 - March
   - STAR TREK: THE NEW VOYAGES
   - edited by Sondra Marshak and Myrna Culbreath
-- April
-- May
-- June
-- July
-- August
-- September
-- October
-- November
-- December
 
-- -
+- Date unclear
   - SPOCK, MESSIAH!
   - Theodore R. Cogswell and Charles A. Spano, Jr.
 
 ## 1977
 
-- January
-- February
-- March
-- April
-- May
-- June
 - July
   - THE PRICE OF THE PHOENIX
   - Sondra Marshak and Myrna Culbreath
 - August
   - PLANET OF JUDGEMENT
   - Joe Haldeman
-- September
-- October
 - November
   - STAR TREK 12
   - James Blish with J.A. Lawrence
 
   - FOTONOVEL: THE CITY ON THE EDGE OF FOREVER
 
-- December
-
 ## 1978
 
 - January
   - STAR TREK: THE NEW VOYAGES 2
   - edited by Sondra Marshak and Myrna Culbreath
-- February
-- March
-- April
 - May
   - MUDD'S ANGELS
   - J.A. Lawrence
-- June
-- July
-- August
 - September
   - VULCAN!
   - Kathleen Sky
-- October
 - November
   - THE STARLESS WORLD
   - Gordon Eklund
-- December
 
 ## 1979
 
@@ -239,101 +114,96 @@
 - February
   - WORLD WITHOUT END
   - Joe Haldeman
-- March
-- April
 - May
   - THE FATE OF THE PHOENIX
   - Sondra Marshak and Myrna Culbreath
-- June
-- July
-- August
-- September
-- October
 - November
   - DEVIL WORLD
   - Gordon Eklund
 - December
+  - STAR TREK: THE MOTION PICTURE
+  - Gene Roddenberry
 
 ## 1980
 
-- January
 - February
   - PERRY'S PLANET
   - Jack C. Haldeman II
-- March
-- April
-- May
-- June
-- July
-- August
-- September
 - October
   - THE GALACTIC WHIRLPOOL
   - David Gerrold
-- November
-- December
 
 ## 1981
 
-- January
-- February
-- March
 - April
   - DEATH'S ANGEL
   - Kathleen Sky
-- May
 - June
-- July
-- August
-- September
+  - THE ENTROPY EFFECT
+  - Vonda N. McIntyre
 - October
-- November
+  - THE KLINGON GAMBIT
+  - Robert E. Vardman
 - December
+  - THE COVENANT OF THE CROWN
+  - Howard Weinstein
 
 ## 1982
 
-- January
-- February
 - March
-- April
+  - THE PROMETHEUS DESIGN
+  - Sondra Marshak and Myrna Culbreath
 - May
-- June
+  - THE ABODE OF LIFE
+  - Lee Corey
 - July
-- August
-- September
-- October
-- November
-- December
+  - STAR TREK II: THE WRATH OF KHAN
+  - Vonda N. McIntyre
 
 ## 1983
 
 - January
-- February
+  - BLACK FIRE
+  - Sonni Cooper
 - March
-- April
-- May
+  - TRIANGLE
+  - Sondra Marshak and Myrna Culbreath
 - June
-- July
+  - WEB OF THE ROMULANS
+  - M.S. Murdock
 - August
-- September
+  - YESTERDAY'S SON
+  - A.C. Crispin
 - October
-- November
+  - MUTINY ON THE ENTERPRISE
+  - Robert E. Vardeman
 - December
+  - THE WOUNDED SKY
+  - Diane Duane
 
 ## 1984
 
-- January
-- February
 - March
+  - THE TRELLISANE CONFRONTATION
+  - David Dvorkin
 - April
+  - CORONA
+  - Greg Bear
 - May
+  - THE FINAL REFLECTION
+  - John M. Ford
 - June
+  - STAR TREK III: THE SEARCH FOR SPOCK
+  - Vonda N. McIntyre
 - July
-- August
+  - MY ENEMY, MY ALLY
+  - Diane Duane
 - September
-- October
+  - THE TEARS OF THE SINGERS
+  - Melinda Snodgrass
 - November
-- December
+  - THE VULCAN ACADEMY MURDERS
+  - Jean Lorrah
 
 ## 1985
 
