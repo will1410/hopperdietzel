@@ -88,23 +88,45 @@
 - November
   - STAR TREK 12
   - James Blish with J.A. Lawrence
-
+- November
   - FOTONOVEL: THE CITY ON THE EDGE OF FOREVER
+- December
+  - FOTONOVEL: WHERE NO MAN HAS GONE BEFORE
+- December
+  - FOTONOVEL: THE TROUBLE WITH TRIBBLES
 
 ## 1978
 
 - January
   - STAR TREK: THE NEW VOYAGES 2
   - edited by Sondra Marshak and Myrna Culbreath
+- January
+  - FOTONOVEL: A TASTE OF ARMAGEDDON
+- February
+  - FOTONOVEL: METAMORPHOSIS
+- March
+  - FOTONOVEL: ALL OUR YESTERDAYS
 - May
   - MUDD'S ANGELS
   - J.A. Lawrence
+- May
+  - FOTONOVEL: THE GALILELO 7
+- June
+  - FOTONOVEL: A PIECE OF THE ACTION
+- July
+  - FOTONOVEL: THE DEVIL IN THE DARK
 - September
   - VULCAN!
   - Kathleen Sky
+- September
+  - FOTONOVEL: THE DEADLY YEARS
+- October
+  - FOTONOVEL: AMOK TIME
 - November
   - THE STARLESS WORLD
   - Gordon Eklund
+- December
+  - FOTONOVEL: DAY OF THE DOVE
 
 ## 1979
 
@@ -129,6 +151,8 @@
 - February
   - PERRY'S PLANET
   - Jack C. Haldeman II
+- April
+  - STAR TREK: THE MOTION PICTURE - THE PHOTOSTORY
 - October
   - THE GALACTIC WHIRLPOOL
   - David Gerrold
@@ -159,6 +183,8 @@
 - July
   - STAR TREK II: THE WRATH OF KHAN
   - Vonda N. McIntyre
+- Auguts
+  - STAR TREK II: THE WRATH OF KHAN PHOTOSTORY
 
 ## 1983
 
@@ -208,29 +234,44 @@
 ## 1985
 
 - January
-- February
+  - UHURA'S SONG
+  - Janet Kagan
 - March
-- April
+  - SHADOW LORD
+  - Laurence Yep
 - May
-- June
+  - ISHMAEL
+  - Barbara Hambly
 - July
-- August
+  - KILLING TIME
+  - Della Van Hise
 - September
-- October
+  - DWELLERS IN THE CRUCIBLE
+  - Margaret Wander Bonanno
 - November
-- December
+  - PAWNS AND SYMBOLS
+  - Majliss Larson
 
 ## 1986
 
 - January
-- February
+  - MINDSHADOW
+  - J.M. Dillard
 - March
-- April
+  - CRISIS ON CENTAURUS
+  - Brad Ferguson
 - May
-- June
+  - DREADNOUGHT!
+  - Diane Carey
 - July
+  - DEMONS
+  - J.M. Dillard
 - August
+  - BATTLESTATIONS!
+  - Diane Carey
 - September
+  - ENTERPRISE: THE FIRST ADVENTURE
+  - Vonda N. McIntyre
 - October
 - November
 - December
@@ -239,75 +280,127 @@
 
 - January
 - February
+  - CHAIN OF ATTACK
+  - Gene DeWeese
 - March
 - April
+  - DEEP DOMAIN
+  - Howard Weinstein
 - May
 - June
+  - DREAMS OF THE RAVEN
+  - Carmen Carter
 - July
 - August
+  - THE ROMULAN WAY
+  - Diane Duane AND Peter Morwood
 - September
 - October
+  - HOW MUCH FOR JUST THE PLANET?
+  - John M. Ford
 - November
 - December
+  - BLOODTHIRST
+  - J.M. Dillard
 
 ## 1988
 
 - January
 - February
+  - THE IDIC EPICEMIC
+  - Jean Lorrah
 - March
 - April
+  - Time for Yesterday
+  - A.C. Crispin
 - May
 - June
+  - TIMETRAP
+  - David Dvorkin
 - July
 - August
+  - THE THREE-MINUTE UNIVERSE
+  - Barbara Paul
 - September
 - October
+  - MEMORY PRIME
+  - Gar and Judith Reeves-Stevens
 - November
 - December
+  - The Final Nexus
+  - Gene DeWeese
 
 ## 1989
 
 - January
 - February
+  - VULCAN'S GLORY
+  - D.C. Fontana
 - March
 - April
+  - DOUBLE, DOUBLE
+  - Michael Jan Friedman
 - May
 - June
 - July
 - August
 - September
 - October
+  - THE CRY OF THE ONLIES
+  - Judy Klass
 - November
 - December
+  - THE KOBAYASHI MARU
+  - Julia Ecklar
 
 ## 1990
 
 - January
 - February
+  - Rules of Engagement
+  - Peter Morwood
 - March
 - April
+  - THE PANDORA PRINCIPLE
+  - Carolyn Clowes
 - May
 - June
+  - Doctor's Orders
+  - Diane Duane
 - July
 - August
 - September
 - October
+  - ENEMY UNSEEN
+  - V.E. Mitchell
 - November
 - December
+  - HOME IS THE HUNTER
+  - Dana Kramer-Rolls
 
 ## 1991
 
 - January
 - February
+  - GHOST WALKER
+  - Barbara Hambly
 - March
 - April
+  - A FLAG FULL OF STARS
+  - Brad Ferguson
 - May
 - June
+  - RENEGADE
+  - Gene DeWeese
 - July
 - August
+  - LEGACY
+  - Michael Jan Friedman
 - September
 - October
 - November
+  - THE RIFT
+  - Peter David
 - December
 
 ## 1992
@@ -315,60 +408,98 @@
 - January
 - February
 - March
+  - FACES OF FIRE
+  - Michael Jan Friedman
 - April
 - May
+  - THE DISINHERITED
+  - Peter David, Michael Jan Friedman, and Robert Greenberger
 - June
 - July
+  - ICE TRAP
+  - L.A. Graf
 - August
 - September
+  - SANCTUARY
+  - John Vornholt
 - October
 - November
+  - DEATH COUNT
+  - L.A. Graf
 - December
 
 ## 1993
 
 - January
 - February
+  - SHELL GAME
+  - Melissa Crandall
 - March
 - April
+  - THE STARSHIP TRAP
+  - Mel Gilden
 - May
 - June
+  - WINDOWS ON A LOST WORLD
+  - V.E. Mitchell
 - July
 - August
+  - FROM THE DEPTHS
+  - Victor Milan
 - September
 - October
+  - THE GREAT STARSHIP RACE
+  - Diane Carey
 - November
 - December
 
 ## 1994
 
 - January
+  - FIRESTORM
+  - L.A. Graf
 - February
 - March
 - April
+  - THE PATRIAN TRANSGRESSION
+  - Simon Hawke
 - May
 - June
+  - TRAITOR WINDS
+  - L.A. Graf
 - July
 - August
 - September
+  - CROSSROAD
+  - Barbara Hambly
 - October
 - November
 - December
+  - THE BETTER MAN
+  - Howard Weinstein
 
 ## 1995
 
 - January
 - February
 - March
+  - RECOVERY
+  - J.M. Dillard
 - April
 - May
 - June
+  - THE FEARFUL SUMMONS
+  - Denny Martin Flinn
 - July
 - August
+  - FIRST FRONTIER
+  - Diane Carey and Dr. James I. Kirkland
 - September
 - October
 - November
 - December
+  - THE CAPTAIN'S DAUGHTER
+  - Peter David
 
 ## 1996
 
