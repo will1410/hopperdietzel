@@ -1,6 +1,6 @@
 # George H. Williams
 
-## [See my presentations here](/presentations/index.html)
+## [See my presentations here](/presentations.html)
 
 ## Records / Singles
 
