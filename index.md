@@ -1,6 +1,6 @@
 # George H. Williams
 
-##[See my presentations here](https://open.spotify.com/track/7MTX3vevnm41xuEoPxWT3j?si=f7c849e2a3d440e2)
+## [See my presentations here](/presentations/index.html)
 
 ## Records / Singles
 
