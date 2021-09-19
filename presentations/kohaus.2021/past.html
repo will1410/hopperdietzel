@@ -31,6 +31,14 @@
 			width: 50%;
 			padding: 5px;
 		}
+
+		.reveal .slides section .fragment.step-fade-in-then-out {
+			opacity: 0;
+			display: none; }
+			.reveal .slides section .fragment.step-fade-in-then-out.current-fragment {
+			opacity: 1;
+			display: inline; }
+
 	</style>
 </head>
 
@@ -45,21 +53,21 @@
 				<section>
 					<h2>Future of past data<br />- or -<br />Is there a report that can show me checkouts by Zip code for the past 5 years?</h2><br />
 					<h3>Strategies for keeping meaningful data while getting rid of unneeded details.</h3>
-					<aside class="notes">In case you didn't get it there from the introduction, I'm going to be talking about data.</aside>
+					<aside class="notes">Hello everybody, I'm George Williams</aside>
 				</section>
 
 				<section id="slide-me1">
 					<h2>George Williams</h2><br />
 					<h3>Next Search Catalog Coordinator<br /><a href="https://www.nekls.org" target="_blank">Northeast Kansas Library System </a></h3><br />
 					<h3>koha-US member and Past President <a href="https://www.koha-us.org" target="_blank">www.koha-us.org</a></h3>
-					<aside class="notes">Hello, I'm George Williams</aside>
+					<aside class="notes">In case you didn't get it there from the introduction, I'm going to be talking about data.</aside>
 				</section>
 
 				<section id="usa">
 					<h2>USA - Kansas is in the middle.</h2>
 					<img src="./images/usa.jpg" alt="USA" height="300">
 					<p>I am the Next Search Catalog Coordinator at<br />Northeast Kansas Library System in Lawrence, KS.</p>
-					<aside class="notes">I am the Next Search Catalog Coordinator at Northeast Kansas Library System in Lawrence, KS, which is also known as NEKLS.</aside>
+					<aside class="notes">To introduce myself, I am the Next Search Catalog Coordinator at Northeast Kansas Library System in Lawrence, KS, which is also known as NEKLS.</aside>
 				</section>
 
 				<section id="kansas">
@@ -67,14 +75,14 @@
 					<img src="./images/kansas030.jpg" alt="Kansas" height="300">
 					<p>NEKLS provides many services to all types of libraries in north east Kansas.</p>
 					<p>The 14 highlighted counties account for approximately 44% of the population of Kansas.</p>
-					<aside class="notes">A lot of people in the Koha community think NEKLS=the shared catalog we operate here.  But NEKLS is actually a regional library system as established in the late 60s by Kansas law and we have 117 member libraries in the 14 counties in the upper right hand corner of the state where Kansas, Nebraska, and Missouri all meet along the Missouri River.</aside>
+					<aside class="notes">A lot of people in the Koha community think NEKLS *is* the shared catalog we operate here.  But NEKLS is actually a regional library system as established in the late 60s by Kansas law and we have 117 member libraries in the 14 counties in the upper right hand corner of the state where Kansas, Nebraska, and Missouri all meet along the Missouri River.</aside>
 				</section>
 
 				<section id="next">
 					<h2>Next Search Catalog<br />(used to be called NExpress)</h2>
 					<img src="./images/0010.png" alt="Next Search Catalog logo" height="300">
-					<p>Next Search Catalog is only one of the services NEKLS provides.<br />51 of our member libraries participate in our shared catalog.</p>
-					<aside class="notes">Of those 117 libraries, only 52 of those libraries participate in Next Search Catalog and out of the 10 employees at NEKLS, I'm the only one who has 100% of their time devoted to Next Search Catalog and Koha.</aside>
+					<p>Next Search Catalog is only one of the services NEKLS provides.<br />52 of our member libraries participate in our shared catalog.</p>
+					<aside class="notes">Of those 117 libraries, only 52 of those libraries participate in Next Search Catalog and out of the 11 employees at NEKLS, I'm the only one who has 100% of their time devoted to Next Search Catalog and Koha.</aside>
 				</section>
 
 				<section id="koha">
@@ -101,6 +109,685 @@
 				</section>
 
 <!-- Presentation content starts here -->
+
+				<section>
+					<h2>datum, dati - 2nd declension noun (neuter)</h2><br />
+					<h3>Latin - gift, present | in English it becomes "a given"</h3>
+					<table>
+					<tbody>
+					  <tr>
+					    <td class="tg-9gth">Case<br></td>
+					    <td class="tg-0pky">Singular</td>
+					    <td class="tg-0pky">Plural</td>
+					  </tr>
+					  <tr>
+					    <td class="tg-0pky">Nomnative</td>
+					    <td class="tg-0pky">datum</td>
+					    <td class="tg-0pky">data</td>
+					  </tr>
+					  <tr>
+					    <td class="tg-0pky">Genitive</td>
+					    <td class="tg-0pky">dati</td>
+					    <td class="tg-0pky">datorum</td>
+					  </tr>
+					  <tr>
+					    <td class="tg-0pky">Dative<br></td>
+					    <td class="tg-0pky">dato</td>
+					    <td class="tg-0pky">datis</td>
+					  </tr>
+					  <tr>
+					    <td class="tg-0pky">Accusative</td>
+					    <td class="tg-0pky">datum</td>
+					    <td class="tg-0pky">data</td>
+					  </tr>
+					  <tr>
+					    <td class="tg-0pky">Ablative</td>
+					    <td class="tg-0pky">dato</td>
+					    <td class="tg-0pky">datis</td>
+					  </tr>
+					  <tr>
+					    <td class="tg-0pky">Vocative</td>
+					    <td class="tg-0pky">datum</td>
+					    <td class="tg-0pky">data</td>
+					  </tr>
+					</tbody>
+					</table>
+					<aside class="notes">And like I said before, i'm going to be talking today about data</aside>
+				</section>
+
+				<section>
+					<section>
+						<h2>Main set of reports</h2>
+						<ul>
+							<li><a href="https://github.com/northeast-kansas-library-system/nextkansas.sql/blob/master/R.003418.sql" target="_blank">Monthly 110 Monthly statistics master - Items and holdings</a></li>
+							<li><a href="https://github.com/northeast-kansas-library-system/nextkansas.sql/blob/master/R.003419.sql" target="_blank">Monthly 111 Monthly statistics master - Circulation</a></li>
+							<li><a href="https://github.com/northeast-kansas-library-system/nextkansas.sql/blob/master/R.003420.sql" target="_blank">Monthly 112 Monthly statistics master - Borrowers</a></li>
+							<li><a href="https://github.com/northeast-kansas-library-system/nextkansas.sql/blob/master/R.003421.sql" target="_blank">Monthly 113 Monthly statistics master - ILL Loans and borrows</a></li>
+							<li><a href="https://github.com/northeast-kansas-library-system/nextkansas.sql/blob/master/R.003422.sql" target="_blank">Monthly 114 Monthly statistics master - Biblios total</a></li>
+						</ul>
+						<aside class="notes">And how I collect statistical data;  These are some of the reports I use and each of these is a link.  If you look at the presentation after it's over you can click on the links and they'll take you to my github site where you can see the SQL for all of these reports.</aside>
+					</section>
+
+					<section>
+						<h2>Reports for circulation by different categories</h2>
+						<ul>
+							<li><a href="https://github.com/northeast-kansas-library-system/nextkansas.sql/blob/master/R.003393.sql" target="_blank">Monthly 210 Circulation statistics by item type</a></li>
+							<li><a href="https://github.com/northeast-kansas-library-system/nextkansas.sql/blob/master/R.003394.sql" target="_blank">Monthly 220 Circulation statistics by collection code</a></li>
+							<li><a href="https://github.com/northeast-kansas-library-system/nextkansas.sql/blob/master/R.003505.sql" target="_blank">Monthly 230 Circulation by borrower's zipcode</a></li>
+							<li><a href="https://github.com/northeast-kansas-library-system/nextkansas.sql/blob/master/R.003499.sql" target="_blank">Monthly 240 Hourly statistics</a></li>
+							<li>*Circulation by borrower category coming in 2022*</li>
+						</ul>
+						<aside class="notes">These are reports for circulation by item type, collection code, and borrower zipcode</aside>
+					</section>
+
+					<section>
+						<h2>Reports for Borrower usage, item counts, and requests</h2>
+						<ul>
+							<li><a href="https://github.com/northeast-kansas-library-system/nextkansas.sql/blob/master/R.003355.sql" target="_blank">Monthly 310 Monthly unique borrower usage count by date</a></li>
+							<li><a href="https://github.com/northeast-kansas-library-system/nextkansas.sql/blob/master/R.003530.sql" target="_blank">Monthly 410 Item count by library and item type</a></li>
+							<li><a href="https://github.com/northeast-kansas-library-system/nextkansas.sql/blob/master/R.003537.sql" target="_blank">Monthly 420 Item count by library and collection code</a></li>
+							<li><a href="https://github.com/northeast-kansas-library-system/nextkansas.sql/blob/master/R.002975.sql" target="_blank">Monthly 510 Monthly requests</a></li>
+						</ul>
+						<aside class="notes">These are for borrower usage, item counts, and reqeusts</aside>
+					</section>
+
+					<section>
+						<h2>Reports for local item checkout, net lending/borrowing, and borrower counts</h2>
+						<ul>
+							<li><a href="https://github.com/northeast-kansas-library-system/nextkansas.sql/blob/master/R.00.sql" target="_blank">Monthly 610 Local checkouts and renewals last month by Item type</a></li>
+							<li><a href="https://github.com/northeast-kansas-library-system/nextkansas.sql/blob/master/R.00.sql" target="_blank">Monthly 615 Local checkouts and renewals last month by Collection code</a></li>
+							<li><a href="https://github.com/northeast-kansas-library-system/nextkansas.sql/blob/master/R.00.sql" target="_blank">Monthly 620 Net borrows</a></li>
+							<li><a href="https://github.com/northeast-kansas-library-system/nextkansas.sql/blob/master/R.00.sql" target="_blank">Monthly Borrower count by category</a></li>
+							<li><a href="https://github.com/northeast-kansas-library-system/nextkansas.sql/blob/master/R.00.sql" target="_blank">Monthly borrower count by zipcode</a></li>
+						</ul>
+						<aside class="notes">And these are for local item checkout counts, net lending/borrowing, and borrower counts.</aside>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>I use Excel to make the reports presentable and saveable</h2>
+						<img src="./images/past.00010.png" alt="Statistics 2021 tab on staff client" height="300">
+						<p>12 Excel workbooks with a variety of annual statistics</p>
+						<aside class="notes">And how I present and store statistical data for our member libraries.</aside>
+					</section>
+					<section>
+						<h2>Current Next Search Catalog main statistics</h2>
+						<ul>
+							<li><a href="https://drive.google.com/uc?id=14MOrtv7HVX0tfHpKhCPHIEESjsFMZzts&export=download">2021 general statistics</a></li>
+							<li><a href="https://drive.google.com/uc?id=1-sJi279Fr0sUbxvJm3aEQNLYELhT_U87&export=download">2020/2021 fiscal year general statistics</a></li>
+							<li><a href="https://drive.google.com/uc?id=17xbjWF5KRzI8ZdjTdiHlAqPA3dYGxU24&export=download">2021/2022 fiscal year general statistics</a></li>
+						</ul>
+						<aside class="notes"></aside>
+					</section>
+					<section>
+						<h2>Current Next Search Catalog detailed circulation statistics</h2>
+						<ul>
+							<li><a href="https://drive.google.com/uc?id=15AXs0cIpM87y_PjAxt1oetM-r2bUSvmi&export=download">2021 circulation by item type</a></li>
+							<li><a href="https://drive.google.com/uc?id=15CU4wsuzgq5YWLT4imeBFdNEzXKpb6hx&export=download">2021 circulation by collection code</a></li>
+							<li><a href="https://drive.google.com/uc?id=13UBGOariDNwzQhc2szQGHiJTCHSuuaYL&export=download">2021 circulation by borrower zipcode (only 1/2 year)</a></li>
+							<li><a href="https://drive.google.com/uc?id=139xOM7d2T1UwQ88k17AWFb73QjtLWIka&export=download">2021 hourly statistics</a></li>
+						</ul>
+						<aside class="notes"></aside>
+					</section>
+					<section>
+						<h2>Current Next Search Catalog detailed borrower, holdings, and item statistics</h2>
+						<ul>
+							<li><a href="https://drive.google.com/uc?id=13I9WYfMjOX_RNuomvAaRWaOv2Js41_Py&export=download">2021 daily borrower count</a></li>
+							<li><a href="https://drive.google.com/uc?id=1470WQIhQR5SxW4hMPzvpROxgxjLeITX4&export=download">2021 item count by item type</a></li>
+							<li><a href="https://drive.google.com/uc?id=147feSJykCEv-9138XWWPQNydZAsc44et&export=download">2021 item count by collection code</a></li>
+						</ul>
+						<aside class="notes"></aside>
+					</section>
+					<section>
+						<h2>Current Next Search Catalog detailed request and resource sharing statistics</h2>
+						<ul>
+							<li><a href="https://drive.google.com/uc?id=14yFCA4Hq4_59T1OMQbTEhCv9GjeV-4QS&export=download">2021 request statistics</a></li>
+							<li><a href="https://drive.google.com/uc?id=13PVGbmSSJHo1UasuNG-p52FSoV8z2b4T&export=download">2021 local circulation by item type</a></li>
+							<li><a href="https://drive.google.com/uc?id=13P7hACN3bppYJub0bG171X-jawg-P1V6&export=download">2021 local circulation by collection code</a></li>
+							<li><a href="https://drive.google.com/uc?id=15CvPo--T85oVo-QG7CyUdhhqyh9lBEGX&export=download">2021 Net borrower/net lender statistics</a></li>
+						</ul>
+						<aside class="notes"></aside>
+					</section>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p>What to save, what not to save</p>
+					<aside class="notes">Koha can save a ton of data, but there can be limitations on what you save in Koha and what you can do with old data that's saved in Koha.  It's not a bad idea to come up with a strategy for what to save and what not to save and how and when to collect the statistical data you might want in the future while the data is still *Fresh*</aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p>Need a milk expiration photo</p>
+					<aside class="notes"> - and I'll talk about *Fresh* data in a few minutes -</aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p>Find a way</p>
+					<aside class="notes"> But you're going to want to find a way to summarize and store your statistical data outside of Koha so that you can easily access good data when you need it.  I'll be mostly talking about my experiences at Next Search Catalog and the SQL and Excel spreadsheets I use to help our member libraries answer questions about their data and the data of their borrowers.</aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p>Why I'm doing this - 2 threads</p>
+					<aside class="notes">The origin of this presentation follows two different threads.  As long as I have been at NEKLS one of my responsibilities is to gather and present monthly statistics to our Next Search Catalog members.  6 years ago, my predecessor was doing this by running 6 or 7 different Koha reports each month, putting the output from those reports into Google Sheets, and then sending a link to a Google Document to all of the member libraries.</aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p>Google</p>
+					<aside class="notes">The key reason we stopped with this method was "Google."</aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p>I made an assumption</p>
+					<aside class="notes">What happened is that my predecessor had put all of this data into a shared folder in Google drive and when I started I thought I had been made the owner of that shared folder.  In reality I had only been given access to the shared folder.  My predecessor still "owned" the folder.  When our IT department deleted her account, all of that data was gone.</aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p>The loss was an opportunity</p>
+					<aside class="notes">I looked at this opportunity rather than a loss.  An opportunity to create something new and start all over again.  Which was great because I was getting less data from those 6 or 7 reports than I now get from just 1 or 2 of the reports we run now.</aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p>Allowed me to re-configure reports and build new delivery systems</p>
+					<aside class="notes">And I accomplished that by consolidating those old SQL reports into sub-queries in new reports.  And rather than e-mailing a link to a google document once a month, I'm just posting links to the data on the home page in Koha.</aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p>Statistical data for the current year is all in one place</p>
+					<aside class="notes">The big advantage of this to our members is that when our members ask "Where can I find circulation statistics?" the answer is usually "Look at the home page in the staff client."</aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p>Gail Santy workshop - link to the spreadsheet instructions</p>
+					<aside class="notes">The second thread that led to this presentation is that, in March of this year I created a spreadsheet for a workshop on weeding that Gail Santy of Central Kansas Library System was doing for our members.  </aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p>Kansas data</p>
+					<aside class="notes">The state of Kansas has been collecting library statistical data for decades.  The spreadsheet I created for Gail's workshop takes some of that data that's been collected annually by the state and breaks it down into collection size per capita, circulation per capita, and turnover.  And I set it up to work with State of Kansas data back to 2012.</aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p>link to PDF data</p>
+					<aside class="notes">I don't have it set up to go further back than that because the data prior to 2012 is in PDF format and can't easily be copied and pasted into a spreadsheet.</aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p>You should talk about this</p>
+					<aside class="notes">A couple of different people in the Koha community saw these spreadsheets and saw the reports I've been using and suggested that I talk about it at this conference.  That's why I'm talking today.  This is what lead me to decide to do this presentation.</aside>
+				</section>
+
+				<section>
+					<h2>Questions I've received so far this year</h2>
+					<p class="fragment step-fade-in-then-out">1. I have a borrower who wants to know the title of every book they've checked out since 2002.  Is there a report I can run to tell me that?</p>
+					<p class="fragment step-fade-in-then-out">2. I need to know weekly circulation by Item Type, Collection Code, and Shelving Location for the last 5 years.  I can find a report for that but I have to enter the start date and end date for each week and it only goes back to 2018.  Can you help?</p>
+					<p class="fragment step-fade-in-then-out">3. I want to know circulation by Zip code since 2011.  Can you write a report for that?</p>
+					<aside class="notes">Let me get in to the meat of this presentation by sharing three questions I've gotten in the past 6 months with you.  These are paraphrased questions from actual Next libraries. // Read questions</aside>
+				</section>
+
+				<section>
+					<h2>Answers I've give to these questions</h2>
+					<ol>
+						<li class="fragment">No</li>
+						<li class="fragment">No</li>
+						<li class="fragment">No</li>
+					</ol>
+					<aside class="notes">All of my answers have been "No"</aside>
+				</section>
+
+				<section>
+					<h2>CRIMINAL MINDS</h2>
+					<img src="./images/past.00250.png" alt="CRIMINAL MINDS - Derek" height="300">
+					<p>FBI library patron</p>
+					<aside class="notes">I think what has happened is that people have seen too many episodes of CSI, or NCIS, or CRIMINAL MINDS.  There's always some point in an episode of CRIMINAL MINDS where the BAU is out in the field and Derek has to call Penelope back in Washington and, after some sexually inappropriate small talk, he'll make a request like "We need a list of everyone who served time in a county jail in the 1970s, has had at least 2 root canals, and has been recently released from a mental institution near a tungsten mine.  Oh, and they may have lived in Joplin, Montana, between 1967 and 1969."</aside>
+				</section>
+
+				<section>
+					<h2>CRIMINAL MINDS</h2>
+					<img src="./images/past.00260.png" alt="CRIMINAL MINDS - Penelope" height="300">
+					<p>FBI reference librarian in charge of answering unrealistic complex questions</p>
+					<aside class="notes">Then you see Penelope click a few keys and say "I've got 50 people that meet those criteria, but only two of them lived in Joplin, Montana, in the 60s.  I'm texting you their details now."</aside>
+				</section>
+
+				<section>
+					<h2>There is a burden to saving data forever</h2>
+					<img src="./images/past.00270.png" alt="File cabinet" height="300">
+					<p>Physical files</p>
+					<aside class="notes">People have developed this expectation that, just because the data they're interested in isn't on paper in a file cabinet or in a banker's box in the back room of the building, that we keep it forever.</aside>
+				</section>
+
+				<section>
+					<h2>There is a burden to saving data forever</h2>
+					<img src="./images/past.00275.png" alt="Clouds above the Tetons" height="300">
+					<p>The cloud</p>
+					<aside class="notes">Since it's not taking up physical space, there's no "burden" in keeping it forever.  They think of "the cloud" as an unlimited data resource.</aside>
+				</section>
+
+				<section>
+					<h2>The cloud = these guys' computers</h2>
+					<img src="./images/past.00280.png" alt="CRIMINAL MINDS - Penelope" height="300">
+					<p>Google founders Larry page and Sergey Brin</p>
+					<aside class="notes">What they don't realize is that putting data "In the cloud" really means putting data "On a hard drive on somebody else's computer."  People like these guys.</aside>
+				</section>
+
+				<section>
+					<h2>The cloud = these guys' computers</h2>
+					<img src="./images/past.00300.png" alt="CRIMINAL MINDS - Penelope" height="300">
+					<p>Dropbox founders Drew Houston and Arash Ferdowsi</p>
+					<aside class="notes">or these guys</aside>
+				</section>
+
+				<section>
+					<h2>The cloud = this guy's computer</h2>
+					<img src="./images/past.00290.png" alt="CRIMINAL MINDS - Penelope" height="300">
+					<p>Amazon founder Jeff Bezos</p>
+					<aside class="notes">Or this guy.  This guy owns the computers where our Koha now lives.</aside>
+				</section>
+
+				<section>
+					<h2>The practical and the philosophical</h2>
+					<ol>
+						<li class="fragment">Practical reason: It takes up physical space on our server</li>
+						<li class="fragment">Philosophical reason: The longer we keep our data, the greater the risk that confidentiality may be breached</li>
+					</ol>
+					<aside class="notes">So there are two reasons we don't keep data forever.  A. It takes up physical space on our server B. Keeping data exposes our patrons to potential breaches of their confidentiality</aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p></p>
+					<aside class="notes">As far as the practical goes, Our Koha is supported and maintained by ByWater Solutions and I'm sure I could call them and say "Can you double our server size so we can save more data?"  And I'm equally sure that their response would be, "Sure, let me get you a price for that and write up an addendum to our annual contract."</aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p>Try and find a link to server costs</p>
+					<aside class="notes">The more data you keep, the more space you need on a server and a bigger server costs more money.  It doesn't get any simpler than that.</aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p>add Next statistics</p>
+					<aside class="notes">We have over 400,000 bibliographic records, over a million item records, and over 115,000 borrower records and have been checking out around 100,000 items a month on average.  If we had been keeping all of the data since 2008, we would probably need a much bigger server.</aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p>Kansas library records laws</p>
+					<aside class="notes">As far as the philosopical goes, potential breaches of borrower confidentiality is always a risk.  I know that in the upcoming versions of Koha there are some new confidentiality features that will encrypt some patron data that's not needed for statistical purposes.</aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p>Law enforcement has contacted us 5 times in the last 6 years asking for confidential data from our system</p>
+					<aside class="notes">But the most surefire way of keeping borrower information confidential is to delete that data when it's no longer needed.  I've worked in libraries now for about 25 years and in the last 6 years I've had 5 requests for confidential data from law enforcement.  In two of those cases they knew that the suspect had a library card, but when I was told that I needed to preserve data for a possible subpoena, there was no data associated with that card number.  In those cases the borrower's accounts were apparently expired and had been deleted.  In the third case, the account was still active, but all of the circulation history had been deleted as a part of our normal database cleanup process.</aside>
+				</section>
+
+				<section>
+					<h2>Our retention schedule</h2>
+					<ul>
+						<li>action_logs - timestamp 120 days (recently changed from 60 days)</li>
+						<li>deletedbiblio - timestamp 13 months</li>
+						<li>deletedbiblio_metadata - timestamp 13 months</li>
+						<li>deletedbiblioitems - timestamp 13 months</li>
+						<li>deleteditems - timestamp 13 months</li>
+						<li>message_queue - time_queued 6 months</li>
+						<li>old_issues - timestamp 13 months</li>
+						<li>old_reserves - timestamp 13 months</li>
+						<li>statistics - datetime 25 months</li>
+					</ul>
+					<p></p>
+					<aside class="notes">Our normal process is to use cleanupdatabase.pl and our current schedule is on this slide.  </aside>
+				</section>
+
+				<section>
+					<h2>Action logs</h2>
+					<ul>
+						<li>action_logs - timestamp 120 days (recently changed from 60 days)</li>
+					</ul>
+					<p></p>
+					<aside class="notes">The action logs were originally cut back to 60 days a very long time ago and it was mostly done to conserve space so we could use the CataloguingLog (which used to generate a lot of unneeded lines).</aside>
+				</section>
+
+				<section>
+					<h2>Most other data</h2>
+					<ul>
+						<li>deletedbiblio - timestamp 13 months</li>
+						<li>deletedbiblio_metadata - timestamp 13 months</li>
+						<li>deletedbiblioitems - timestamp 13 months</li>
+						<li>deleteditems - timestamp 13 months</li>
+						<li>old_issues - timestamp 13 months</li>
+						<li>old_reserves - timestamp 13 months</li>
+					</ul>
+					<aside class="notes">The other durations are set to, more-or-less, give us at least 1 year's worth of data.</aside>
+				</section>
+
+				<section>
+					<h2>Two other exceptions</h2>
+					<ul>
+						<li>message_queue - time_queued 6 months</li><br/>
+						<li>statistics - datetime 25 months</li>
+					</ul>
+					<aside class="notes">But there are two exceptions for statistics and sent messages</aside>
+				</section>
+
+				<section>
+					<h2>Mondo report</h2>
+					<p>add a link</p>
+					<aside class="notes">Now, if you're asking yourself "How long are we keeping things?" you're in luck.  I wrote a report</aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p></p>
+					<aside class="notes">If you go to this link, this is the report.  Essentially what it does is it gives you the oldest and newest value for every date and timestamp field in every table in Koha.  This can give you an idea of what date parameters you can set in a report.  And it can give you an idea of where you need to adjust your database cleanup processes.</aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p>screenshot of report</p>
+					<aside class="notes">And here's the results of this report on my system.  You can see, for example:</aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p>Screenshot zoom of action logs</p>
+					<aside class="notes">If I look at the "Action logs" I dont' have any data older than June 9.  That's because we have, for years, been deleting old action log data after 60 days and I just updated that to 120 days recently.</aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p>Screenshot zoom of biblios</p>
+					<aside class="notes">If I go down to the biblios section, you'll notice that there's no data older than August, 2020, because we have deleted biblios set to be purged when the data is more than 13 months old.</aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p>Screenshot zoom of statistics</p>
+					<aside class="notes">When I get to Circulation statistics, though, I've got that data set for 25 month retention.  This gives me the raw data from statistics for at least 2 years.  On the one hand we could set statistics to store lots of data forever.  Then we could answer more questions about circulation in the past.  There are two problems with this.  What you'll first notice if we look more closely is that it's limited in what it stores.</aside>
+				</section>
+
+				<section>
+					<h2>Statistics table</h2>
+					<p>
+						statistics.datetime<br />
+						statistics.branch<br />
+						statistics.value<br />
+						statistics.type<br />
+						statistics.other<br />
+						statistics.itemnumber<br />
+						statistics.itemtype<br />
+						statistics.location<br />
+						statistics.borrowernumber<br />
+						statistics.ccode<br />
+					</p>
+					<aside class="notes">And this is where I'll get back to those three questions and the idea of 'Fresh' data.</aside>
+				</section>
+
+				<section>
+					<h2>Statistics table</h2>
+					<p>statistics.branch = check-out branch</p>
+					<p>statistics.location = current shelving location - NOT permanent location</p>
+					<aside class="notes">The "branch" in the statistics table is the branch where the item is checked out - not the item's home branch; and "location" is the item's current "SHELVING location" rather than the item's "PERMANENT shelving location." If you're using the "CART" location, that becomes an issue if something gets checked out that has a "CART" location.</aside>
+				</section>
+
+				<section>
+					<h2>Very basic checkout/renew count at a checkout library</h2>
+					<pre><code data-trim data-noescape>
+						SELECT
+						  statistics.branch,
+						  Count(*) AS COUNT
+						FROM
+						  statistics
+						WHERE
+						  (statistics.type = 'issue' OR
+						    statistics.type = 'renew')
+						GROUP BY
+						  statistics.branch
+					</code></pre>
+					<aside class="notes">So this report gets me items checked out or renewed at a library</aside>
+				</section>
+
+				<section>
+					<h2>Very basic checkout/renew count at a checkout library grouped by item type</h2>
+					<pre><code data-trim data-noescape>
+						SELECT
+							statistics.branch,
+							statistics.itemtype,
+							Count(*) AS COUNT
+						FROM
+							statistics
+						WHERE
+							(statistics.type = 'issue' OR
+								statistics.type = 'renew')
+						GROUP BY
+							statistics.branch,
+							statistics.itemtype
+					</code></pre>
+					<aside class="notes">So this report gets me items checked out or renewed at a library grouped by item type</aside>
+				</section>
+
+				<section>
+					<h2>Very basic check-out and renewal count by checkout/renew branch, item home branch, and item type</h2>
+					<pre><code data-trim data-noescape>
+						SELECT
+						  statistics.branch,
+						  items.homebranch,
+							statistics.itemtype,
+						  Count(*) AS COUNT
+						FROM
+						  statistics JOIN
+						  items ON items.itemnumber = statistics.itemnumber
+						WHERE
+						  (statistics.type = 'issue' OR
+						    statistics.type = 'renew')
+						GROUP BY
+						  statistics.branch,
+						  items.homebranch,
+							statistics.itemtype
+					</code></pre>
+					<aside class="notes">Here's where "Fresh" data starts to come into play.  If I'm writing a report that's looking for circulation statistics in the past that has to link out to the items table, if the item has been deleted, the link between statistics and items is broken and there's no result.</aside>
+				</section>
+
+				<section>
+					<h2>Report run on October 1, 2021 for September 2021 data</h2>
+					<pre><code data-trim data-noescape>
+						SELECT
+						  statistics.branch,
+						  items.homebranch,
+							statistics.itemtype,
+						  Count(*) AS COUNT
+						FROM
+						  statistics JOIN
+						  items ON items.itemnumber = statistics.itemnumber
+						WHERE
+						  statistics.datetime IS BETWEEN "2021-09-01" AND "2021-10-01" AND
+						  (statistics.type = 'issue' OR
+						    statistics.type = 'renew')
+						GROUP BY
+						  statistics.branch,
+						  items.homebranch,
+							statistics.itemtype
+					</code></pre>
+					<p>Potentially good result if run on October 1, 2021</p>
+					<aside class="notes">If I'm running a report on October 1, 2021 and you're limiting the results to September 1-30, 2021, there's a really good chance that the item record hasn't been changed or deleted.</aside>
+				</section>
+
+				<section>
+					<h2>Report run on October 1, 2021 for September 2019 data</h2>
+					<pre><code data-trim data-noescape>
+						SELECT
+							statistics.branch,
+							items.homebranch,
+							statistics.itemtype,
+							Count(*) AS COUNT
+						FROM
+							statistics JOIN
+							items ON items.itemnumber = statistics.itemnumber
+						WHERE
+							statistics.datetime IS BETWEEN "2019-09-01" AND "2019-10-01" AND
+							(statistics.type = 'issue' OR
+								statistics.type = 'renew')
+						GROUP BY
+							statistics.branch,
+							items.homebranch,
+							statistics.itemtype
+					</code></pre>
+					<p>Data won't be fresh - many items could have been deleted or updated in the intervening 2 years</p>
+					<aside class="notes">If I'm running a report on October 1, 2021 and you're limiting the results to September 1-30, 2021, there's a really good chance that the item record hasn't been changed or deleted.</aside>
+				</section>
+
+				<section>
+					<h2>Fresh</h2>
+					<pre><code data-trim data-noescape>
+						SELECT
+						  statistics.branch,
+							borrowers.zipcode,
+						  Count(*) AS COUNT
+						FROM
+							statistics JOIN
+							borrowers ON borrowers.borrowernumber = statistics.borrowernumber
+						WHERE
+						  statistics.datetime IS BETWEEN "2021-09-01" AND "2021-10-01" AND
+						  (statistics.type = 'issue' OR
+						    statistics.type = 'renew')
+						GROUP BY
+						  statistics.branch,
+  						borrowers.zipcode
+					</code></pre>
+					<aside class="notes">And the same is tru of borrower records.  This is a report of checkouts by borrower zipcode that's fresh if I run it on October 1, 2021</aside>
+				</section>
+
+				<section>
+					<h2>Stale</h2>
+					<pre><code data-trim data-noescape>
+						SELECT
+							statistics.branch,
+							borrowers.zipcode,
+							Count(*) AS COUNT
+						FROM
+							statistics JOIN
+							borrowers ON borrowers.borrowernumber = statistics.borrowernumber
+						WHERE
+							statistics.datetime IS BETWEEN "2019-09-01" AND "2019-10-01" AND
+							(statistics.type = 'issue' OR
+								statistics.type = 'renew')
+						GROUP BY
+							statistics.branch,
+							borrowers.zipcode
+					</code></pre>
+					<aside class="notes">But if I run this report on October 1, 2021, the data is going to be stale because of all of the potential changes that have happened to borrower records in the past 2 years.</aside>
+				</section>
+
+				<section>
+					<h2>Deletions</h2>
+					<ul>
+						<li>Borrowers: </li>
+						<li>Items: </li>
+					</ul>
+					<aside class="notes">In the last two years alon we've deleted a pile of items and borrowers.</aside>
+				</section>
+
+				<section>
+					<h2>Statistics table again</h2>
+					<p>
+						statistics.datetime<br />
+						statistics.branch<br />
+						statistics.value<br />
+						statistics.type<br />
+						statistics.other<br />
+						statistics.itemnumber<br />
+						statistics.itemtype<br />
+						statistics.location<br />
+						<span style="font-size: 1.2em"><ins>statistics.borrowernumber</ins></span> <br />
+						statistics.ccode<br />
+					</p>
+					<aside class="notes">The other thing I want to point out about the statistics table is the "borrowernumber" field.</aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p></p>
+					<aside class="notes"></aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p></p>
+					<aside class="notes"></aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p></p>
+					<aside class="notes"></aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p></p>
+					<aside class="notes"></aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p></p>
+					<aside class="notes"></aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p></p>
+					<aside class="notes"></aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p></p>
+					<aside class="notes"></aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p></p>
+					<aside class="notes"></aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p></p>
+					<aside class="notes"></aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p></p>
+					<aside class="notes"></aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p></p>
+					<aside class="notes"></aside>
+				</section>
+
+				<section>
+					<h2></h2>
+					<p></p>
+					<aside class="notes"></aside>
+				</section>
 
 
 
