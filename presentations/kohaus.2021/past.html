@@ -578,67 +578,45 @@
 					<aside class="notes">In the last two years alone we've deleted a pile of items and borrowers.  Additionally, I've bulk-updated about 20 different collection codes and item types.  And I've probably batch-updated well over 2000 borrowers this year so far.  <br><br>Because all of these changes, the older the data is, the more likely it is to be incorrect if you have to link out to get information not stored in the statistics table.</aside>
 				</section>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 				<section>
 					<h2>Questions I've received so far this year</h2>
 					<p class="fragment">Q: I have a borrower who wants to know the title of every book they've checked out since 2002. Is there a report I can run to tell me that?</p>
 					<p class="fragment">A. No, because a) we only keep old_issues for the past 13 months: and b) we've only been using Koha since 2008 and it would be impossible to lookup data from before then even if we did keep it: and c) even if we could go all the way back to 2008, your library didn't join Next until 2011 and before that you wern't automated - all of the pre-2011 data would have to be on paper files created at your library.</p>
-					<aside class="notes"></aside>
+					<aside class="notes">Just read the questions</aside>
 				</section>
 
 				<section>
 					<h2>Questions I've received so far this year</h2>
 					<p class="fragment">Q: I need to know weekly circulation by Item Type, Collection Code, and Shelving Location for the last 5 years. I can find a report for that but I have to enter the start date and end date for each week and it only goes back to 2018. Can you help?</p>
 					<p class="fragment">A. No.  We only keep statistics data for the last 25 months, but we started saving monthly circulation counts by library, location, and collection code in 2019 and we started saving monthly circulation counts by library, location, and item type in 2020, so I can show you to those spreadsheets.</p>
-					<aside class="notes"></aside>
+					<aside class="notes">Just read the questions</aside>
 				</section>
 
 				<section>
 					<h2>Questions I've received so far this year</h2>
 					<p class="fragment">Q: I want to know circulation by Zip code since 2011. Can you write a report for that?</p>
 					<p class="fragment">A. No.  Nobody has ever asked for this statistic before.  I can write a report that will get you good data for last month, but data from more than a month ago will not be as reliable and it can only go back for the previous 25 months.  But since you're interested in this and since another library is interested in this, I'll start collecting this data system wide starting in July of 2021.</p>
-					<aside class="notes"></aside>
+					<aside class="notes">Just read the questions</aside>
 				</section>
+
+				<h2>How to decide what to report on</h2>
+				<ul>
+					<li>What do your end of the month and end of the year reports look like</li>
+					<li>What kind of collection development data do would be useful for collection development</li>
+					<li>What kind of demographic information do you need for strategic planning</li>
+					<li>What kind of data do you need for intra-consortial planning</li>
+				</ul>
+				<aside class="notes">Like I said, it's a good idea to come up with a strategy for what you want to report on each year.</aside>
+			</section>
+
+			<h2>When to collect the data and where to store</h2>
+			<ul>
+				<li>For us, monthly works well</li>
+				<li>I schedule on the first of each month</li>
+				<li>We currently store on Google Drive, but we're switching to Github in January</li>
+			</ul>
+			<aside class="notes">Expand on these.</aside>
+		</section>
 
 				<section>
 					<section>
@@ -737,220 +715,49 @@
 					</section>
 				</section>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 				<section>
-					<h2></h2>
-					<p>Genesis </p>
-					<aside class="notes">The reason I am doing this presentation today is because a few people have seen some of the reports and spreadsheets I've been using for keeping Koha data and wanted more information about that. </aside>
+					<h2>A report you can use</h2>
+					<p><a href="https://github.com/northeast-kansas-library-system/nextkansas.sql/blob/master/R.003559.sql" target="_blank">See the report on Github</a></p>
+					<p class="fragment">This report is 2362 lines long - but it runs in about 30-40 seconds.</p>
+					<p class="fragment">Creating it wasn't as hard as you'd think.</p>
+					<aside class="notes">Now, if you're asking yourself "How long are we keeping things?" you're in luck. I wrote a report <br><br>If you go to this link, this is the report. Essentially what it does is it gives you the oldest and newest value for every date and timestamp field in every table in Koha. This can give you an idea of what date parameters you can set in a report. And it can give you an idea of where you need to adjust your database cleanup processes.</aside>
 				</section>
 
 				<section>
-					<h2></h2>
-					<p>Gail Santy workshop - link to the spreadsheet instructions</p>
-					<aside class="notes">This presentation also grew out of a spreadsheet I created for a workshop on weeding that Gail Santy of Central Kansas Library System was doing for our members. </aside>
-				</section>
-
-				<section>
-					<h2></h2>
-					<p>Kansas data</p>
-					<aside class="notes">The state of Kansas has been collecting library statistical data for decades. The spreadsheet I created for Gail's workshop takes some of that data that's been collected annually by the state and breaks it down into
-						collection size per capita, circulation per capita, and turnover. And I set it up to work with State of Kansas data back to 2012.</aside>
-				</section>
-
-				<section>
-					<h2></h2>
-					<p>link to PDF data</p>
-					<aside class="notes">I don't have it set up to go further back than that because the data prior to 2012 is in PDF format and can't easily be copied and pasted into a spreadsheet.</aside>
-				</section>
-
-				<section>
-					<h2></h2>
-					<p></p>
-					<aside class="notes"></aside>
-				</section>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-				<section>
-					<h2>Mondo report</h2>
-					<p>add a link</p>
-					<aside class="notes">Now, if you're asking yourself "How long are we keeping things?" you're in luck. I wrote a report</aside>
-				</section>
-
-				<section>
-					<h2></h2>
-					<p></p>
-					<aside class="notes">If you go to this link, this is the report. Essentially what it does is it gives you the oldest and newest value for every date and timestamp field in every table in Koha. This can give you an idea of what date
-						parameters you can set in a report. And it can give you an idea of where you need to adjust your database cleanup processes.</aside>
-				</section>
-
-				<section>
-					<h2></h2>
+					<h2>Date-time report</h2>
+					<img src="./images/past.601.png" alt="Top of report" height="300">
 					<p>screenshot of report</p>
 					<aside class="notes">And here's the results of this report on my system. You can see, for example:</aside>
 				</section>
 
 				<section>
-					<h2></h2>
+					<h2>Action logs</h2>
+					<img src="./images/past.602.png" alt="Action logs section" height="300">
 					<p>Screenshot zoom of action logs</p>
 					<aside class="notes">If I look at the "Action logs" I dont' have any data older than June 9. That's because we have, for years, been deleting old action log data after 60 days and I just updated that to 120 days recently.</aside>
 				</section>
 
 				<section>
-					<h2></h2>
+					<h2>Biblios</h2>
+					<img src="./images/past.603.png" alt="Biblios section" height="300">
 					<p>Screenshot zoom of biblios</p>
 					<aside class="notes">If I go down to the biblios section, you'll notice that there's no data older than August, 2020, because we have deleted biblios set to be purged when the data is more than 13 months old.</aside>
 				</section>
 
 				<section>
-					<h2></h2>
+					<h2>Statistics and circulation</h2>
+					<img src="./images/past.604.png" alt="Circulation section" height="300">
 					<p>Screenshot zoom of statistics</p>
 					<aside class="notes">When I get to Circulation statistics, though, I've got that data set for 25 month retention. This gives me the raw data from statistics for at least 2 years. On the one hand we could set statistics to store lots of data
 						forever. Then we could answer more questions about circulation in the past. There are two problems with this. What you'll first notice if we look more closely is that it's limited in what it stores.</aside>
 				</section>
 
-
 				<section>
-					<h2></h2>
-					<p></p>
-					<aside class="notes"></aside>
-				</section>
-
-				<section>
-					<h2></h2>
-					<p></p>
-					<aside class="notes"></aside>
-				</section>
-
-				<section>
-					<h2></h2>
-					<p></p>
-					<aside class="notes"></aside>
-				</section>
-
-				<section>
-					<h2></h2>
-					<p></p>
-					<aside class="notes"></aside>
-				</section>
-
-				<section>
-					<h2></h2>
-					<p></p>
-					<aside class="notes"></aside>
-				</section>
-
-				<section>
-					<h2></h2>
-					<p></p>
-					<aside class="notes"></aside>
-				</section>
-
-				<section>
-					<h2></h2>
-					<p></p>
-					<aside class="notes"></aside>
-				</section>
-
-				<section>
-					<h2></h2>
-					<p></p>
-					<aside class="notes"></aside>
-				</section>
-
-				<section>
-					<h2></h2>
-					<p></p>
-					<aside class="notes"></aside>
-				</section>
-
-				<section>
-					<h2></h2>
-					<p></p>
-					<aside class="notes"></aside>
-				</section>
-
-				<section>
-					<h2></h2>
-					<p></p>
-					<aside class="notes"></aside>
+					<h2>Thanks for listening</h2>
+					<img src="./images/cropped-koha_us_125.png" alt="koha-US logo" height="300">
+					<p>Thanks for coming to the 2021 koha-US conference!</p>
+					<p>These slides availale at <a href="http://hopperdietzel.org" target="_blank">http://hopperdietzel.org</a></p>
+					<aside class="notes">Hopefully this gives you some ideas about what you want to do as far as collecting and storing data goes.  I think the most important thing is to think once a year or so about what data you're gathering, how you're gathering it, and where you're keeping it outside of Koha.</aside>
 				</section>
 
 				<section>
@@ -961,8 +768,6 @@
 					</ul>
 					<aside class="notes"></aside>
 				</section>
-
-
 
 				<!-- Presentation content ends here -->
 
