@@ -1,11 +1,11 @@
 # George H. Williams
-
+<br />  <br />
 
 ## [See my presentations here](/slides)
-
+<br />  <br />
 
 ## [Notes about Koha](/knotes)
-
+<br />  <br />
 
 ## Records / Singles
 
