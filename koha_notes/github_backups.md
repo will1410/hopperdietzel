@@ -24,8 +24,94 @@ My system preference backups are not accessible to the public, though.  System p
 
 Instead of including a link to those instructions, I'm including those instructions here:
 
+-----
+
+# system_preference_backup
+Backup files for Next Search Catalog's Koha system preferences
+
+## Special note
+The system preferences may contain confidential information such as confidential URLs and usernames and passwords for third party resources such as Overdrive or Syndetics.  If you are using Github to store backups, you should only store your backups in a private repository.
+
+## Instructions
+
+Create a folder on your c:\ drive called "git"
+
+Run this SQL (Next Search Catalog report 3596), save it as a csv spreadsheet, open the file in Excel
+
+```sql
+
+SELECT
+  Concat(If(Length(systempreferences.value) > 30000, "XX.", "SP."), Replace(systempreferences.variable, ":", "_")) AS FILE_NAME,
+  Concat_Ws("",
+    Concat(If(Length(systempreferences.value) > 30000, "XX.", "SP."), systempreferences.variable, ".txt"),
+    Char(13), Char(10), Char(13), Char(10),
+    "----------",
+    Char(13), Char(10), Char(13), Char(10),
+    "Preference name: ", systempreferences.variable,
+    Char(13), Char(10), Char(13), Char(10),
+    "Type: ", systempreferences.type,
+    Char(13), Char(10), Char(13), Char(10),
+    "Options: ", systempreferences.options,
+    Char(13), Char(10), Char(13), Char(10),
+    "----------",
+    Char(13), Char(10), Char(13), Char(10),
+    "Preference value: ",
+    Char(13), Char(10), Char(13), Char(10)
+  ) AS INFO,
+  SubString(systempreferences.value FROM 1 FOR 30000 ) AS PART_ONE,
+  If(Length(systempreferences.value) > 30000, "||AAAAA||", "") AS SEP_ONE,
+  SubString(systempreferences.value FROM 30001 FOR 30000 ) AS PART_TWO,
+  If(Length(systempreferences.value) > 60000, "||AAAAA||", "") AS SEP_TWO,
+  SubString(systempreferences.value FROM 60001 FOR 30000 ) AS PART_THREE,
+  If(Length(systempreferences.value) > 90000, "||AAAAA||", "") AS SEP_THREE,
+  SubString(systempreferences.value FROM 90001 FOR 30000 ) AS PART_FOUR,
+  If(Length(systempreferences.value) > 120000, "||AAAAA||", "") AS SEP_FOUR,
+  SubString(systempreferences.value FROM 120001 FOR 30000 ) AS PART_FIVE
+FROM
+  systempreferences
+GROUP BY
+  systempreferences.variable
+
 ```
 
+With the csv file open in Excel, run this VBA macro:
 
+```vba
+
+Sub WriteToTxt()
+
+Const forReading = 1, forAppending = 3, fsoForWriting = 2
+Dim fs, objTextStream, sText As String
+Dim lLastRow As Long, lRowLoop As Long, lLastCol As Long, lColLoop As Long
+
+lLastRow = Cells(Rows.Count, 1).End(xlUp).Row
+
+For lRowLoop = 1 To lLastRow
+
+    Set fs = CreateObject("Scripting.FileSystemObject")
+    Set objTextStream = fs.opentextfile("c:\git\" & Cells(lRowLoop, 1) & ".txt", fsoForWriting, True)
+
+    sText = ""
+
+    For lColLoop = 2 To 15
+        sText = sText & Cells(lRowLoop, lColLoop) & Chr(10) & Chr(10)
+    Next lColLoop
+
+    objTextStream.writeline (Left(sText, Len(sText) - 1))
+
+
+    objTextStream.Close
+    Set objTextStream = Nothing
+    Set fs = Nothing
+
+Next lRowLoop
+
+End Sub
 
 ```
+
+This macro should save the contents of coulmn B, C, D, E, F, G, H, I, J, K, L, M, N, O, and P in a text file in c:\git.  The title of each file should be based on column A.  All filenames should start with the letters "SP" unless the system preference has more than 30,000 characters.  In cases were the system preference value is longer than 30,000 characters, the preference value will be broken up into 30,000 character long segments seperated by the text "||AAAAA||" and the filename will start with the letters "XX."
+
+After this process has run, you will need to find any files that start with "XX" and remove the spaces created by the "||AAAAA||" placeholders and any whitespace that Excel has bounded them with.
+
+Move the contents of c:\git to the local folder for your repository and then use git to sync the updated information with your repository.  NEKLS uses separate folders in the git repository for the production server and the test server.
