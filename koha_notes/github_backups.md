@@ -110,8 +110,8 @@ End Sub
 
 ```
 
-This macro should save the contents of coulmn B, C, D, E, F, G, H, I, J, K, L, M, N, O, and P in a text file in c:\git.  The title of each file should be based on column A.  All filenames should start with the letters "SP" unless the system preference has more than 30,000 characters.  In cases were the system preference value is longer than 30,000 characters, the preference value will be broken up into 30,000 character long segments seperated by the text "||AAAAA||" and the filename will start with the letters "XX."
+This macro should save the contents of coulmn B, C, D, E, F, G, H, I, J, K, L, M, N, O, and P in a text file in c:\git.  The title of each file should be based on column A.  All filenames should start with the letters "SP" unless the system preference has more than 30,000 characters.  In cases were the system preference value is longer than 30,000 characters, the preference value will be broken up into 30,000 character long segments seperated by the text \"\|\|AAAAA\|\|\" and the filename will start with the letters "XX."
 
-After this process has run, you will need to find any files that start with "XX" and remove the spaces created by the "||AAAAA||" placeholders and any whitespace that Excel has bounded them with.
+After this process has run, you will need to find any files that start with "XX" and remove the spaces created by the \"\|\|AAAAA\|\|\" placeholders and any whitespace that Excel has bounded them with.
 
 Move the contents of c:\git to the local folder for your repository and then use git to sync the updated information with your repository.  NEKLS uses separate folders in the git repository for the production server and the test server.
