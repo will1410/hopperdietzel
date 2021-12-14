@@ -2,6 +2,10 @@
 
 ## Presentations
 
+### [KohaCon21 - What's going on with koha-US](/presentations/kohacon.2021/kohacon2021.html)
+
+This is a presentation given on December 14, 2021
+
 ### [koha-US 2021 - Future of past data](/presentations/kohaus.2021/past.html)
 
 This is a presentation given on September 21, 2021
