@@ -1,6 +1,6 @@
 ## Adding tabbed content to IntranetmainUserblock, IntranetCirculationHomeHTML, IntranetReportsHomeHTML
 
-###This is an update to a presentation I did at the koha-US conference in 2017 in Coeur d'Alene, Idaho
+*This is an update to a presentation I did at the koha-US conference in 2017 in Coeur d'Alene, Idaho*
 
 When I worked for the VALNet consortium we had a lot of content we needed to store somewhere easy for library staff to access.  There were some reports that were run monthly at various libraries and there were notices about school closures for the summer, and there were other things that seemed important to make available for staff.
 
