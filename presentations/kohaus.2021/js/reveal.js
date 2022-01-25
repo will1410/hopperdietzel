@@ -26,14 +26,14 @@ import {
 } from './utils/constants.js'
 
 // The reveal.js version
-export const VERSION = '4.1.3';
+export const VERSION = '4.2.1';
 
 /**
  * reveal.js
  * https://revealjs.com
  * MIT licensed
  *
- * Copyright (C) 2020 Hakim El Hattab, https://hakim.se
+ * Copyright (C) 2011-2022 Hakim El Hattab, https://hakim.se
  */
 export default function( revealElement, options ) {
 
@@ -189,6 +189,9 @@ export default function( revealElement, options ) {
 
 		// Prevent the slides from being scrolled out of view
 		setupScrollPrevention();
+
+		// Adds bindings for fullscreen mode
+		setupFullscreen();
 
 		// Resets all vertical slides so that only the first is visible
 		resetVerticalSlides();
@@ -377,6 +380,19 @@ export default function( revealElement, options ) {
 	}
 
 	/**
+	 * After entering fullscreen we need to force a layout to
+	 * get our presentations to scale correctly. This behavior
+	 * is inconsistent across browsers but a force layout seems
+	 * to normalize it.
+	 */
+	function setupFullscreen() {
+
+		document.addEventListener( 'fullscreenchange', onFullscreenChange );
+		document.addEventListener( 'webkitfullscreenchange', onFullscreenChange );
+
+	}
+
+	/**
 	 * Registers a listener to postMessage events, this makes it
 	 * possible to call all reveal.js API methods from another
 	 * window. For example:
@@ -529,6 +545,7 @@ export default function( revealElement, options ) {
 		controls.bind();
 		focus.bind();
 
+		dom.slides.addEventListener( 'click', onSlidesClicked, false );
 		dom.slides.addEventListener( 'transitionend', onTransitionEnd, false );
 		dom.pauseOverlay.addEventListener( 'click', resume, false );
 
@@ -554,6 +571,7 @@ export default function( revealElement, options ) {
 
 		window.removeEventListener( 'resize', onWindowResize, false );
 
+		dom.slides.removeEventListener( 'click', onSlidesClicked, false );
 		dom.slides.removeEventListener( 'transitionend', onTransitionEnd, false );
 		dom.pauseOverlay.removeEventListener( 'click', resume, false );
 
@@ -1200,7 +1218,7 @@ export default function( revealElement, options ) {
 
 		// Dispatch an event before hte slide
 		const slidechange = dispatchEvent({
-			type: 'slidechange',
+			type: 'beforeslidechange',
 			data: {
 				indexh: h === undefined ? indexh : h,
 				indexv: v === undefined ? indexv : v,
@@ -2375,6 +2393,33 @@ export default function( revealElement, options ) {
 	}
 
 	/**
+	 * A global listener for all click events inside of the
+	 * .slides container.
+	 *
+	 * @param {object} [event]
+	 */
+	function onSlidesClicked( event ) {
+
+		const anchor = Util.closest( event.target, 'a[href^="#"]' );
+
+		// If a hash link is clicked, we find the target slide
+		// and navigate to it. We previously relied on 'hashchange'
+		// for links like these but that prevented media with
+		// audio tracks from playing in mobile browsers since it
+		// wasn't considered a direct interaction with the document.
+		if( anchor ) {
+			const hash = anchor.getAttribute( 'href' );
+			const indices = location.getIndicesFromHash( hash );
+
+			if( indices ) {
+				Reveal.slide( indices.h, indices.v, indices.f );
+				event.preventDefault();
+			}
+		}
+
+	}
+
+	/**
 	 * Handler for the window level 'resize' event.
 	 *
 	 * @param {object} [event]
@@ -2400,6 +2445,26 @@ export default function( revealElement, options ) {
 				document.activeElement.blur();
 			}
 			document.body.focus();
+		}
+
+	}
+
+	/**
+	 * Handler for the document level 'fullscreenchange' event.
+	 *
+	 * @param {object} [event]
+	 */
+	function onFullscreenChange( event ) {
+
+		let element = document.fullscreenElement || document.webkitFullscreenElement;
+		if( element === dom.wrapper ) {
+			event.stopImmediatePropagation();
+
+			// Timeout to avoid layout shift in Safari
+			setTimeout( () => {
+				Reveal.layout();
+				Reveal.focus.focus(); // focus.focus :'(
+			}, 1 );
 		}
 
 	}
