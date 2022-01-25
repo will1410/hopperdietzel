@@ -9,7 +9,7 @@
 
 ## Records / Singles
 
-###Hey man, is that Freedom Rock?  [Various artists](https://open.spotify.com/playlist/37zmSX6VgD1d8Kre3Q3Rz7?si=2af9874c60884495)
+### Hey man, is that Freedom Rock?  [Various artists](https://open.spotify.com/playlist/37zmSX6VgD1d8Kre3Q3Rz7?si=2af9874c60884495)
 
 Let me be clear on this.  I've never bought a record by phoning an 800 number and ordering from K-Tel or any of those 70s or 80s companies that used to direct market by advertising on TV.  I had a friend that did.  He had FREEDOM ROCK, the Neil Diamond collection they sold on TV in the 80s, an Elvis collection and he probably had a set of Ginsu knives too.
 
