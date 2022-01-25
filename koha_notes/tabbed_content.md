@@ -201,6 +201,17 @@ Below is the code with some commentary on what most parts do:
 
 ```
 
+The way to use this code is to open Koha and go to Home > Administration > System preferences.  Once there you'll want to find the system preference for the page you want to add the content to.  Currently you can add this to:
+
+| Page | Preference |
+| --- | --- |
+| Staff interface home page | IntranetmainUserblock |
+| Circulation home page | IntranetCirculationHomeHTML |
+| Reports home page | IntranetReportsHomeHTML |
+
+If you have any content already in one of these preferences, you'll want to put this code after the content, or incorporate that content into one of the tabs you're creating.
+
+
 Here is a screenshot of how this looks on the Reports page for Next Search Catalog
 
 ![Reports page example 1](/images/tabbed_content_020.png){:class="img-responsive"}
