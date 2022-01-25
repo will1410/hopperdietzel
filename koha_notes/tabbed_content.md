@@ -6,7 +6,7 @@ When I worked for the VALNet consortium we had a lot of content we needed to sto
 
 The IntranetmainUserblock system preference seemed like a great place to store those things.  The problem was that we had so much content we wanted to share, especially relating to annual summer school closures, that at certain times of the year the home page could become 5 miles tall.
 
-One day I though, wouldn't it be cool to set that up as tabbed content.  School closures on one tab, reports on another, maybe a blog or calendar on a third.  This led to an investigation of tabbed content and I found a great, pre-built, tabbed content with only Java / CSS page template on GitHub written by Shaun2D2 - [Shaun2D2 at GitHub](https://github.com/Shaun2D2) - specifically [this gist](https://gist.github.com/Shaun2D2/6296191).
+One day I though, wouldn't it be cool to set that up as tabbed content.  School closures on one tab, reports on another, maybe a blog or calendar on a third.  This led to an investigation of tabbed content and I found a great, pre-built, tabbed content with only Java / CSS page template on GitHub written by Shaun2D2 - [Shaun2D2 at GitHub](https://github.com/Shaun2D2){:target="_blank"} - specifically [this gist](https://gist.github.com/Shaun2D2/6296191){:target="_blank"}.
 
 This is an example of this code written for the IntranetCirculationHomeHTML preference with some added comments describing what the different lines are doing.
 
