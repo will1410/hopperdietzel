@@ -211,6 +211,7 @@ The way to use this code is to open Koha and go to Home > Administration > Syste
 
 If you have any content already in one of these preferences, you'll want to put this code after the content, or incorporate that content into one of the tabs you're creating.
 
+Once the code from above is in the preference, then you need to rename the tabs and add the content in HTML to get it to do and say what you want it to say.
 
 Here is a screenshot of how this looks on the Reports page for Next Search Catalog
 
