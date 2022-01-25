@@ -9,6 +9,16 @@
 
 ## Records / Singles
 
+###Hey man, is that Freedom Rock?  [Various artists](https://open.spotify.com/playlist/37zmSX6VgD1d8Kre3Q3Rz7?si=2af9874c60884495)
+
+Let me be clear on this.  I've never bought a record by phoning an 800 number and ordering from K-Tel or any of those 70s or 80s companies that used to direct market by advertising on TV.  I had a friend that did.  He had FREEDOM ROCK, the Neil Diamond collection they sold on TV in the 80s, an Elvis collection and he probably had a set of Ginsu knives too.
+
+I made my copy of FREEDOM ROCK from his set of LPs.  And the reason I re-created it on Spotify as a playlist is because it's actually a really good collection.  This has, to the best of Spotify's capability, all of the songs that were on the 4 LP set I borrowed one weekend from John Betzsold - a co-worker at Matt's Rathaus Pizza in Pullman, Washington.
+
+On the one hand, FREEDOM ROCK was marketed as a collection of 60s hippie music, but several of the songs are from the early 70s and it has a ton of great songs on it.  And you can find the commercial for it on [YouTube](https://youtu.be/P3CnvphQs04){:target="_blank"}.
+
+2022.01.25
+
 ### READERS DIGEST'S GOLDEN AGE OF ENTERTAINMENT (A close approximation) [Various artists](https://open.spotify.com/playlist/6DiQcqNrttaaNcH3EkSEaM?si=a89fa0364b1c44ea)
 
 In 1979, my father bought a 1972 Cadillac Coupe de Ville.  5000 pounds of beige steel with a 7.7 liter engine that produced 220 horsepower and (according to the factory) had a top speed of 119 miles per hour.  (I got my dad's Caddilac up to 130, but that's probably a different story.)  Anyway, this was the first car my parents *ever* owned that had more to it than an AM radio.  This car boasted an AM/FM radio with an 8-track player.
