@@ -60,9 +60,6 @@ This one step all by itself gets this page down to 3840x1040 and confines the ta
         //This removes the .col-sm-push-2 class from the div that the #navmenu content is displayed in -- if you don't remove this class, you only remove the content without resizing the layout of the page
         $('.row .col-sm-10.col-sm-push-2').removeClass('col-sm-push-2');
 
-        //Optional for full rule display - this is commented out right now -- I'll come back to it later
-        //$('.hiderule').removeClass();
-
         //Now that the column header on this table is "sticky," this function is required to force the column header to resize when you remove the content -- without this function, the column header won't line up with the column content when you scroll up or down the page
         $(window).trigger('resize');
 
@@ -231,3 +228,132 @@ There are many columns we don't use in our system.  The following code allows yo
   });
 
 ```
+
+### Pre-collapse columns you never use
+
+There are some columns we never use at our libraries.  Anything to do with suspensions or rental charges or article requests, for example, are not currently things we use, so why even have them visible to begin with?  This code pre-collapses columns.
+
+This code is set up with the code to hide *all* columns in Koha 21.05 but I've put comment markers at the beginning of each line **except** the ones I actually want to use.  To pre-collapse a column, just remove the // from in front of the dollar sign for the column you want to collapse.
+
+Note that there is also a line at the very end that adds the "+" symbol to the pre-collapsed columns.
+
+***IntranetUserJS***
+
+```javascript
+
+//BEGIN changes to smart-rules.pl
+  $('#default-circulation-rules').on('init.dt', function() {
+
+    //Hide 'Patron category' row by default
+      //$('#default-circulation-rules th:nth-child(1), #default-circulation-rules td:nth-child(1)').addClass('hiderule');
+    //Hide 'Item type' row by default
+      //$('#default-circulation-rules th:nth-child(2), #default-circulation-rules td:nth-child(2)').addClass('hiderule');
+    //Hide 'Actions (1)' row by default
+      //$('#default-circulation-rules th:nth-child(3), #default-circulation-rules td:nth-child(3)').addClass('hiderule');
+    //Hide 'Note' row by default
+      //$('#default-circulation-rules th:nth-child(4), #default-circulation-rules td:nth-child(4)').addClass('hiderule');
+    //Hide 'Current checkouts allowed' row by default
+      //$('#default-circulation-rules th:nth-child(5), #default-circulation-rules td:nth-child(5)').addClass('hiderule');
+    //Hide 'Current on-site checkouts allowed' row by default
+      //$('#default-circulation-rules th:nth-child(6), #default-circulation-rules td:nth-child(6)').addClass('hiderule');
+    //Hide 'Loan period' row by default
+      //$('#default-circulation-rules th:nth-child(7), #default-circulation-rules td:nth-child(7)').addClass('hiderule');
+    //Hide 'Days mode' row by default
+      $('#default-circulation-rules th:nth-child(8), #default-circulation-rules td:nth-child(8)').addClass('hiderule');
+    //Hide 'Unit' row by default
+      //$('#default-circulation-rules th:nth-child(9), #default-circulation-rules td:nth-child(9)').addClass('hiderule');
+    //Hide 'Hard due date' row by default
+      //$('#default-circulation-rules th:nth-child(10), #default-circulation-rules td:nth-child(10)').addClass('hiderule');
+    //Hide 'Decreased loan period for high holds (day)' row by default
+      $('#default-circulation-rules th:nth-child(11), #default-circulation-rules td:nth-child(11)').addClass('hiderule');
+    //Hide 'Fine amount' row by default
+      //$('#default-circulation-rules th:nth-child(12), #default-circulation-rules td:nth-child(12)').addClass('hiderule');
+    //Hide 'Fine charging interval' row by default
+      //$('#default-circulation-rules th:nth-child(13), #default-circulation-rules td:nth-child(13)').addClass('hiderule');
+    //Hide 'When to charge' row by default
+      //$('#default-circulation-rules th:nth-child(14), #default-circulation-rules td:nth-child(14)').addClass('hiderule');
+    //Hide 'Fine grace period' row by default
+      //$('#default-circulation-rules th:nth-child(15), #default-circulation-rules td:nth-child(15)').addClass('hiderule');
+    //Hide 'Overdue fines cap (amount)' row by default
+      //$('#default-circulation-rules th:nth-child(16), #default-circulation-rules td:nth-child(16)').addClass('hiderule');
+    //Hide 'Cap fine at replacement price' row by default
+      $('#default-circulation-rules th:nth-child(17), #default-circulation-rules td:nth-child(17)').addClass('hiderule');
+    //Hide 'Suspension in days (day)' row by default
+      $('#default-circulation-rules th:nth-child(18), #default-circulation-rules td:nth-child(18)').addClass('hiderule');
+    //Hide 'Max. suspension duration (day)' row by default
+      $('#default-circulation-rules th:nth-child(19), #default-circulation-rules td:nth-child(19)').addClass('hiderule');
+    //Hide 'Suspension charging interval' row by default
+      $('#default-circulation-rules th:nth-child(20), #default-circulation-rules td:nth-child(20)').addClass('hiderule');
+    //Hide 'Renewals allowed (count)' row by default
+      //$('#default-circulation-rules th:nth-child(21), #default-circulation-rules td:nth-child(21)').addClass('hiderule');
+    //Hide 'Renewal period' row by default
+      //$('#default-circulation-rules th:nth-child(22), #default-circulation-rules td:nth-child(22)').addClass('hiderule');
+    //Hide 'No renewal before' row by default
+      $('#default-circulation-rules th:nth-child(23), #default-circulation-rules td:nth-child(23)').addClass('hiderule');
+    //Hide 'Automatic renewal' row by default
+      $('#default-circulation-rules th:nth-child(24), #default-circulation-rules td:nth-child(24)').addClass('hiderule');
+    //Hide 'No automatic renewal after' row by default
+      $('#default-circulation-rules th:nth-child(25), #default-circulation-rules td:nth-child(25)').addClass('hiderule');
+    //Hide 'No automatic renewal after (hard limit)' row by default
+      $('#default-circulation-rules th:nth-child(26), #default-circulation-rules td:nth-child(26)').addClass('hiderule');
+    //Hide 'Holds allowed (total)' row by default
+      //$('#default-circulation-rules th:nth-child(27), #default-circulation-rules td:nth-child(27)').addClass('hiderule');
+    //Hide 'Holds allowed (daily)' row by default
+      //$('#default-circulation-rules th:nth-child(28), #default-circulation-rules td:nth-child(28)').addClass('hiderule');
+    //Hide 'Holds per record (count)' row by default
+      //$('#default-circulation-rules th:nth-child(29), #default-circulation-rules td:nth-child(29)').addClass('hiderule');
+    //Hide 'On shelf holds allowed' row by default
+      //$('#default-circulation-rules th:nth-child(30), #default-circulation-rules td:nth-child(30)').addClass('hiderule');
+    //Hide 'OPAC item level holds' row by default
+      //$('#default-circulation-rules th:nth-child(31), #default-circulation-rules td:nth-child(31)').addClass('hiderule');
+    //Hide 'Article requests' row by default
+      $('#default-circulation-rules th:nth-child(32), #default-circulation-rules td:nth-child(32)').addClass('hiderule');
+    //Hide 'Rental discount (%)' row by default
+      $('#default-circulation-rules th:nth-child(33), #default-circulation-rules td:nth-child(33)').addClass('hiderule');
+    //Hide 'Actions (2)' row by default
+      //$('#default-circulation-rules th:nth-child(34), #default-circulation-rules td:nth-child(34)').addClass('hiderule');
+
+
+    //Replace the text with a + sign on pre-hidden columns
+     $("#default-circulation-rules > thead > tr > th.hiderule > span").html("+");
+
+  });
+
+```
+
+### Automatically adjust for super-huge screen size
+
+Finally, since I do have a 3 monitor setup on my office computer, I have the following code that automatically removes the left hand navigation aides and un-collapses all of the columns and resizes the window when I open the rules page when my browser is set to a super-wide display.
+
+***IntranetUserJS***
+
+```javascript
+
+//BEGIN changes to smart-rules.pl
+  $('#default-circulation-rules').on('init.dt', function() {
+
+    //BEGIN expand when super large or multi screen sized page is loaded
+
+      //Creates a set of functions that happen when the browser size is greater than 2500 pixels wide
+      if ($(window).width() > 2500) {
+
+        //Removes the left hand navigation content and button
+        $('#navmenu, #allshows').hide();
+
+        //Adjusts the position of the table
+        $('.row .col-sm-10.col-sm-push-2').removeClass('col-sm-push-2');
+
+        //Removes the hiderule class from all the cells it's been applied to
+        $('.hiderule').removeClass();
+
+        //Triggers the window re-size to fix the sticky header problem
+        $(window).trigger('resize');
+
+      //This curly bracket ends the function
+      }
+
+  });
+
+```
+
+### Recap without the comments
