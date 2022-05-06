@@ -3,6 +3,10 @@
 ## Notes about Koha
 <br />
 <br />
+### [Changes to circulation rules - 21.05](/koha_notes/circ_rules_21_05)
+<br />
+These notes cover how I use jQuery and CSS to modify the circulation rules page to make it more managable.
+<br />
 ### [Using GitHub to backup Koha things](/koha_notes/github_backups)
 <br />
 These notes cover how I use GitHub for backing up system preferences, notes and slips templates, and saved SQL from Koha.
