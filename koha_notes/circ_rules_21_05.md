@@ -4,7 +4,7 @@ I originally did a presentation on this same topic at the koha-US conference in 
 
 ## The problem
 
-The circulation rules matrix table on smart-rules.pl is wide.  Really wide.  Really-really wide.  Really-really-really wide.  And it's getting wider all the time.  I have 3 screens on my work computer and if I go to Home > Administration > Circulation and fine rules on Koha and adjust my browser window to 4370 x 1040 I can see the full circulation rules matrix.  That's an insanely wide browser window.  It completely fills two full screens and even bleeds a little bit over onto the third screen.  It's crazy.
+The circulation rules matrix table on smart-rules.pl is wide.  Really wide.  Really-really wide.  Really-really-really wide.  And it's getting wider all the time.  I have 3 screens on my work computer and if I go to Home > Administration > Circulation and fine rules on Koha and adjust my browser window to 4370 x 1030 I can see the full circulation rules matrix.  That's an insanely wide browser window.  It completely fills two full screens and even bleeds a little bit over onto the third screen.  It's crazy.
 
 But there are a whole bunch of things on this screen that I really don't need to see in order to manage the circulation rules for my libraries.  I don't really need the left hand navigation controls.  I also don't need several columns in the table itself.
 
@@ -37,7 +37,7 @@ All of the jQuery I use for the changes I want will only affect smart-rules.pl a
 
 The first thing I'm going to do is create a button that collapses the space to the left of the table that has the links out to the other parts of the system preferences menu.  I've made comments on each line in the code below.
 
-This one step all by itself gets this page down to 3840x1040 and confines the table to less than 2 full screens.
+This one step all by itself gets this page down to 3840x1030 and confines the table to less than 2 full screens.
 
 ***IntranetUserJS***
 
@@ -128,6 +128,9 @@ This is another one that helps my eyes, but it also has a secondary purpose.  If
         //Takes "this" row that you've clicked on and "insert"s it "Before" the editing row - i.e. at the bottom of the table
         $(this).insertBefore('#default-circulation-rules #edit_row');
 
+        //Trigger a window resize to fix problem with "sticky" header
+        $(window).trigger('resize');
+
       //Ends the click function
       });
 
@@ -168,6 +171,9 @@ Sometimes it's helpful to see what the other rules with matching values are, so 
 
         //Forces the edit row to stay at the bottom of the table no matter where the sort wants to put it
         $("#default-circulation-rules #edit_row").insertBefore("tfoot");
+
+        //Trigger a window resize to fix problem with "sticky" header
+        $(window).trigger('resize');
 
       //Closes the click function
       });
@@ -237,6 +243,9 @@ There are many columns we don't use in our system.  The following code allows yo
         } else {
           $(this).find('span').html('Hide<br />Column');
         }
+
+        //Trigger a window resize to fix problem with "sticky" header
+        $(window).trigger('resize');
 
       });
 
@@ -416,6 +425,7 @@ Here is the full code without all of the comments
     //Click on row to move it to bottom
       $('#default-circulation-rules tr:contains(Edit)').click(function() {
         $(this).insertBefore('#default-circulation-rules #edit_row');
+        $(window).trigger('resize');
       });
 
     //BEGIN Sort circulation rules by clicking on footer
@@ -430,6 +440,7 @@ Here is the full code without all of the comments
           table.append(rows[i]);
         }
         $("#default-circulation-rules #edit_row").insertBefore("tfoot");
+        $(window).trigger('resize');
       });
       function comparer(index) {
         return function(a, b) {
@@ -453,6 +464,7 @@ Here is the full code without all of the comments
         } else {
           $(this).find('span').html('Hide<br />Column');
         }
+        $(window).trigger('resize');
       });
 
     //Hide 'Patron category' row by default
