@@ -14,6 +14,12 @@ Back in 2015 I created the jQuery and CSS you'll find below in order to hide sev
 
 This is code that needs to be upgraded for virtually every Koha upgrade because any time a new column gets added to the circulation rules (which seems to be in almost every new release of Koha) the column counts need to be updated.
 
+***Special note***
+
+I use Firefox with the browser extension "Window Resizer" which can be found at  [My Browser Addon's website](https://mybrowseraddon.com/window-resizer.html){:target="_blank"}
+
+I also frequently use the "What is my browser window size" tool at [RapidTables](https://www.rapidtables.com/web/tools/window-size.html){:target="_blank"} to figure out where my browser window is and what it's doing.
+
 ## The code
 
 All of the jQuery I use for the changes I want will only affect smart-rules.pl and I want to wait for them to take effect after the circulation rules table has loaded so the first thing I'm going to do is to write jQuery that executes all of these functions only after the rules table has loaded.
