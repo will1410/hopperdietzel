@@ -18,7 +18,7 @@ This is code that needs to be upgraded for virtually every Koha upgrade because 
 
 All of the jQuery I use for the changes I want will only affect smart-rules.pl and I want to wait for them to take effect after the circulation rules table has loaded so the first thing I'm going to do is to write jQuery that executes all of these functions only after the rules table has loaded.
 
-```JavaScript
+```javascript
 
 //BEGIN changes to smart-rules.pl
   //This function tells the browser to wait on starting the function until the datatable finishes loading
@@ -37,7 +37,7 @@ The first thing I'm going to do is create a button that collapses the space to t
 
 This one step all by itself gets this page down to 3840x1040 and confines the table to less than 2 full screens.
 
-```JavaScript
+```javascript
 
 //BEGIN changes to smart-rules.pl
   $('#default-circulation-rules').on('init.dt', function() {
@@ -75,7 +75,7 @@ I'm over 50, so when I try read a row across two computer screens, it's really e
 
 
 
-```JavaScript
+```javascript
 
 //BEGIN changes to smart-rules.pl
   $('#default-circulation-rules').on('init.dt', function() {
@@ -113,7 +113,7 @@ I'm over 50, so when I try read a row across two computer screens, it's really e
 
 This is another one that helps my eyes, but it also has a secondary purpose.  If you move the row to the bottom of the table, that's another way to make it easier on your eyes.  It also has the advantage when you're editing a row to be able to see what the previous values were.  The edit row populates with the old values as soon as you click "Edit" but if you mess up and want to reference the row after an abortive attempt at an edit, this puts the row you're editing right above the edits you're making.
 
-```JavaScript
+```javascript
 
 //BEGIN changes to smart-rules.pl
   $('#default-circulation-rules').on('init.dt', function() {
@@ -136,7 +136,7 @@ This is another one that helps my eyes, but it also has a secondary purpose.  If
 
 Sometimes it's helpful to see what the other rules with matching values are, so it would be nice to sort the table.  This next batch of code sorts the table when you click on the footer.
 
-```JavaScript
+```javascript
 
 //BEGIN changes to smart-rules.pl
   $('#default-circulation-rules').on('init.dt', function() {
@@ -165,9 +165,6 @@ Sometimes it's helpful to see what the other rules with matching values are, so 
         return $(row).children('td').eq(index).text();
       }
       $("#default-circulation-rules .fixed_sort sorting_asc").insertBefore("tfoot");
-
-
-
 
   });
 
