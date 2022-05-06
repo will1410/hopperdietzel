@@ -18,6 +18,8 @@ This is code that needs to be upgraded for virtually every Koha upgrade because 
 
 All of the jQuery I use for the changes I want will only affect smart-rules.pl and I want to wait for them to take effect after the circulation rules table has loaded so the first thing I'm going to do is to write jQuery that executes all of these functions only after the rules table has loaded.
 
+***IntranetUserJS***
+
 ```javascript
 
 //BEGIN changes to smart-rules.pl
@@ -36,6 +38,8 @@ All of the jQuery I use for the changes I want will only affect smart-rules.pl a
 The first thing I'm going to do is create a button that collapses the space to the left of the table that has the links out to the other parts of the system preferences menu.  I've made comments on each line in the code below.
 
 This one step all by itself gets this page down to 3840x1040 and confines the table to less than 2 full screens.
+
+***IntranetUserJS***
 
 ```javascript
 
@@ -73,7 +77,7 @@ This one step all by itself gets this page down to 3840x1040 and confines the ta
 
 I'm over 50, so when I try read a row across two computer screens, it's really easy for my eyes to get lost.  I added this very simple code so that when I hover the mouse over a row, it highlights in orange.  The best part about this is that the .highlighted-row class is already a part of Koha.  All I have to do is create a function that adds .highlighted-row to a row when I move the mouse over it and takes it away when I move the mouse off of it.
 
-
+***IntranetUserJS***
 
 ```javascript
 
@@ -113,6 +117,8 @@ I'm over 50, so when I try read a row across two computer screens, it's really e
 
 This is another one that helps my eyes, but it also has a secondary purpose.  If you move the row to the bottom of the table, that's another way to make it easier on your eyes.  It also has the advantage when you're editing a row to be able to see what the previous values were.  The edit row populates with the old values as soon as you click "Edit" but if you mess up and want to reference the row after an abortive attempt at an edit, this puts the row you're editing right above the edits you're making.
 
+***IntranetUserJS***
+
 ```javascript
 
 //BEGIN changes to smart-rules.pl
@@ -135,6 +141,8 @@ This is another one that helps my eyes, but it also has a secondary purpose.  If
 ### Click on the footer to sort the table
 
 Sometimes it's helpful to see what the other rules with matching values are, so it would be nice to sort the table.  This next batch of code sorts the table when you click on the footer.
+
+***IntranetUserJS***
 
 ```javascript
 
@@ -165,6 +173,60 @@ Sometimes it's helpful to see what the other rules with matching values are, so 
         return $(row).children('td').eq(index).text();
       }
       $('#default-circulation-rules .fixed_sort sorting_asc').insertBefore('tfoot');
+
+  });
+
+```
+### Collapse columns when the header is clicked
+
+There are many columns we don't use in our system.  The following code allows you to collapse a column if you don't want to see it but it requires that you put some code into  IntranetUserCSS.
+
+***IntranetUserCSS***
+
+```css
+
+/* -Administration › Circulation and fine rules- hides columns in circulation rules (requires accompanying jQuery) */
+/* This code establishes a class called "hiderule" and gives td-s and th-s with a hiderule class a very narrow profile and moves any text in that class 9999 pixels to the left of the screen i.e. makes the text invisible for all intents and purposes */
+  th.hiderule, td.hiderule {
+    min-width: 15px;
+    max-width: 15px;
+    text-indent: -9999px;
+  }
+
+```
+
+***IntranetUserJS***
+
+```javascript
+
+//BEGIN changes to smart-rules.pl
+  $('#default-circulation-rules').on('init.dt', function() {
+
+    //BEGIN Hide unneeded columns in circulation rules by clicking on header (--requires corresponding css--)
+
+      //Adds the word "Hide" to the header of each column
+      $('#default-circulation-rules thead th').append('<br /><br /><span>Hide<br />Column</span>');
+
+      //Adds a click function to the cells of the header
+      $('#default-circulation-rules thead th').click(function() {
+
+        //Creates a variable to index the head cell just clicked on
+        var index = (this.cellIndex + 1);
+
+        //Creates a variable that identifies all of the cells in the table with the matching index
+        var cells = $('#default-circulation-rules tr > :nth-child(' + index + ')');
+
+        //Toggles the "hiderule" class on the cells identified in the last step
+        cells.toggleClass('hiderule');
+
+        //Replaces all of the text in the head cell with a "+" symbol or with "Hide column" depending on the toggle state of the hiderule class
+        if ($(this).hasClass('hiderule')) {
+          $(this).find('span').html('+');
+        } else {
+          $(this).find('span').html('Hide<br />Column');
+        }
+
+      });
 
   });
 

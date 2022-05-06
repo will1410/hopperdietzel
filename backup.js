@@ -114,27 +114,3 @@
       $(".row .col-sm-10.col-sm-push-2").removeClass("col-sm-push-2");
     }
   });
-
-//BEGIN Sort circulation rules by clicking on footer
-  $('#default-circulation-rules tfoot tr th').click(function() {
-    var table = $(this).parents('table').eq(0);
-    var rows = table.find("tbody tr").toArray().sort(comparer($(this).index()));
-    this.asc = !this.asc;
-    if (!this.asc) {
-      rows = rows.reverse();
-    }
-    for (var i = 0; i < rows.length; i++) {
-      table.append(rows[i]);
-    }
-  });
-  function comparer(index) {
-    return function(a, b) {
-      var valA = getCellValue(a, index),
-      valB = getCellValue(b, index);
-      return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB);
-    };
-  }
-  function getCellValue(row, index) {
-    return $(row).children('td').eq(index).text();
-  }
-  $("#default-circulation-rules #edit_row").insertBefore("tfoot");
