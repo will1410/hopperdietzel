@@ -1,4 +1,4 @@
-## SQL drill downs in Koha reports 
+## SQL drill downs in Koha reports
 
 Essentially, an SQL drill down is using Koha's reports module to create one report that contains a link that runs a different Koha report.  This is an expansion of something we talked about briefly in the [Terrific Every Other Thursday videos by koha-US](https://koha-us.org/learn/video-playlists/) Season 1, episode 5 and episode 12.
 
@@ -102,6 +102,8 @@ LIMIT 500
 If you've watched the [Terrific Every Other Thursday videos by koha-US](https://koha-us.org/learn/video-playlists/) then you may remember Season 1, episode 24, where I spoke about using alternative authorized values in reports (and in bibliogrpahic frameworks).  One of the reports that I highlighted briefly in that video is my "Flexible shelflist report."
 
 Flexible Shelflist is a report that creates a shelf list for all of the items at a library and it's got tons of non-standard runtime parameters based on custom authorized values I've created in Next Search catalog. If you wanted to use this report on your system, you would need to modify the runtime parameters to match your own runtime parameters.
+
+You can see all of the Next Search Catalog custom authorized values at [our Github site](https://github.com/northeast-kansas-library-system/nextkansas.sql) in the file titled "authorised_values.csv"
 
 Here is that report as it appears on my system:
 
@@ -249,6 +251,7 @@ FROM
     FROM
       items
     WHERE
+      /* "ZBRAN" is a custom authoirzed value set in my system */
       items.homebranch LIKE <<Item home library|ZBRAN>>
     GROUP BY
       items.biblionumber,
@@ -264,6 +267,7 @@ FROM
       items.biblionumber) systemcounts ON systemcounts.biblionumber =
       items.biblionumber
 WHERE
+  /* "ZBRAN," "LLOC," "LITYPES," "LCCODE," and "LNOT_LOAN" are custom authorized values in my system */
   items.homebranch LIKE <<Item home library|ZBRAN>> AND
   Coalesce(items.permanent_location, "-") LIKE <<Item permanent shelving location|LLOC>> AND
   Coalesce(items.itype, "PUNC") LIKE <<Item type|LITYPES>> AND
@@ -292,6 +296,7 @@ GROUP BY
   biblio.biblionumber,
   items.itemnumber
 HAVING
+  /* "ZNUMBERS," "ZYES_NO," and "YNUMBER" are custom authorized values in my system */
   CHECKOUTS_PLUS_RENEWALS <= <<With X or fewer checkouts|ZNUMBERS>> AND
   CHECKED_OUT_NOW LIKE <<Display checked out items|ZYES_NO>> AND
   STATUS_PROBLEMS LIKE <<Display lost, missing, and withdrawn items|ZYES_NO>> AND
