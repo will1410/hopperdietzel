@@ -3,6 +3,8 @@
 ## Notes about Koha
 <br />
 <br />
+### [SQL Drill downs](/koha_notes/sqldrilldown)
+<br />
 ### [Changes to circulation rules - 21.05](/koha_notes/circ_rules_21_05)
 <br />
 These notes cover how I use jQuery and CSS to modify the circulation rules page to make it more managable.
