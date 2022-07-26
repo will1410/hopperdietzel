@@ -1,6 +1,6 @@
 ## SQL drill downs in Koha reports
 
-Essentially, an SQL drill down is using Koha's reports module to create one report that contains a link that runs a different Koha report.  This is an expansion of something we talked about briefly in the [Terrific Every Other Thursday videos by koha-US](https://koha-us.org/learn/video-playlists/) Season 1, episode 5 and episode 12.
+Essentially, an SQL drill down is using Koha's reports module to create one report that contains a link that runs a different Koha report.  This is an expansion of something we talked about briefly in the [Terrific Every Other Thursday videos by koha-US](https://koha-us.org/learn/video-playlists/){:target="_blank"} Season 1, episode 5 and episode 12.
 
 So here are two reports that I have in my system and a method for linking them together.
 
@@ -99,11 +99,11 @@ LIMIT 500
 
 ### Sample 2 - Shelflist report
 
-If you've watched the [Terrific Every Other Thursday videos by koha-US](https://koha-us.org/learn/video-playlists/) then you may remember Season 1, episode 24, where I spoke about using alternative authorized values in reports (and in bibliogrpahic frameworks).  One of the reports that I highlighted briefly in that video is my "Flexible shelflist report."
+If you've watched the [Terrific Every Other Thursday videos by koha-US](https://koha-us.org/learn/video-playlists/){:target="_blank"} then you may remember Season 1, episode 24, where I spoke about using alternative authorized values in reports (and in bibliogrpahic frameworks).  One of the reports that I highlighted briefly in that video is my "Flexible shelflist report."
 
 Flexible Shelflist is a report that creates a shelf list for all of the items at a library and it's got tons of non-standard runtime parameters based on custom authorized values I've created in Next Search catalog. If you wanted to use this report on your system, you would need to modify the runtime parameters to match your own runtime parameters.
 
-You can see all of the Next Search Catalog custom authorized values at [our Github site](https://github.com/northeast-kansas-library-system/nextkansas.sql) in the file titled "authorised_values.csv"
+You can see all of the Next Search Catalog custom authorized values at [our Github site](https://github.com/northeast-kansas-library-system/nextkansas.sql){:target="_blank"} in the file titled "authorised_values.csv"
 
 Here is that report as it appears on my system:
 
