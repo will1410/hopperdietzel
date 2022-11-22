@@ -9,6 +9,14 @@
 
 ## Records / Singles
 
+### YOU ARE AN EDGY VIDIONARY SEER [Jim Pearce](https://open.spotify.com/album/2IjK48zZABQi454uvxPO0I?si=Uo-Kj9CGRYyrmT30Ud3_Cw){:target="_blank"}
+
+I love Jim Pearce.  He thinks jazz should be fun.  This album is now a few years old, but I find myself listening to it about once a week.  When it first came out I remember listening to it and explaining the song "Old as Dirt" to one of my co-workers at Latah Count Library.  She did not appreciate that I said a song titled "Old as Dirt" reminded me of her that the line "What golden years / my knees are achin'" was the line that made me think of her because she was just about to have knee replacement surgery.
+
+In a lot of respects I think Jim Pearce is a lot like The Bobs.  They have both recorded some great music, but they also take the attitude that music should be fun.  Jim Pearce's albums are a lot of fun.  The more recent album from 2020, titled [LITTLE MOVIES](https://open.spotify.com/album/3Fsw6Hq6xKtTZkDtHOFVWJ?si=Rl2N2MfORKuVCD2V_fE5Lw){:target="_blank"} is also great but it an insturmental only album.
+
+2022.11.22
+
 ### TIME WARP II [Erich Kunzel and the Cincinati Pops Orchestra](https://open.spotify.com/album/7LoG7jbAl7rml2tKI0ah9i?si=c_z34en3Toa7ifJByv4JDw){:target="_blank"}
 
 I bought TIME WARP II on CD shortly after I got my first CD player.  I also bought the Cincinatti Pop's 1812 Overture around the same time (this is the one with the digital cannon shots that broke the windows on the recording studio).  This CD was a great way to re-experience some great movie moments - especially from the STAR TREK TV show.  This CD includes a symphonic suite based on the original soundtrack for "The Cage" - STAR TREK's first pilot episode.  At the time this CD came out, this was about as close to soundtrack for STAR TREK as you could get.  It would be a couple of years before there was an actual STAR TREK Soundtrack released [see here](https://open.spotify.com/album/0mMLJvnEGiuha1ZmnFa8Tj?si=T_8NWEV6TgWnw1YDAQLgAQ){:target="_blank"}.  The album covers pieces of music featured in STAR TREK, ALIEN, BATTLESTAR GALACTICA, SUPERMAN and, of course, 2001: A SPACE ODYSSEY.  My favorite is the Cincinatti Pop's rendition of the "Love theme from 'Superman'" which is also sometimes called "Can You Read My Mind."
