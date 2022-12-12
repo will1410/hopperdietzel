@@ -239,3 +239,5 @@ Order By
 ```
 
 This is what it looks like on the koha-US test site
+
+![Upcoming closures example](/images/upcoming_closures_0010.png){:class="img-responsive"}
