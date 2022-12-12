@@ -3,6 +3,9 @@
 ## Notes about Koha
 <br />
 <br />
+### [Upcoming closures](/koha_notes/upcoming_closures)
+<br />
+<br />
 ### [SQL Drill downs](/koha_notes/sqldrilldown)
 <br />
 How to create a link in one Koha report that will run a separate Koha report.<br />
