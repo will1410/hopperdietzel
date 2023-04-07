@@ -3,11 +3,11 @@
 ## Notes about Koha
 <br />
 <br />
+### [Library contact sheet](/koha_notes/library_contact_sheet)
+How to create a table with contact information for all libraries in Koha and put it on the circulation page.<br />
+<br />
 ### [Holds queue counter](/koha_notes/holds_queue_count)
 How to create a holds-queue counter to the home page that acts as a button to run a holds queue report.<br />
-<br />
-How to create a table showing upcoming closures on the home page of the staff interface.<br />
-<br />
 <br />
 ### [Upcoming closures](/koha_notes/upcoming_closures)
 <br />
