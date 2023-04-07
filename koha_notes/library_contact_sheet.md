@@ -2,25 +2,25 @@
 
 We have 54 "branches" in our Koha and a courier system that delivers materials between our libraries.  Staff at 1 library frequently need to contact staff at other libraries.  For years we've maintained a library directory on our system's home page at https://www.nekls.org/
 
-The problem that staff have had with this is that, if you need to contact someone, you need to leave Koha, go to a different website, search through the directory (which includes all 117 of our member libraries - not just the ones using Koha) and search through the member directory to find the library information you need.  It was clunky and awkward and the information that was in the directory did not always match the information in Koha because the library informaiton from the directory is not linked to Koha in any way, shape, or form.
+The problem that staff have had with this is that, if you need to contact someone, you need to leave Koha, go to a different website, search through the directory (which includes all 117 of our member libraries - not just the ones using Koha) and search through the member directory to find the library information you need.  It was clunky and awkward and the information that was in the directory did not always match the information in Koha because the library informaiton from the directory is not linked to the Koha library information in any way, shape, or form.
 
-So, in 2017 I created a report that gathered all of the library contact information from the branches table in Koha and laid it out in a table that could be posted into the  IntranetCirculationHomeHTML system preference.  Since this report took some time to run I went ahead and set its cache period for 12 hours.  That way it wouldn't re-run every time the page loaded.
+So, in 2017 I created a report that gathered all of the library contact information from the branches table in Koha and laid it out in a table that could be posted into the  IntranetCirculationHomeHTML system preference.  Since this report took some time to run I went ahead and set its cache period for 12 hours.  That way it wouldn't re-run every time the page loaded.  It would load once in the morning and then be cached for 12 hours.  This meant that if I made any changed to a library record in Koha, it wouldn't be visible until the next day.
 
-Over time I added some information beyond contact information.  Specifically we had several months where many libraries were working with third party vendors and they were frequently asking me "What was our circulation in previous 12 months?," "How many items does my library own?," and "How many patrons do I have right now?"  By adding to this report I could answer most of these questions with "Go look at your library informaiton on the circulation page."  The report got slower, but it still ran in about 30-40 seconds and it cached for 12 hours, so it wasn't really a problem.
+Over time I added some information beyond contact information.  Specifically we had several months where many libraries were working with a third party vendor and they were frequently asking me "What was our circulation in previous 12 months?," "How many items does my library own?," and "How many patrons do I have right now?"  By adding to this report I could answer most of these questions with "Go look at your library informaiton on the circulation page."  The report got slower, but it still ran in about 30-40 seconds and it cached for 12 hours, so it wasn't really a problem.
 
-Then in February of 2023 we did a MariaDB upgrade that changed the way the report ran.  Instead of running in 30-40 seconds, it crashed after 5 minutes.  This meant that the report never cached.  This meant that every time someone opened the circulation page, the report tried to run.  This meant that Koha crashed.
+Then in February of 2023 we did a MariaDB upgrade that changed the way the report ran.  Instead of running in 30-40 seconds, it crashed after 5 minutes.  This meant that the report never cached.  This meant that every time someone opened the circulation page, the report tried to run.  When 7 or 8 libraires opened in the morning and tried to go to the circulation page, this meant that Koha crashed.
 
-The solution was to either monkey around with the settings on MariaDB or to abandon the report as a report.  Since people had come to rely on having that library contact information on the circulation page, I decided the best way to deal with the situation was to re-write the table using the Rest API rather than a report.  This meant two things.  First, it meant that the table would be live.  If I updated something in a library record in Koha, there would no longer be a 12 hour delay in the table update.  Second, it meant that I couldn't include information beyond what's in the library record.  I couldn't have the contact sheet answer the "How many items does my library own?" question any longer.
+The solution was to either monkey around with the settings on MariaDB or to abandon the report as a report.  Since people had come to rely on having that library contact information on the circulation page, I decided the best way to deal with the situation was to re-write the table using the Rest API rather than a report.  This meant two things.  First, it meant that the table would be live.  If I updated something in a library record in Koha, there would no longer be a 12 hour delay in the table update.  Second, it meant that I couldn't include information beyond what's in the library record.  I couldn't have the contact sheet answer the "How many items does my library own?" question any longer.  That seemed like something that was worth sacrificing.
 
-Here are the steps to re-creat what I've one on my system:
+Here are the steps I took to create a library contact table on the circulation page in Next Search Catalog:
 
 ## Change labels on branches.pl
 
-The first part of my process in managing library contact information in Koha is to modify the labels on the "New library/Modify library" pages at **Home > Administration > Libraries > New library** and **Home > Administration > Libraries > Modify library**.
+The first part of my process in managing library contact information in Koha is to modify the labels on the "New library/Modify library" pages.  The URL for this page sends you to some variation of branche.pl, or to describe it using the Koha breadcrumbs, these pages are **Home > Administration > Libraries > New library** and **Home > Administration > Libraries > Modify library**.
 
-For example, the label on the New/modify page for branches.branchaddress1 is "Address line 1:"  For our system this field is always used for a library's mailing address, so I use jQuery to update that label to "Mailing address:"  "Library address 2:" becomes "Street address/Physical address:"  And "Library address 3:" becomes "Director/ILL contact:"
+As an example of the types of changes I make to these pages, the label on the New/modify page for branches.branchaddress1 is "Address line 1:"  For our system this field is always used for a library's mailing address, so I use jQuery to update that label to "Mailing address:"  "Library address 2:" becomes "Street address/Physical address:"  And "Library address 3:" becomes "Director/ILL contact:"
 
-The full set of labels, their CSS selector, and the database field they relate to in Koha 22.05 are:
+The full set of labels, their CSS selectors, and the database fields they relate to in Koha 22.05 are:
 
 | Standard Koha label | CSS selector | Database field | Next Search Catalog |
 |--|--|--|--|
@@ -49,7 +49,7 @@ The full set of labels, their CSS selector, and the database field they relate t
 The formula for using jQuery to re-write any of these labels is to write 
 
 ```javascript
-$('CSS Selector from column B').html('New label text:');
+$('_CSS_Selector_from_column_B').html('New_label_text');
 ```
 
 So for Next Search Catalog, the jQuery to change "Address line 1:" to "Mailing address:" is:
@@ -58,7 +58,7 @@ So for Next Search Catalog, the jQuery to change "Address line 1:" to "Mailing a
 $('#admin_branches.admin label[for="branchaddress1"]').html('Mailing address:');
 ```
 
-Changing "Country:" to "KLE code:" is:
+And changing "Country:" to "KLE code:" is:
 
 ```javascript
 $('#admin_branches.admin label[for="branchcountry"]').html('KLE code:');
@@ -80,11 +80,13 @@ For example, I enter the logo for the Baldwin City library into the "Opac info" 
 <p><img src="https://baldwin.mykansaslibrary.org/wp-content/uploads/B.C.L.Rainbow.Logo_.10.2020.3.png" alt="" width="150" height="54" /></p>
 ```
 
-This way, when the API builds the final table, I can display the library's logo in the contact label.
+This way, when the API builds the final table, I can display the library's logo in the contact table.
 
 ## Adding a table header to the IntranetCirculationHomeHTML system preference 
 
-In order to have the API take the library information and add it to a table, I need a table somewhere on IntranetCirculationHomeHTML.  To do this I put this HTML somewhere in the IntranetCirculationHomeHTML system preference:
+In order to have the API take the library information and add it to a table, I need a table somewhere on IntranetCirculationHomeHTML.  I also have some custom code in my IntranetCirculationHomeHTML that tabs the content in this preference.  How you add this code will depend on what other html you have in this system preference.
+
+For Next Search Catalog I put this HTML somewhere in the IntranetCirculationHomeHTML system preference:
 
 ```html
 <div id="libtable">
@@ -117,6 +119,8 @@ In order to have the API take the library information and add it to a table, I n
 
 ### Step-by-step walk through
 
+#### Step 1
+
 The first thing I do is to build a div to hold the data and I'm going give it an id of  "libtable."  This will help me identify the table when I want to do things with it later.
 
 ```html
@@ -125,6 +129,8 @@ The first thing I do is to build a div to hold the data and I'm going give it an
 </div>
 
 ```
+
+#### Step 2
 
 Next I want to create the actual table and I'm going to give it an id of "library_table" and put it inside of the div I just created.
 
@@ -137,6 +143,8 @@ Next I want to create the actual table and I'm going to give it an id of "librar
 
 </div>
 ```
+#### Step 3
+
 Then I want to add a header and a footer to the table.  HTML includes a "th" element for header elements that adds style to those elements, but in order to get the informaiton in the footer to be styled similarly to the header, it's easiest to add css to make the footer act and look like the header.
 
 You'll also note that I'm adding a "noprint" class to the logo column which will prevent that cell from being printed if someone tries to print the table from the screen.
@@ -166,6 +174,8 @@ You'll also note that I'm adding a "noprint" class to the logo column which will
 
 </div>
 ```
+
+#### Step 4
 
 Finally I add the actual table body tags to the html.  This is where the actual table with display when the code is finished.
 
@@ -198,3 +208,309 @@ Finally I add the actual table body tags to the html.  This is where the actual 
 </div>
 ```
 
+## Adding the jQuery to IntranetUserJS 
+
+The jQuery that calls up the data from the API and plugs it into the table follows:
+
+```Javascript
+
+/* ========== Contact sheet for circulation page ========== */ 
+
+$(document).ready(function () { 
+
+//Home > Circulation 
+  //BEGIN - adds contact sheet to "Library contact information" tab in tabbed section of IntranetCirculationHomeHTML system preference 
+    var contact_sheet_url = $(location).attr('href'); 
+    if (contact_sheet_url.indexOf("circulation-home.pl") != -1) { 
+
+      $.getJSON("/api/v1/libraries", function (data) { 
+
+        var contact_sheet = ''; 
+
+        $.each(data, function (key, value) { 
+
+          var address4 = value.address2 || ''; 
+          var physical_address = address4 || value.address1; 
+          var fax_machine = value.fax || ''; 
+          var zipcode = value.postal_code.substr(0, 5); 
+          var director = value.address3.replace(" | ", "</span></p><p><span>").replace(" | ", "</span></p><p><span>").replace(" | ", "</span></p>"); 
+          var report_branch = value.library_id.replace(/(DONI)\w+/, 'DONI%').replace(/(PH)\w+/, 'PH%'); 
+
+          contact_sheet += '<tr class="filterme">'; 
+
+          contact_sheet += '<td scope="row"><p style="font-size: 1.5em">' + value.name + '</p><p><ins>Mailing address:</ins></p><p>' + value.address1 + '<br />' + value.city + ', ' + value.state + ' ' + zipcode + '</p><p><ins>Physical address:</ins></p><p>' + physical_address + '<br />' + value.city + ', ' + value.state + '</p><p><ins>Branch code: </ins>' + value.library_id + '</p></td>'; 
+
+          contact_sheet += '<td>'; 
+
+          contact_sheet += '<p>Phone: ' + value.phone + '</p><p>Fax: ' + fax_machine + '</p><p>e-mail: ' + value.email + '</p><p>Courier route #: ' + value.notes + '</p><br /><p class="noprint"><a class="badge btn-sm btn-success" style="color: white;" href="' + value.url + '" target="_blank">Website</a></p>' + '</td>'; 
+
+          contact_sheet += '<td><p><span style="font-size: 1.5em;">' + director + '</span></p><br /><p><a class="btn btn-lg btn-info noprint" style="color: white;" href="/cgi-bin/koha/reports/guided_reports.pl?reports=3716&phase=Run+this+report&param_name=Choose+your+library|ZBRAN&sql_params=' + report_branch + '" target="_blank">Current statistics report for this library</a></p></td>'; 
+
+          contact_sheet += '<td class="noprint"><p>' + value.opac_info + '</span></p></td>'; 
+
+          contact_sheet += '</tr>'; 
+
+        }); 
+
+        $('#library_table th').parent().after(contact_sheet); 
+
+        console.log(contact_sheet); 
+
+      }); 
+    } 
+
+    //add filter function to search the table 
+    $("#myInput").on("keyup", function () { 
+      var value = $(this).val().toLowerCase(); 
+      $(".filtertable .filterme").filter(function () { 
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1); 
+      }); 
+    }); 
+
+    $(".clear").click(function(){ 
+      $("#myInput").val("").keyup(); 
+      return false; 
+    }); 
+
+}); 
+
+/* ========== END Contact sheet for circulation page ========== */ 
+
+```
+### Step-by-step walkthrough of the jQuery 
+
+#### Step 1
+
+```Javascript
+
+/* ========== Contact sheet for circulation page ========== */ 
+
+$(document).ready(function () { 
+
+
+
+}); 
+
+/* ========== END Contact sheet for circulation page ========== */ 
+
+```
+
+These are the basics.  Anything between a ```/* */``` in Javascript or jQuery is a comment, so the first line and the last line are just to help keep track of what this piece of code does in your Koha.  If you don't comment your code you often run into the quesion "What does this code do?" because you will have it in your system so long you can't remember why you wrote it.
+
+And the ```$(document).ready(function () { /*_jquery_goes_here_*/ }); ``` is the piece of code you need to wrap around any jQuery you write to make it work in Koha.
+
+#### Step 2
+
+```Javascript
+
+/* ========== Contact sheet for circulation page ========== */ 
+
+$(document).ready(function () { 
+
+  /* New section for step 2 */
+  var contact_sheet_url = $(location).attr('href'); 
+
+  if (contact_sheet_url.indexOf("circulation-home.pl") != -1) {
+
+
+
+  }
+  /* END New section for step 2 */
+
+
+}); 
+
+/* ========== END Contact sheet for circulation page ========== */ 
+
+```
+
+The new section for step 2 does two things.  The first creates a variable called "contact_sheet_url" based on the URL of the page you're looking at.
+
+The second section says if "contact_sheet_url" contains the phrase "circulation-home.pl" to execute the function that will appear between the {}.
+
+#### Step 3
+
+```Javascript
+
+/* ========== Contact sheet for circulation page ========== */ 
+
+$(document).ready(function () { 
+
+  var contact_sheet_url = $(location).attr('href'); 
+
+  if (contact_sheet_url.indexOf("circulation-home.pl") != -1) {
+
+
+    /* New section for step 3 */
+    $.getJSON("/api/v1/libraries", function (data) { 
+
+
+
+    }); 
+    /* END New section for step 3 */
+
+
+  }
+
+}); 
+
+/* ========== END Contact sheet for circulation page ========== */ 
+
+```
+
+The new section for step 3 tells Koha that, if we are on "circulation-home.pl" to go ahead and get the library data from the API.
+
+
+#### Step 4
+
+```Javascript
+
+/* ========== Contact sheet for circulation page ========== */ 
+
+$(document).ready(function () { 
+
+  var contact_sheet_url = $(location).attr('href'); 
+
+  if (contact_sheet_url.indexOf("circulation-home.pl") != -1) {
+
+    $.getJSON("/api/v1/libraries", function (data) { 
+
+
+      /* New section for step 4 */
+      var contact_sheet = ''; 
+
+      $.each(data, function (key, value) { 
+
+
+
+      }); 
+      /* END New section for step 4 */
+
+
+    }); 
+    
+  }
+
+}); 
+
+/* ========== END Contact sheet for circulation page ========== */ 
+
+```
+
+The new section for step 4 does two things.  First it creates a new variable called "contact_sheet" and then it sets that variable to a blank space.  In a couple of steps from now we'll start adding data to that blank space.
+
+Then it says that for each row of API data for libraries, to index rows and extract their values from the api data.
+
+#### Step 5
+
+```Javascript
+
+/* ========== Contact sheet for circulation page ========== */ 
+
+$(document).ready(function () { 
+
+  var contact_sheet_url = $(location).attr('href'); 
+
+  if (contact_sheet_url.indexOf("circulation-home.pl") != -1) {
+
+    $.getJSON("/api/v1/libraries", function (data) { 
+
+      var contact_sheet = ''; 
+
+      $.each(data, function (key, value) { 
+
+        /* New section for step 5 */
+        
+        //Creates a varialbe called "address4" by taking the value of address2 unless address2 is null, in which case, address4 is blank
+        var address4 = value.address2 || ''; 
+
+        //Creates a variable called "physical address" which = address4 (i.e. address2 or a blank space) unless address4 is blank, in which case it equals address1
+        //This has the effect of making the physical address = the library's mailing address in cases where the library doesn't have a PO Box
+        //For those who don't live in  a rural area - many people and libraries in rural areas don't get mail delivery to their homes or offices
+        //in many rural parts of the USA you still have to go to the post office to pick up your mail
+        var physical_address = address4 || value.address1; 
+
+        //Creates a varialbe called "fax_machine" which is blank if the library doesn't have a separate fax number
+        var fax_machine = value.fax || ''; 
+
+        //Creates a varialbe called "zipcode" that strips the extra 4 digits from the library's zip code if it was entered as a 9 digit number
+        var zipcode = value.postal_code.substr(0, 5); 
+
+        //Creates a variable called "director" that replaces the pipes (described above) with line breaks to make the data easier to read in the table 
+        var director = value.address3.replace(" | ", "</span></p><p><span>").replace(" | ", "</span></p><p><span>").replace(" | ", "</span></p>"); 
+
+        //Craetes a varialbe called "report_branch" which allows the the branchcodes of some of our libraries to be pushed into a report 
+        //(which I'll talk about later) so that the report will run for all branches of those libraries instead of one branch at a time
+        var report_branch = value.library_id.replace(/(DONI)\w+/, 'DONI%').replace(/(PH)\w+/, 'PH%'); 
+        
+        /* END New section for step 5 */
+
+      }); 
+
+    }); 
+    
+  }
+
+}); 
+
+/* ========== END Contact sheet for circulation page ========== */ 
+
+```
+
+This section takes the values that have been indexed and acquired in step 4 and monkeys around with them.  The comments above each line in the code explains what the code here is doing.
+
+The imporant thing to remember here is to remember how jQuery and Javascript deal with null values.  If address2 is blank and you ask jQuery to show you address2, you'll get a result that says "NaN" (i.e. Not a Number) where you may have been hoping for "".  With jQuery, though, you have to tell jQuery that if address2 is null, then you want a "" instead of a "Not a Number" error message.
+
+#### Step 6
+
+```Javascript
+
+/* ========== Contact sheet for circulation page ========== */ 
+
+$(document).ready(function () { 
+
+  var contact_sheet_url = $(location).attr('href'); 
+
+  if (contact_sheet_url.indexOf("circulation-home.pl") != -1) {
+
+    $.getJSON("/api/v1/libraries", function (data) { 
+
+      var contact_sheet = ''; 
+
+      $.each(data, function (key, value) { 
+
+        var address4 = value.address2 || ''; 
+        var physical_address = address4 || value.address1; 
+        var fax_machine = value.fax || ''; 
+        var zipcode = value.postal_code.substr(0, 5); 
+        var director = value.address3.replace(" | ", "</span></p><p><span>").replace(" | ", "</span></p><p><span>").replace(" | ", "</span></p>"); 
+        var report_branch = value.library_id.replace(/(DONI)\w+/, 'DONI%').replace(/(PH)\w+/, 'PH%'); 
+        
+        /* New section for step 6 */
+        contact_sheet += '<tr class="filterme">'; 
+
+          contact_sheet += '<td scope="row"><p style="font-size: 1.5em">' + value.name + '</p><p><ins>Mailing address:</ins></p><p>' + value.address1 + '<br />' + value.city + ', ' + value.state + ' ' + zipcode + '</p><p><ins>Physical address:</ins></p><p>' + physical_address + '<br />' + value.city + ', ' + value.state + '</p><p><ins>Branch code: </ins>' + value.library_id + '</p></td>'; 
+
+          contact_sheet += '<td>'; 
+
+          contact_sheet += '<p>Phone: ' + value.phone + '</p><p>Fax: ' + fax_machine + '</p><p>e-mail: ' + value.email + '</p><p>Courier route #: ' + value.notes + '</p><br /><p class="noprint"><a class="badge btn-sm btn-success" style="color: white;" href="' + value.url + '" target="_blank">Website</a></p>' + '</td>'; 
+
+          contact_sheet += '<td><p><span style="font-size: 1.5em;">' + director + '</span></p><br /><p><a class="btn btn-lg btn-info noprint" style="color: white;" href="/cgi-bin/koha/reports/guided_reports.pl?reports=3716&phase=Run+this+report&param_name=Choose+your+library|ZBRAN&sql_params=' + report_branch + '" target="_blank">Current statistics report for this library</a></p></td>'; 
+
+          contact_sheet += '<td class="noprint"><p>' + value.opac_info + '</span></p></td>'; 
+
+          contact_sheet += '</tr>'; 
+        /* END New section for step 6 */
+
+
+      }); 
+
+    }); 
+    
+  }
+
+}); 
+
+/* ========== END Contact sheet for circulation page ========== */ 
+
+```
