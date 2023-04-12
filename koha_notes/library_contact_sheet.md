@@ -68,7 +68,7 @@ $('#admin_branches.admin label[for="branchcountry"]').html('KLE code:');
 
 Two other things that I currently do with the data in a library record are related to how I've used the report and now the API to display data I want to share in a way that looks good in the table.
 
-For "Address line 3:" that I've renamed "Director/ILL contact:" I separate add the director's name and e-mail address; followed by a space, a pipe, and a space (i.e. " \| "); followed by the name of that library's primary ILL contact and e-mail address (if they have a dedicated ILL contact); followed again by a space, pipe, and a space; followed by that library's accredation type.
+For "Address line 3:" that I've renamed "Director/ILL contact:" I separate add the director's name and e-mail address; followed by a space, a pipe, and a space (i.e. ```" | "```); followed by the name of that library's primary ILL contact and e-mail address (if they have a dedicated ILL contact); followed again by a space, pipe, and a space; followed by that library's accredation type.
 
 The pipes allow me to use a search/replace function when I'm building the table so that the pipes become line breaks in the final table output.
 
@@ -676,7 +676,7 @@ I'll explain this part of the code at the end.
 
 ## Adding a link to a report
 
-Something you may have noticed in the code is that there is link to a report.  Specifically that code is "/cgi-bin/koha/reports/guided_reports.pl?reports=3716&phase=Run+this+report&param_name=Choose+your+library\|ZBRAN&sql_params=' + report_branch + '"
+Something you may have noticed in the code is that there is link to a report.  Specifically that code is ```"/cgi-bin/koha/reports/guided_reports.pl?reports=3716&phase=Run+this+report&param_name=Choose+your+library|ZBRAN&sql_params=' + report_branch + '"```
 
 When I had this table building from a report, I was able to fill the report with some data directly from Koha and that's part of why the report broke (trying to get too much data).  Since I can't pump that report data into the table from the API, I wrote a report and then I use the API to create a link to that report here on the table, so that if someone is looking at the table, they can click on a link to run the report for their library.
 
