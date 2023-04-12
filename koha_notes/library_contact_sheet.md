@@ -90,26 +90,32 @@ For Next Search Catalog I put this HTML somewhere in the IntranetCirculationHome
 
 ```html
 <div id="libtable">
-  
-  <table id="library_table" class="table table-hover table-bordered">
-  
-    <thead>
-      <tr>
-        <th scope="col">Library</th>
-        <th scope="col">Contact information</th>
-        <th scope="col">Staff contacts / report link</th>
-        <th scope="col" class="noprint">Logo/photo</th>
-      </tr>
-    </thead>
 
-    <tfoot>
-      <td scope="row" style="text-align: center; font-weight: 700; background-color: #e8e8e8;">Library</td>
-      <td style="text-align: center; font-weight: 700; background-color: #e8e8e8;">Contact information</td>
-      <td style="text-align: center; font-weight: 700; background-color: #e8e8e8;">Staff contacts / holdings</td>
-      <td style="text-align: center; font-weight: 700; background-color: #e8e8e8;" class="noprint">Logo/photo</td>
-    </tfoot>  
+  <div id="libtable" class="dataTables_wrapper">
 
-  </table>
+    <span style="padding: 10px"><input id="myInput" type="text" placeholder="Search.." style="padding: 10px"><a href="#" class="clear" rel="nofollow"><span style="padding: 10px">Clear</span></a></span>
+    
+    <table id="library_table" class="table table-hover table-bordered">
+    
+      <thead>
+        <tr>
+          <th scope="col">Library</th>
+          <th scope="col">Contact information</th>
+          <th scope="col">Staff contacts / report link</th>
+          <th scope="col" class="noprint">Logo/photo</th>
+        </tr>
+      </thead>
+
+      <tfoot>
+        <td scope="row" style="text-align: center; font-weight: 700; background-color: #e8e8e8;">Library</td>
+        <td style="text-align: center; font-weight: 700; background-color: #e8e8e8;">Contact information</td>
+        <td style="text-align: center; font-weight: 700; background-color: #e8e8e8;">Staff contacts / holdings</td>
+        <td style="text-align: center; font-weight: 700; background-color: #e8e8e8;" class="noprint">Logo/photo</td>
+      </tfoot>  
+
+    </table>
+
+  </div>
 
 </div>
 ```
@@ -168,6 +174,43 @@ You'll also note that I'm adding a "noprint" class to the logo column which will
     </tfoot>
 
   </table>
+
+</div>
+```
+
+### Step 4
+
+```html
+<div id="libtable">
+
+  <!-- I'll explain this line at the end -->
+  <div id="libtable" class="dataTables_wrapper">
+
+    <!-- I'll explain this line at the end -->
+    <span style="padding: 10px"><input id="myInput" type="text" placeholder="Search.." style="padding: 10px"><a href="#" class="clear" rel="nofollow"><span style="padding: 10px">Clear</span></a></span>
+    
+    <table id="library_table" class="table table-hover table-bordered">
+    
+      <thead>
+        <tr>
+          <th scope="col">Library</th>
+          <th scope="col">Contact information</th>
+          <th scope="col">Staff contacts / report link</th>
+          <th scope="col" class="noprint">Logo/photo</th>
+        </tr>
+      </thead>
+
+      <tfoot>
+        <td scope="row" style="text-align: center; font-weight: 700; background-color: #e8e8e8;">Library</td>
+        <td style="text-align: center; font-weight: 700; background-color: #e8e8e8;">Contact information</td>
+        <td style="text-align: center; font-weight: 700; background-color: #e8e8e8;">Staff contacts / holdings</td>
+        <td style="text-align: center; font-weight: 700; background-color: #e8e8e8;" class="noprint">Logo/photo</td>
+      </tfoot>  
+
+    </table>
+
+  <!-- I'll explain this line at the end -->
+  </div>
 
 </div>
 ```
@@ -362,9 +405,9 @@ $(document).ready(function () {
 
 ```
 
-The new section for step 4 does two things.  First it creates a new variable called "contact_sheet" and then it sets that variable to a blank space.  In a couple of steps from now we'll start adding data to that blank space.
+The new section for step 4 does two things.  First it creates a new variable called "contact_sheet" and then it sets that variable to a blank space.  In a couple of steps from now we'll start replacing that blank space wtih some data.
 
-Then it says that for each row of API data for libraries, to index rows and extract their values from the api data.
+Then it says that for each row of API data for libraries, to index rows and extract their values from the api results.
 
 #### Step 5
 
@@ -424,7 +467,7 @@ $(document).ready(function () {
 
 This section takes the values that have been indexed and acquired in step 4 and monkeys around with them.  The comments above each line in the code explains what the code here is doing.
 
-The imporant thing to remember here is to remember how jQuery and Javascript deal with null values.  If address2 is blank and you ask jQuery to show you address2, you'll get a result that says "NaN" (i.e. Not a Number) where you may have been hoping for "".  With jQuery, though, you have to tell jQuery that if address2 is null, then you want a "" instead of a "Not a Number" error message.
+The imporant thing to remember here is to remember how jQuery and Javascript deal with null values.  If address2 is blank and you ask jQuery to show you address2, you'll get a result that says "NaN" (i.e. Not a Number) where you may have been hoping for a simple blank space.  In order to get the blank space you're hoping for you have to tell jQuery that if address2 is null, then you want a "" instead of a "Not a Number" error message.
 
 #### Step 6
 
@@ -482,7 +525,7 @@ $(document).ready(function () {
 
 This section does the bulk of the work of creating the table.  Each time you see "contact_sheet +=" the code is adding the variables from the API and the html in single quotes into the table.
 
-"contact_sheet" is the variable created in step 4.  So the first step is to add "<tr class="filterme">" to that varialbe.  Then the next line adds a td and much other data to that variable, and so on, and so on.
+"contact_sheet" is the variable created in step 4.  So the first step is to add "<tr class="filterme">" to that varialbe.  Then the next line adds the html to build the table along with the data from the api to that variable, and so on, and so on.  Each "+=" appends more data to "contact_sheet" variable.
 
 #### Step 7
 
@@ -543,13 +586,213 @@ $(document).ready(function () {
 
 ```
 
-This step accomplishes two things.  First it takes the contact_sheet varialbe (which is all of the table data created in step 6) and sticks it into the html table we built in IntranetCirculationHomeHTML.  Then it takes all of that data and logs it in the console on your browser.
+#### Step 8
 
-Logging it in the console is a step I often take temporarily just so I can verify that the code is progressing and working the way I expect it to.
+```javascript
+
+/* ========== Contact sheet for circulation page ========== */ 
+
+$(document).ready(function () { 
+
+//Home > Circulation 
+  //BEGIN - adds contact sheet to "Library contact information" tab in tabbed section of IntranetCirculationHomeHTML system preference 
+    var contact_sheet_url = $(location).attr('href'); 
+    if (contact_sheet_url.indexOf("circulation-home.pl") != -1) { 
+
+      $.getJSON("/api/v1/libraries", function (data) { 
+
+        var contact_sheet = ''; 
+
+        $.each(data, function (key, value) { 
+
+          var address4 = value.address2 || ''; 
+          var physical_address = address4 || value.address1; 
+          var fax_machine = value.fax || ''; 
+          var zipcode = value.postal_code.substr(0, 5); 
+          var director = value.address3.replace(" | ", "</span></p><p><span>").replace(" | ", "</span></p><p><span>").replace(" | ", "</span></p>"); 
+          var report_branch = value.library_id.replace(/(DONI)\w+/, 'DONI%').replace(/(PH)\w+/, 'PH%'); 
+
+          contact_sheet += '<tr class="filterme">'; 
+
+          contact_sheet += '<td scope="row"><p style="font-size: 1.5em">' + value.name + '</p><p><ins>Mailing address:</ins></p><p>' + value.address1 + '<br />' + value.city + ', ' + value.state + ' ' + zipcode + '</p><p><ins>Physical address:</ins></p><p>' + physical_address + '<br />' + value.city + ', ' + value.state + '</p><p><ins>Branch code: </ins>' + value.library_id + '</p></td>'; 
+
+          contact_sheet += '<td>'; 
+
+          contact_sheet += '<p>Phone: ' + value.phone + '</p><p>Fax: ' + fax_machine + '</p><p>e-mail: ' + value.email + '</p><p>Courier route #: ' + value.notes + '</p><br /><p class="noprint"><a class="badge btn-sm btn-success" style="color: white;" href="' + value.url + '" target="_blank">Website</a></p>' + '</td>'; 
+
+          contact_sheet += '<td><p><span style="font-size: 1.5em;">' + director + '</span></p><br /><p><a class="btn btn-lg btn-info noprint" style="color: white;" href="/cgi-bin/koha/reports/guided_reports.pl?reports=3716&phase=Run+this+report&param_name=Choose+your+library|ZBRAN&sql_params=' + report_branch + '" target="_blank">Current statistics report for this library</a></p></td>'; 
+
+          contact_sheet += '<td class="noprint"><p>' + value.opac_info + '</span></p></td>'; 
+
+          contact_sheet += '</tr>'; 
+
+        }); 
+
+        $('#library_table th').parent().after(contact_sheet); 
+
+        console.log(contact_sheet); 
+
+      }); 
+    } 
+
+    /* New section for step 7 */
+    //add filter function to search the table 
+    $("#myInput").on("keyup", function () { 
+      var value = $(this).val().toLowerCase(); 
+      $(".filtertable .filterme").filter(function () { 
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1); 
+      }); 
+    }); 
+
+    $(".clear").click(function(){ 
+      $("#myInput").val("").keyup(); 
+      return false; 
+    }); 
+    /* New section for step 7 */
+
+}); 
+
+/* ========== END Contact sheet for circulation page ========== */ 
+
+```
+### Step-by-step walkthrough of the jQuery 
+
+#### Step 1
+
+```javascript
+
+/* ========== Contact sheet for circulation page ========== */ 
+
+$(document).ready(function () { 
+
+
+
+}); 
+
+/* ========== END Contact sheet for circulation page ========== */ 
+
+```
+
+I'll explain this part of the code at the end.
 
 ## Adding a link to a report
 
-Something you may have noticed in the code is that there is link to a report.
+Something you may have noticed in the code is that there is link to a report.  Specifically that code is "/cgi-bin/koha/reports/guided_reports.pl?reports=3716&phase=Run+this+report&param_name=Choose+your+library|ZBRAN&sql_params=' + report_branch + '"
 
-Like I said, when I had this table building from a report, I was able to fill the report with some data directly from Koha and that's part of why the report broke (trying to get too much data).  Since I can't pump that report data into the table from the API, I wrote a report and then I use the API to create a link to that report here on the table, so that if someone is looking at the table, they can click on a link to run the report for their library.
+When I had this table building from a report, I was able to fill the report with some data directly from Koha and that's part of why the report broke (trying to get too much data).  Since I can't pump that report data into the table from the API, I wrote a report and then I use the API to create a link to that report here on the table, so that if someone is looking at the table, they can click on a link to run the report for their library.
+
+In my system that report is number 3716.  The SQL for this report is:
+
+```sql
+
+SELECT
+  branches.branchname,
+  'Current borrowers' AS STATISTIC,
+  coalesce(Count(DISTINCT borrowers.borrowernumber), 0) AS Count
+FROM
+  branches LEFT JOIN
+  borrowers ON borrowers.branchcode = branches.branchcode
+WHERE
+  branches.branchcode LIKE <<Choose your library|branches>>
+GROUP BY
+  branches.branchname
+UNION
+SELECT
+  branches.branchname,
+  'Current titles' AS STATISTIC,
+  coalesce(Count(DISTINCT items.biblionumber), 0) AS Count_biblionumber
+FROM
+  branches LEFT JOIN
+  items ON items.homebranch = branches.branchcode
+WHERE
+  branches.branchcode LIKE <<Choose your library|branches>>
+GROUP BY
+  branches.branchname
+UNION
+SELECT
+  branches.branchname,
+  'Current items' AS STATISTIC,
+  coalesce(Count(DISTINCT items.itemnumber), 0) AS Count_itemnumber
+FROM
+  branches LEFT JOIN
+  items ON items.homebranch = branches.branchcode
+WHERE
+  branches.branchcode LIKE <<Choose your library|branches>>
+GROUP BY
+  branches.branchname
+UNION
+SELECT
+  branches.branchname,
+  'Checkouts + renewals - previous 365 days' AS STATISTIC,
+  coalesce(Count(*), 0)
+FROM
+  branches LEFT JOIN
+  statistics ON statistics.branch = branches.branchcode
+WHERE
+  branches.branchcode LIKE <<Choose your library|branches>> AND
+  (statistics.type = 'issue' OR
+    statistics.type = 'renew') AND
+  statistics.datetime BETWEEN CurDate() - INTERVAL 1 YEAR AND CurDate()
+GROUP BY
+  branches.branchname
+UNION
+SELECT
+  branches.branchname,
+  'Unique borrowers - previous 365 days' AS STATISTIC,
+  coalesce(Count(DISTINCT statistics.borrowernumber), 0) AS Count_borrowernumber
+FROM
+  branches LEFT JOIN
+  statistics ON statistics.branch = branches.branchcode
+WHERE
+  branches.branchcode LIKE <<Choose your library|branches>> AND
+  (statistics.type = 'issue' OR
+    statistics.type = 'renew') AND
+  statistics.datetime BETWEEN CurDate() - INTERVAL 1 YEAR AND CurDate()
+GROUP BY
+  branches.branchname
+ORDER BY
+  branchname
+
+```
+
+To add this report to your contact sheet you would need to add the report to Koha and then get the report ID number that Koha assigns to that report in your system and replace that number in the URL that is being built by this jQuery (i.e. "/cgi-bin/koha/reports/guided_reports.pl?reports=_YourReportNumberHere_&phase=Run+this+report&param_name=Choose+your+library|branches&sql_params=' + report_branch + '")
+
+## Adding a search box to the table
+
+The last piece of this I haven't mentioned yet includes the following pieces of HTML and jQuery:
+
+```html
+
+<div id="libtable" class="dataTables_wrapper">
+
+  <span style="padding: 10px"><input id="myInput" type="text" placeholder="Search.." style="padding: 10px"><a href="#" class="clear" rel="nofollow"><span style="padding: 10px">Clear</span></a></span>
+
+</div>
+
+
+```
+
+```javascript
+
+    //add filter function to search the table 
+    $("#myInput").on("keyup", function () { 
+      var value = $(this).val().toLowerCase(); 
+      $(".filtertable .filterme").filter(function () { 
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1); 
+      }); 
+    }); 
+
+    $(".clear").click(function(){ 
+      $("#myInput").val("").keyup(); 
+      return false; 
+    }); 
+
+
+```
+
+The HTML gets wrapped around the <table> element and it adds a search box and a "Clear" element right at the top of the table.
+
+The jQuery element adds a search function to the table so that, when you type a string into the search box, the rows in the table that do not contain that string will be hidden from the table.
+
+On my Koha this means that if I want the contact information for "Winchester Public Library," instead of scrolling to the bottom of the list, I can just start typing "Winc . . ." into the search box and the only row of the table I'll see is the row for "Winchester Public Library."
 
