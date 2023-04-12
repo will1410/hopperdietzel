@@ -655,9 +655,8 @@ $(document).ready(function () {
 /* ========== END Contact sheet for circulation page ========== */ 
 
 ```
-### Step-by-step walkthrough of the jQuery 
 
-#### Step 1
+#### Step 9
 
 ```javascript
 
@@ -759,7 +758,7 @@ To add this report to your contact sheet you would need to add the report to Koh
 
 ## Adding a search box to the table
 
-The last piece of this I haven't mentioned yet includes the following pieces of HTML and jQuery:
+The last piece of this I mentioned briefly includes the following pieces of HTML and jQuery:
 
 ```html
 
@@ -792,7 +791,10 @@ The last piece of this I haven't mentioned yet includes the following pieces of 
 
 The HTML gets wrapped around the <table> element and it adds a search box and a "Clear" element right at the top of the table.
 
-The jQuery element adds a search function to the table so that, when you type a string into the search box, the rows in the table that do not contain that string will be hidden from the table.
+The jQuery element adds a search function to the search box so that, when you type a string into the search box, the rows in the table that do not contain that string will be hidden from the table.
 
-On my Koha this means that if I want the contact information for "Winchester Public Library," instead of scrolling to the bottom of the list, I can just start typing "Winc . . ." into the search box and the only row of the table I'll see is the row for "Winchester Public Library."
+On my Koha this means that if I want the contact information for "Winchester Public Library," instead of scrolling to the bottom of the table, I can just type "Winchester" into the search box and the only row of the table I'll see are the rows that include the word "Winchester."
 
+## Conclusion
+
+As always, the content of this page is freely available for you to use in your Koha and I hope you are able to use it and change it to work for your library.
