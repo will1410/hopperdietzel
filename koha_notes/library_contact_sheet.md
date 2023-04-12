@@ -676,7 +676,7 @@ I'll explain this part of the code at the end.
 
 ## Adding a link to a report
 
-Something you may have noticed in the code is that there is link to a report.  Specifically that code is "/cgi-bin/koha/reports/guided_reports.pl?reports=3716&phase=Run+this+report&param_name=Choose+your+library|ZBRAN&sql_params=' + report_branch + '"
+Something you may have noticed in the code is that there is link to a report.  Specifically that code is "/cgi-bin/koha/reports/guided_reports.pl?reports=3716&phase=Run+this+report&param_name=Choose+your+library\|ZBRAN&sql_params=' + report_branch + '"
 
 When I had this table building from a report, I was able to fill the report with some data directly from Koha and that's part of why the report broke (trying to get too much data).  Since I can't pump that report data into the table from the API, I wrote a report and then I use the API to create a link to that report here on the table, so that if someone is looking at the table, they can click on a link to run the report for their library.
 
@@ -754,7 +754,7 @@ ORDER BY
 
 ```
 
-To add this report to your contact sheet you would need to add the report to Koha and then get the report ID number that Koha assigns to that report in your system and replace that number in the URL that is being built by this jQuery (i.e. "/cgi-bin/koha/reports/guided_reports.pl?reports=_YourReportNumberHere_&phase=Run+this+report&param_name=Choose+your+library|branches&sql_params=' + report_branch + '")
+To add this report to your contact sheet you would need to add the report to Koha and then get the report ID number that Koha assigns to that report in your system and replace that number in the URL that is being built by this jQuery (i.e. ```"/cgi-bin/koha/reports/guided_reports.pl?reports=_YourReportNumberHere_&phase=Run+this+report&param_name=Choose+your+library|branches&sql_params=' + report_branch + '"```)
 
 ## Adding a search box to the table
 
