@@ -4,13 +4,13 @@ We have 54 "branches" in our Koha and a courier system that delivers materials b
 
 The problem that staff have had with this is that, if you need to contact someone, you need to leave Koha, go to a different website, search through the directory (which includes all 117 of our member libraries - not just the ones using Koha) and search through the member directory to find the library information you need.  It was clunky and awkward and the information that was in the directory did not always match the information in Koha because the library informaiton from the directory is not linked to the Koha library information in any way, shape, or form.
 
-So, in 2017 I created a report that gathered all of the library contact information from the branches table in Koha and laid it out in a table that could be posted into the  IntranetCirculationHomeHTML system preference.  Since this report took some time to run I went ahead and set its cache period for 12 hours.  That way it wouldn't re-run every time the page loaded.  It would load once in the morning and then be cached for 12 hours.  This meant that if I made any changed to a library record in Koha, it wouldn't be visible until the next day.
+So, in 2017 I created a report that gathered all of the library contact information from the branches table in Koha and laid it out in a table that could be posted into the  IntranetCirculationHomeHTML system preference.  Since this report took some time to run I went ahead and set its cache period for 12 hours.  That way it wouldn't re-run every time the page loaded.  It would load once in the morning and then be cached for 12 hours.  This meant that if I made any changed to a library record in Koha, the changes wouldn't be visible until the next day.
 
 Over time I added some information beyond contact information.  Specifically we had several months where many libraries were working with a third party vendor and they were frequently asking me "What was our circulation in previous 12 months?," "How many items does my library own?," and "How many patrons do I have right now?"  By adding to this report I could answer most of these questions with "Go look at your library informaiton on the circulation page."  The report got slower, but it still ran in about 30-40 seconds and it cached for 12 hours, so it wasn't really a problem.
 
 Then in February of 2023 we did a MariaDB upgrade that changed the way the report ran.  Instead of running in 30-40 seconds, it crashed after 5 minutes.  This meant that the report never cached.  This meant that every time someone opened the circulation page, the report tried to run.  When 7 or 8 libraires opened in the morning and tried to go to the circulation page, this meant that Koha crashed.
 
-The solution was to either monkey around with the settings on MariaDB or to abandon the report as a report.  Since people had come to rely on having that library contact information on the circulation page, I decided the best way to deal with the situation was to re-write the table using the Rest API rather than a report.  This meant two things.  First, it meant that the table would be live.  If I updated something in a library record in Koha, there would no longer be a 12 hour delay in the table update.  Second, it meant that I couldn't include information beyond what's in the library record.  I couldn't have the contact sheet answer the "How many items does my library own?" question any longer.  That seemed like something that was worth sacrificing.
+The solution was to either monkey around with the settings on MariaDB or to abandon the report as a report.  Since people had come to rely on having that library contact information on the circulation page, I decided the best way to deal with the situation was to re-write the table using the Rest API rather than a report.  This meant two things.  First, it meant that the table would be live.  If I updated something in a library record in Koha, there would no longer be a 12 hour delay in the table update.  Second, it meant that I couldn't include information beyond what's in the library record.  I couldn't have the contact sheet answer the "How many items does my library own?" question or other related questions any more.  That seemed like something that was worth sacrificing.
 
 Here are the steps I took to create a library contact table on the circulation page in Next Search Catalog:
 
@@ -68,7 +68,7 @@ $('#admin_branches.admin label[for="branchcountry"]').html('KLE code:');
 
 Two other things that I currently do with the data in a library record are related to how I've used the report and now the API to display data I want to share in a way that looks good in the table.
 
-For "Address line 3:" that I've renamed "Director/ILL contact:" I separate add the director's name and e-mail address; followed by a space, a pipe, and a space (i.e. " | "); followed by the name of that library's primary ILL contact and e-mail address (if they have a dedicated ILL contact); followed again by a space, pipe, and a space; followed by that library's accredation type.
+For "Address line 3:" that I've renamed "Director/ILL contact:" I separate add the director's name and e-mail address; followed by a space, a pipe, and a space (i.e. " \| "); followed by the name of that library's primary ILL contact and e-mail address (if they have a dedicated ILL contact); followed again by a space, pipe, and a space; followed by that library's accredation type.
 
 The pipes allow me to use a search/replace function when I'm building the table so that the pipes become line breaks in the final table output.
 
@@ -514,3 +514,77 @@ $(document).ready(function () {
 /* ========== END Contact sheet for circulation page ========== */ 
 
 ```
+
+This section does the bulk of the work of creating the table.  Each time you see "contact_sheet +=" the code is adding the variables from the API and the html in single quotes into the table.
+
+"contact_sheet" is the variable created in step 4.  So the first step is to add "<tr class="filterme">" to that varialbe.  Then the next line adds a td and much other data to that variable, and so on, and so on.
+
+#### Step 7
+
+```Javascript
+
+/* ========== Contact sheet for circulation page ========== */ 
+
+$(document).ready(function () { 
+
+  var contact_sheet_url = $(location).attr('href'); 
+
+  if (contact_sheet_url.indexOf("circulation-home.pl") != -1) {
+
+    $.getJSON("/api/v1/libraries", function (data) { 
+
+      var contact_sheet = ''; 
+
+      $.each(data, function (key, value) { 
+
+        var address4 = value.address2 || ''; 
+        var physical_address = address4 || value.address1; 
+        var fax_machine = value.fax || ''; 
+        var zipcode = value.postal_code.substr(0, 5); 
+        var director = value.address3.replace(" | ", "</span></p><p><span>").replace(" | ", "</span></p><p><span>").replace(" | ", "</span></p>"); 
+        var report_branch = value.library_id.replace(/(DONI)\w+/, 'DONI%').replace(/(PH)\w+/, 'PH%'); 
+        
+
+        contact_sheet += '<tr class="filterme">'; 
+
+          contact_sheet += '<td scope="row"><p style="font-size: 1.5em">' + value.name + '</p><p><ins>Mailing address:</ins></p><p>' + value.address1 + '<br />' + value.city + ', ' + value.state + ' ' + zipcode + '</p><p><ins>Physical address:</ins></p><p>' + physical_address + '<br />' + value.city + ', ' + value.state + '</p><p><ins>Branch code: </ins>' + value.library_id + '</p></td>'; 
+
+          contact_sheet += '<td>'; 
+
+          contact_sheet += '<p>Phone: ' + value.phone + '</p><p>Fax: ' + fax_machine + '</p><p>e-mail: ' + value.email + '</p><p>Courier route #: ' + value.notes + '</p><br /><p class="noprint"><a class="badge btn-sm btn-success" style="color: white;" href="' + value.url + '" target="_blank">Website</a></p>' + '</td>'; 
+
+          contact_sheet += '<td><p><span style="font-size: 1.5em;">' + director + '</span></p><br /><p><a class="btn btn-lg btn-info noprint" style="color: white;" href="/cgi-bin/koha/reports/guided_reports.pl?reports=3716&phase=Run+this+report&param_name=Choose+your+library|ZBRAN&sql_params=' + report_branch + '" target="_blank">Current statistics report for this library</a></p></td>'; 
+
+          contact_sheet += '<td class="noprint"><p>' + value.opac_info + '</span></p></td>'; 
+
+          contact_sheet += '</tr>'; 
+
+        /* New section for step 7 */
+        $('#library_table th').parent().after(contact_sheet); 
+
+        console.log(contact_sheet);
+        /* END New section for step 7 */
+
+
+      }); 
+
+    }); 
+    
+  }
+
+}); 
+
+/* ========== END Contact sheet for circulation page ========== */ 
+
+```
+
+This step accomplishes two things.  First it takes the contact_sheet varialbe (which is all of the table data created in step 6) and sticks it into the html table we built in IntranetCirculationHomeHTML.  Then it takes all of that data and logs it in the console on your browser.
+
+Logging it in the console is a step I often take temporarily just so I can verify that the code is progressing and working the way I expect it to.
+
+## Adding a link to a report
+
+Something you may have noticed in the code is that there is link to a report.
+
+Like I said, when I had this table building from a report, I was able to fill the report with some data directly from Koha and that's part of why the report broke (trying to get too much data).  Since I can't pump that report data into the table from the API, I wrote a report and then I use the API to create a link to that report here on the table, so that if someone is looking at the table, they can click on a link to run the report for their library.
+
