@@ -109,9 +109,6 @@ For Next Search Catalog I put this HTML somewhere in the IntranetCirculationHome
       <td style="text-align: center; font-weight: 700; background-color: #e8e8e8;" class="noprint">Logo/photo</td>
     </tfoot>  
 
-    <tbody>
-    </tbody>
-
   </table>
 
 </div>
@@ -145,7 +142,7 @@ Next I want to create the actual table and I'm going to give it an id of "librar
 ```
 #### Step 3
 
-Then I want to add a header and a footer to the table.  HTML includes a "th" element for header elements that adds style to those elements, but in order to get the informaiton in the footer to be styled similarly to the header, it's easiest to add css to make the footer act and look like the header.
+Then I want to add a header and a footer to the table.  HTML includes a "th" element for header elements that adds style to those elements, but in order to get the informaiton in the footer to be styled similarly to the header, it's easiest to add css to make the footer act and look like the header.  I'm adding the css inline in this example rather than adding it to the intranetusercss system preference in Koha so that it's easier to see what I'm doing in this example.
 
 You'll also note that I'm adding a "noprint" class to the logo column which will prevent that cell from being printed if someone tries to print the table from the screen.
 
@@ -175,44 +172,12 @@ You'll also note that I'm adding a "noprint" class to the logo column which will
 </div>
 ```
 
-#### Step 4
-
-Finally I add the actual table body tags to the html.  This is where the actual table with display when the code is finished.
-
-```html
-<div id="libtable">
-  
-  <table id="library_table" class="table table-hover table-bordered">
-
-    <thead>
-      <tr>
-        <th scope="col">Library</th>
-        <th scope="col">Contact information</th>
-        <th scope="col">Staff contacts / report link</th>
-        <th scope="col" class="noprint">Logo/photo</th>
-      </tr>
-    </thead>
-
-    <tfoot>
-      <td scope="row" style="text-align: center; font-weight: 700; background-color: #e8e8e8;">Library</td>
-      <td style="text-align: center; font-weight: 700; background-color: #e8e8e8;">Contact information</td>
-      <td style="text-align: center; font-weight: 700; background-color: #e8e8e8;">Staff contacts / holdings</td>
-      <td style="text-align: center; font-weight: 700; background-color: #e8e8e8;" class="noprint">Logo/photo</td>
-    </tfoot>
-
-    <tbody>
-    </tbody>
-
-  </table>
-
-</div>
-```
 
 ## Adding the jQuery to IntranetUserJS 
 
 The jQuery that calls up the data from the API and plugs it into the table follows:
 
-```Javascript
+```javascript
 
 /* ========== Contact sheet for circulation page ========== */ 
 
@@ -281,7 +246,7 @@ $(document).ready(function () {
 
 #### Step 1
 
-```Javascript
+```javascript
 
 /* ========== Contact sheet for circulation page ========== */ 
 
@@ -301,7 +266,7 @@ And the ```$(document).ready(function () { /*_jquery_goes_here_*/ }); ``` is the
 
 #### Step 2
 
-```Javascript
+```javascript
 
 /* ========== Contact sheet for circulation page ========== */ 
 
@@ -330,7 +295,7 @@ The second section says if "contact_sheet_url" contains the phrase "circulation-
 
 #### Step 3
 
-```Javascript
+```javascript
 
 /* ========== Contact sheet for circulation page ========== */ 
 
@@ -363,7 +328,7 @@ The new section for step 3 tells Koha that, if we are on "circulation-home.pl" t
 
 #### Step 4
 
-```Javascript
+```javascript
 
 /* ========== Contact sheet for circulation page ========== */ 
 
@@ -403,7 +368,7 @@ Then it says that for each row of API data for libraries, to index rows and extr
 
 #### Step 5
 
-```Javascript
+```javascript
 
 /* ========== Contact sheet for circulation page ========== */ 
 
@@ -463,7 +428,7 @@ The imporant thing to remember here is to remember how jQuery and Javascript dea
 
 #### Step 6
 
-```Javascript
+```javascript
 
 /* ========== Contact sheet for circulation page ========== */ 
 
@@ -521,7 +486,7 @@ This section does the bulk of the work of creating the table.  Each time you see
 
 #### Step 7
 
-```Javascript
+```javascript
 
 /* ========== Contact sheet for circulation page ========== */ 
 
