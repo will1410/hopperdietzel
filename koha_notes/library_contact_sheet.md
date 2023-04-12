@@ -753,6 +753,23 @@ ORDER BY
 
 To add this report to your contact sheet you would need to add the report to Koha and then get the report ID number that Koha assigns to that report in your system and replace that number in the URL that is being built by this jQuery (i.e. ```"/cgi-bin/koha/reports/guided_reports.pl?reports=_yourReportNumberHere_&phase=Run+this+report&param_name=Choose+your+library|branches&sql_params=' + report_branch + '"```)
 
+It's also at this point where the "report_branch" variable created in Step 5 of the jQuery section of this document comes into play.  I have 4 libraries that are all part of a library district and 5 libraries that are all part of a school district:
+
+|branchcode	| branchname |
+|--|--|
+| DONIELWD | Doniphan County Library - Elwood |
+| DONIHIGH | Doniphan County Library - Highland |
+| DONITROY | Doniphan County Library - Troy |
+| DONIWATH | Doniphan County Library - Wathena |
+|--|--|
+| PHAXTELL | Prairie Hills Schools - Axtell Public School |
+| PHSES | Prairie Hills Schools - Sabetha Elementary School |
+| PHSHS | Prairie Hills Schools - Sabetha High School |
+| PHSMS | Prairie Hills Schools - Sabetha Middle School |
+| PHWAC | Prairie Hills Schools - Wetmore Academic Center |
+
+By having the "report_branch" variable take any branchcode that starts with "DONI" and change it to "DONI%" then take any branchcode that starts with "PH" and change it to "PH%," I can have the link to the report run the report for all 4 Doniphan County branches or all 5 Prarie Hills schools when anyone clicks the link to run the report for any of those associated libraries.  Thus, when you click on the link to run the report for "Doniphan County Library - Wathena" you get the results for all 4 Doniphan county libraries because they are one library with 4 locations.
+
 ## Adding a search box to the table
 
 The last piece of this I mentioned briefly twice before includes the following pieces of HTML and jQuery:
