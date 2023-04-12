@@ -215,6 +215,7 @@ You'll also note that I'm adding a "noprint" class to the logo column which will
 </div>
 ```
 
+Finally, I'm wrapping the table in a "dataTables_Wrapper" div and adding a search box.  I'll explain that bit at the end of this document.
 
 ## Adding the jQuery to IntranetUserJS 
 
@@ -303,7 +304,7 @@ $(document).ready(function () {
 
 ```
 
-These are the basics.  Anything between a ```/* */``` in Javascript or jQuery is a comment, so the first line and the last line are just to help keep track of what this piece of code does in your Koha.  If you don't comment your code you often run into the quesion "What does this code do?" because you will have it in your system so long you can't remember why you wrote it.
+These are the basics.  Anything between a ```/* */``` in Javascript or jQuery is a comment, so the first line and the last line are just to help keep track of what this piece of code does in your Koha.  If you don't comment your code you often run into the quesion "What does this code do?" because you will have it in your system so long you can't remember why you wrote it or what it does.
 
 And the ```$(document).ready(function () { /*_jquery_goes_here_*/ }); ``` is the piece of code you need to wrap around any jQuery you write to make it work in Koha.
 
@@ -334,7 +335,7 @@ $(document).ready(function () {
 
 The new section for step 2 does two things.  The first creates a variable called "contact_sheet_url" based on the URL of the page you're looking at.
 
-The second section says if "contact_sheet_url" contains the phrase "circulation-home.pl" to execute the function that will appear between the {}.
+The second section says if "contact_sheet_url" contains the phrase "circulation-home.pl" that Javascript should execute the function that will appear between the {}.
 
 #### Step 3
 
@@ -366,7 +367,9 @@ $(document).ready(function () {
 
 ```
 
-The new section for step 3 tells Koha that, if we are on "circulation-home.pl" to go ahead and get the library data from the API.
+The new section for step 3 tells Koha that, if we are on "circulation-home.pl" to go ahead and get the "libraries" data from the API.
+
+The API includes two methods for getting library data. "getLibrary" requires a branchcode and gets the data for 1 single library.  "listLibraries" gets the data from all of the libraries in Koha at once.  We want the second method.
 
 
 #### Step 4
@@ -405,7 +408,9 @@ $(document).ready(function () {
 
 ```
 
-The new section for step 4 does two things.  First it creates a new variable called "contact_sheet" and then it sets that variable to a blank space.  In a couple of steps from now we'll start replacing that blank space wtih some data.
+The new section for step 4 does two things.  
+
+First it creates a new variable called "contact_sheet" and then it sets that variable to a blank space.  In a couple of steps from now we'll start replacing that blank space wtih some data.
 
 Then it says that for each row of API data for libraries, to index rows and extract their values from the api results.
 
@@ -467,7 +472,9 @@ $(document).ready(function () {
 
 This section takes the values that have been indexed and acquired in step 4 and monkeys around with them.  The comments above each line in the code explains what the code here is doing.
 
-The imporant thing to remember here is to remember how jQuery and Javascript deal with null values.  If address2 is blank and you ask jQuery to show you address2, you'll get a result that says "NaN" (i.e. Not a Number) where you may have been hoping for a simple blank space.  In order to get the blank space you're hoping for you have to tell jQuery that if address2 is null, then you want a "" instead of a "Not a Number" error message.
+An imporant thing to remember here is to remember how jQuery and Javascript deal with null values.  If address2 is blank and you ask jQuery to show you address2, you'll get a result that says "NaN" (i.e. Not a Number) where you may have been hoping for a simple blank space.  In order to get the blank space you're hoping for you have to tell jQuery that if address2 is null, then you want a "" instead of a "NaN" error message.
+
+That's accomplished by saying ```var VariableName = value.fieldname || '';``` i.e. create a variable and give it a value that equals the value of the field I want OR give me a blank space is the field I want is null.
 
 #### Step 6
 
@@ -525,7 +532,7 @@ $(document).ready(function () {
 
 This section does the bulk of the work of creating the table.  Each time you see "contact_sheet +=" the code is adding the variables from the API and the html in single quotes into the table.
 
-"contact_sheet" is the variable created in step 4.  So the first step is to add "<tr class="filterme">" to that varialbe.  Then the next line adds the html to build the table along with the data from the api to that variable, and so on, and so on.  Each "+=" appends more data to "contact_sheet" variable.
+"contact_sheet" is the variable created in step 4.  So the first step is to add "<tr class="filterme">" to that varialbe.  Then the next line adds the html to build the table along with the data from the api to that variable, and so on, and so on.  Each "+=" appends the HTML (i.e. the stuff in single quotes) and the variables (i.e. the stuff between the + signs) to the "contact_sheet" variable.
 
 #### Step 7
 
@@ -586,6 +593,12 @@ $(document).ready(function () {
 
 ```
 
+All the steps up to this point built the variable that contains the table data.  This step does two things.
+
+First it pushes all of the data from the "contact_sheet" varialbe into the table.
+
+Second it puts all of that data into the console.  This step is not necessary for the final version of this code.  The reason I've logged it into the console in this code is that it gives you a good way of looking at what the code is doing, which makes it easier to troubleshoot the code while you're writing it.
+
 #### Step 8
 
 ```javascript
@@ -635,7 +648,7 @@ $(document).ready(function () {
       }); 
     } 
 
-    /* New section for step 7 */
+    /* New section for step 8 */
     //add filter function to search the table 
     $("#myInput").on("keyup", function () { 
       var value = $(this).val().toLowerCase(); 
@@ -648,7 +661,7 @@ $(document).ready(function () {
       $("#myInput").val("").keyup(); 
       return false; 
     }); 
-    /* New section for step 7 */
+    /* New section for step 8 */
 
 }); 
 
@@ -656,23 +669,7 @@ $(document).ready(function () {
 
 ```
 
-#### Step 9
-
-```javascript
-
-/* ========== Contact sheet for circulation page ========== */ 
-
-$(document).ready(function () { 
-
-
-
-}); 
-
-/* ========== END Contact sheet for circulation page ========== */ 
-
-```
-
-I'll explain this part of the code at the end.
+I'll explain this part of the code at the end.  This has to do with adding a search function to the table.
 
 ## Adding a link to a report
 
@@ -754,11 +751,11 @@ ORDER BY
 
 ```
 
-To add this report to your contact sheet you would need to add the report to Koha and then get the report ID number that Koha assigns to that report in your system and replace that number in the URL that is being built by this jQuery (i.e. ```"/cgi-bin/koha/reports/guided_reports.pl?reports=_YourReportNumberHere_&phase=Run+this+report&param_name=Choose+your+library|branches&sql_params=' + report_branch + '"```)
+To add this report to your contact sheet you would need to add the report to Koha and then get the report ID number that Koha assigns to that report in your system and replace that number in the URL that is being built by this jQuery (i.e. ```"/cgi-bin/koha/reports/guided_reports.pl?reports=_yourReportNumberHere_&phase=Run+this+report&param_name=Choose+your+library|branches&sql_params=' + report_branch + '"```)
 
 ## Adding a search box to the table
 
-The last piece of this I mentioned briefly includes the following pieces of HTML and jQuery:
+The last piece of this I mentioned briefly twice before includes the following pieces of HTML and jQuery:
 
 ```html
 
@@ -793,7 +790,9 @@ The HTML gets wrapped around the <table> element and it adds a search box and a 
 
 The jQuery element adds a search function to the search box so that, when you type a string into the search box, the rows in the table that do not contain that string will be hidden from the table.
 
-On my Koha this means that if I want the contact information for "Winchester Public Library," instead of scrolling to the bottom of the table, I can just type "Winchester" into the search box and the only row of the table I'll see are the rows that include the word "Winchester."
+On my Koha this means that if I want the contact information for "Winchester Public Library," instead of scrolling all the way to the bottom of the table, I can just type "Winchester" into the search box and the only rows of the table I'll see are the rows that include the word "Winchester."  Clicking on the "Clear" button resets the table back to its full length.
+
+This search/filter function is based on code by Christopher Brannon available at [https://wiki.koha-community.org/wiki/JQuery_Library#Add_a_filter_to_the_patron_various_tables_in_staff_interface](https://wiki.koha-community.org/wiki/JQuery_Library#Add_a_filter_to_the_patron_various_tables_in_staff_interface)
 
 ## Conclusion
 
