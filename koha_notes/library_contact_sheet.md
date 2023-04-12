@@ -792,7 +792,7 @@ The jQuery element adds a search function to the search box so that, when you ty
 
 On my Koha this means that if I want the contact information for "Winchester Public Library," instead of scrolling all the way to the bottom of the table, I can just type "Winchester" into the search box and the only rows of the table I'll see are the rows that include the word "Winchester."  Clicking on the "Clear" button resets the table back to its full length.
 
-This search/filter function is based on code by Christopher Brannon available at [https://wiki.koha-community.org/wiki/JQuery_Library#Add_a_filter_to_the_patron_various_tables_in_staff_interface](https://wiki.koha-community.org/wiki/JQuery_Library#Add_a_filter_to_the_patron_various_tables_in_staff_interface)
+This search/filter function is based on code by Christopher Brannon available at <a href="https://wiki.koha-community.org/wiki/JQuery_Library#Add_a_filter_to_the_patron_various_tables_in_staff_interface" _target="blank">https://wiki.koha-community.org/wiki/JQuery_Library#Add_a_filter_to_the_patron_various_tables_in_staff_interface</a>
 
 ## Conclusion
 
