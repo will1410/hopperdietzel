@@ -3,7 +3,7 @@
 ## Notes about Koha
 <br />
 <br />
-### [Stepst to close a library](/koha_notes/closing_a_library)
+### [Steps to close a library](/koha_notes/closing_a_library)
 Steps to take in Koha to close a library.<br />
 <br />
 ### [Library contact sheet](/koha_notes/library_contact_sheet)
