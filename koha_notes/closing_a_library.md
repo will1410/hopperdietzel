@@ -10,7 +10,7 @@ Parts of what I do are built into Koha with system preferences and circulation r
 
 - This step is accomplished at Home > Administration > Circulation and fine rules (smart-rules.pl)
 
-For school closures I set the circulation rules for the schools so that items checked out at the school are due before the school year ends.  This ensures that, if the school has borrowed any materials from other member libraries, those items will be shipped back to the libraries that own those items before their school year ends.  Usually the date set is about seven days before their last day of school.
+For school closures I set the circulation rules for the schools so that items checked out at the school are due before the school year ends.  This ensures that, if the school has borrowed any materials from other member libraries, those items will be shipped back to the libraries that own those items before their school year ends.  Usually the date we set as their hard due date is about seven days before their last day of school.
 
 ### Step 2: option A - shutting down the closed library's holds queue
 
@@ -31,7 +31,7 @@ But this method will only work if HoldsQueueSkipClosed is set to "open."
 
 - This step is accomplished at Home > Administration > Libraries (branches.pl)
 
-From the "Libraries" page, you can indicate whether or not a library is a "Pickup location."  During a closure you can change their setting from "Yes" to "No."  This will remove the closed library from the list of pickup location options.
+From the "Libraries" page, you can indicate whether or not a library is a "Pickup location."  During a closure you can change their "Pickup location" setting from "Yes" to "No."  This will remove the closed library from the list of pickup location options.
 
 ### Step 3: option B - Preventing new requests from being placed for pickup at the closed library
 
@@ -43,7 +43,7 @@ From the "Libraries" page, you can indicate whether or not a library is a "Picku
 
 I don't use Step 3: option A.  If a borrower has the closed library set as their home library, when you change a library from "Pickup location: Yes" to "Pickup location: No" it will default that borrower's pickup location to whichever library is alphabetically at the top of the pickup locations list.  In our case this means that if a borrower whose home library is "Sabetha Middle School" places a request while "Sabetha Middle School" is closed for the summer and that borrower isn't paying attention, their request will be shipped to Atchison Public Library (which is about 45 miles east of Sabetha).  Then I have the Atchison Public Library director calling me asking "Why are these things coming to my library?  This (teacher/student/staff member) doesn't even live here.  What's going on?"
 
-Instead of using the "Pickup location: (Yes/No)" feature on branches.pl, I use custom jQuery so that if a closed location is selected by default, Koha will automatically re-route the item to a nearby library that is open.
+Instead of using the "Pickup location: (Yes/No)" feature on branches.pl, I use custom jQuery so that if a closed location is selected when the library is closed, Koha will automatically re-route the item to a nearby library that is open.
 
   - IntranetUserJS
 
