@@ -215,8 +215,8 @@ Once the code from above is in the preference, then you need to rename the tabs 
 
 Here is a screenshot of how this looks on the Reports page for Next Search Catalog
 
-![Reports page example 1](/images/tabbed_content_020.png){:class="img-responsive"}
+![Reports page example 1](/koha_notes/images/tabbed_content_020.png){:class="img-responsive"}
 
 And here is a screenshot of the tabs in action on the Reports page for Next Search Catalog
 
-![Reports page example 2](/images/tabbed_content_010.gif){:class="img-responsive"}
+![Reports page example 2](/koha_notes/images/tabbed_content_010.gif){:class="img-responsive"}

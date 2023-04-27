@@ -12,6 +12,8 @@ Parts of what I do are built into Koha with system preferences and circulation r
 
 For school closures I set the circulation rules for the schools so that items checked out at the school are due before the school year ends.  This ensures that, if the school has borrowed any materials from other member libraries, those items will be shipped back to the libraries that own those items before their school year ends.  Usually the date we set as their hard due date is about seven days before their last day of school.
 
+![Setting hard due dates](/koha_notes/images/closing_a_library_0010.png){:class="img-responsive"}
+
 ### Step 2: option A - shutting down the closed library's holds queue
 
 - This step is accomplished at Home > Administration > System preferences (preferences.pl)
