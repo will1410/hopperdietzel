@@ -16,10 +16,11 @@ For school closures I set the circulation rules for the schools so that items ch
 
 ### Step 2: option A - shutting down the closed library's holds queue
 
-- This step is accomplished at Home > Administration > System preferences (preferences.pl)
+- This step is accomplished at Home > Administration > System preferences : StaticHoldsQueueWeight (preferences.pl)
 
 Once a library is closed, I remove that library's branchcode from the StaticHoldsQueueWeight system preference.  This prevents the items owned by the closed library from being added to the holds queue.
 
+![Remove library from StaticHoldsQueueWeight](/koha_notes/images/closing_a_library_0020.png){:class="img-responsive"}
 
 ### Step 2: option B - shutting down the closed library's holds queue
 
@@ -29,11 +30,15 @@ If the sytem preference HoldsQueueSkipClosed is set to "open" then you can use t
 
 But this method will only work if HoldsQueueSkipClosed is set to "open."
 
+![Use the calendar to close the library](/koha_notes/images/closing_a_library_0030.png){:class="img-responsive"}
+
 ### Step 3: option A - Preventing new requests from being placed for pickup at the closed library
 
 - This step is accomplished at Home > Administration > Libraries (branches.pl)
 
 From the "Libraries" page, you can indicate whether or not a library is a "Pickup location."  During a closure you can change their "Pickup location" setting from "Yes" to "No."  This will remove the closed library from the list of pickup location options.
+
+![Pickup location = No](/koha_notes/images/closing_a_library_0040.png){:class="img-responsive"}
 
 ### Step 3: option B - Preventing new requests from being placed for pickup at the closed library
 
@@ -62,6 +67,59 @@ Instead of using the "Pickup location: (Yes/No)" feature on branches.pl, I use c
     $("option[value='CLOSED_BRANCHCODE']").attr("value","ALTERNATE_BRANCHCODE").html('CLOSED_BRANCHNAME is closed for the summer - requested items will route to ALTERNATE_BRANCHNAME'); 
 
   ```
+### Step 3: option C - Automatically place new requests for future fulfillment 
+
+The third option to prevent new requests from being placed for pickup at the closed library is to automatically set the "Hold starts on" date to a date a day or two before the library is scheduled to re-open.  There is a video on this jQuery at https://youtu.be/GKrHrtLM5PM
+
+Essentially, if a library staff member tries to select a closed library as a pick-up location while that library is closed, this code forces the "Hold starts on date" to the date you set in the code.
+
+```javascript
+
+//BEGIN Set "Hold starts on date" to a specific future date for a branch - makes past dates unavailable as hold starts on dates 
+ 
+  //Set #reserve_date variable by inserting future date here 
+    var reserve_date = ("mm/dd/yyyy"); 
+  //Set closed_branch_code variable by inserting branchcode here 
+    var closed_branchcode = ("BRANCHCODE"); 
+  //Set closed branch name value 
+    var closed_branch_name =  ("Branch name"); 
+  //Set today's date as a variable 
+    var tsnow = new Date($.now()); 
+    var tsday = ("0" + tsnow.getDate()).slice(-2); 
+    var tsmonth = ("0" + (tsnow.getMonth() + 1)).slice(-2); 
+    var tsyear = ("0" + (tsnow.getFullYear())).slice(-4); 
+    var date_now = (tsmonth) + "/" + (tsday) + "/" + (tsyear); 
+  //Set variable to get pre-selected branchcode from select2 element 
+    var win_request=$('#circ_request #pickup option[selected="selected"]').val(); 
+ 
+  //Staff logged in at closed library 
+    //If variable matches closed library, set default "Hold starts on" date to the day before reopening, hide that date, and make it required 
+      if (win_request == closed_branchcode) { 
+        $('#reserve_date').val(reserve_date).attr('required','true').parents('li').hide();  //inserts date, sets field to required, and hides input 
+      } 
+  //Staff logged in at an open library 
+    //If someone changes the pickup dropdown to closed library, change the "Hold starts on" date to the set date, make it required, and set the flatpickr to use reserve_date as the minimum date allowed 
+    //But reset everything when the pickup library is changed back to an open library 
+        $('#circ_request #pickup').parent().change( function() { 
+        var branch_name = $('#select2-pickup-container').text(); 
+        if (branch_name == closed_branch_name) { 
+          $('#reserve_date').val(reserve_date); 
+          $('#reserve_date').flatpickr({minDate: reserve_date}); //sets the minimum date for the datepicker for reopening 
+          $('#reserve_date').attr('required','true'); //makes input required 
+          $('#reserve_date').siblings().hide(); //hides extra "X" clear date icons created by messing with the flatpickr plugin 
+        } else { 
+        //Clears all settings if different library is chosen 
+          $('#reserve_date').val(''); 
+          $('#reserve_date').removeAttr('required'); 
+          $('#reserve_date').show().parents().show(); 
+          $('#reserve_date').flatpickr({minDate: date_now});  //Sets minimum date back to today's date 
+          $('#reserve_date').siblings().hide(); //hides extra "X" clear date icons created by messing with the flatpickr plugin 
+        } 
+ 
+      });
+
+```
+
 ### Step 4: part I - Re-route items in transit to a different location 
 
 - This step is accomplished at Home > Administration > System preferences > IntranetUserJS (preferences.pl)
@@ -139,3 +197,41 @@ So, part of my solution to this is to change the on-screen message that appears 
 
   ```
 
+### Step 5: suspend or change fulfillment date on any unfilled requests
+
+In many cases there may be requests that have been placed for pickup at the closed library that have not been filled yet.  In order to prevent those from being filled while the library is closed, I run a report that tells me if there are any current requests for pickup at that library that have not yet been filled.  Once I identify the unfilled requests I set the "Hold starts on" date to the day before the library is scheduled to reopen.  This way items wont' be shipped to the closed library before they reopen and end up being destroyed in a warehouse fire.
+
+The SQL for this report is:
+
+```sql
+
+SELECT
+  Concat(
+    '<a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=', 
+    reserves.borrowernumber, 
+    '#reserves" target="_blank">Open in new window</a>'
+  ) AS REQUEST,
+  Concat(
+    'https://staff.nextkansas.org/cgi-bin/koha/circ/circulation.pl?borrowernumber=', 
+    reserves.borrowernumber, 
+    '#reserves'
+  ) AS BORROWER,
+  reserves.branchcode,
+  Count(reserves.reserve_id) AS Count_reserve_id
+FROM
+  reserves
+WHERE
+  reserves.branchcode LIKE <<Choose your library|branches> AND
+  reserves.found IS NULL AND
+  reserves.suspend = "" AND 
+  reserves.reservedate <= <<Hold starts before|date>>
+GROUP BY
+  reserves.borrowernumber,
+  reserves.branchcode,
+  reserves.found,
+  reserves.suspend
+ORDER BY
+  reserves.branchcode,
+  reserves.borrowernumber
+
+```
