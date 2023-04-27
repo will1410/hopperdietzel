@@ -30,6 +30,8 @@ Instead of using the "Pickup location: (Yes/No)" feature on branches.pl, I use c
 
 ```javascript
 
-  $("#pickup option[value='CLOSED_BRANCHCODE']").attr("value","ALTERNATE_BRANCHCODE").html('CLOSED_BRANCHNAME is closed for the summer - Items will route to ALTERNATE_BRANCHNAME'); 
+  $("#pickup option[value='CLOSED_BRANCHCODE']").attr("value","ALTERNATE_BRANCHCODE").html('CLOSED_BRANCHNAME is closed for the summer - this request will route to ALTERNATE_BRANCHNAME'); 
 
 ```
+
+### 
