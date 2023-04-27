@@ -16,5 +16,20 @@ Once the school is closed, I remove the school's branchcode from the staticholds
 
 Then I add the branchcodes for the closed schools to opachiddenitems.  This prevents the closed library's items from appearing in teh OPAC.
 
-### Home > Administration > Libraries 
+### Home > Administration > Libraries (branches.pl)
 
+This is one of the options for closing a library that I actually avoid.  It works, but I'm not happy with the way that it works for borrowers who have the closed library set as their home library.
+
+From the "Libraries" page, you can indicate whether or not a library is a "Pickup location."  During a closure you can change their setting from "Yes" to "No."  This will prevent borrowers from having items shipped to this library during a closure.
+
+The reason I don't like this option is that, if a borrower has the closed library set as their home library, when you change a library from "Pickup location: Yes" to "Pickup location: No" it will default that borrower's pickup location to whichever library is alphabetically at the top of the pickup locations list.  In our case this means that if a borrower whose home library is "Sabetha Middle School" places a request while "Sabetha Middle School" is closed and that borrower isn't paying attention, their request will be shipped to Atchison Public Library (which is about 45 miles east of Sabetha).
+
+### IntranetUserJS to fix default pickup location issue 
+
+Instead of using the "Pickup location: (Yes/No)" feature on branches.pl, I use custom jQuery so that if a closed location is selected by default, Koha will automatically re-route the item to a nearby library that is open.
+
+```javascript
+
+  $("#pickup option[value='CLOSED_BRANCHCODE']").attr("value","ALTERNATE_BRANCHCODE").html('CLOSED_BRANCHNAME is closed for the summer - Items will route to ALTERNATE_BRANCHNAME'); 
+
+```
