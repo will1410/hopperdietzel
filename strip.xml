@@ -7,7 +7,7 @@
  </xsl:template>
  <xsl:template match="marc:datafield[@tag='245']/marc:subfield[@code='a']">
    <marc:subfield code="a">
-       <xsl:value-of select="translate(current(),'Ja', 'Aj')"/>
+       <xsl:value-of select="translate(current(),'ja', 'aj')"/>
    </marc:subfield>
  </xsl:template>
  <xsl:template match="node()">
