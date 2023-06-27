@@ -3,6 +3,9 @@
 ## Notes about Koha
 <br />
 <br />
+### [Add local branding to Koha staff interface](/koha_notes/branding_koha)
+CSS to change the Koha staff interface colors to match your brand colors.<br />
+<br />
 ### [Steps to close a library](/koha_notes/closing_a_library)
 Steps to take in Koha to close a library.<br />
 <br />
