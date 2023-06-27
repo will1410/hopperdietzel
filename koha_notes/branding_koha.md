@@ -44,20 +44,20 @@ My basic color variables became:
 
 | Color | variable name | Color ID |
 |-----|-----|-----|
-| dark color |  --c_dark | #0157b9 |
-| medium color | --c_medium | #1f9bde |
-| light color | --c_light | #d7ebff |
+| dark color |  `--c_dark` | #0157b9 |
+| medium color | `--c_medium` | #1f9bde |
+| light color | `--c_light` | #d7ebff |
 
 Then I added a the contrasting text color for each selection to my set of variables:
 
 | Color | variable name | Color ID |
 |-----|-----|-----|
-| dark color |  --c_dark | #0157b9 |
-| dark text |  --t_dark | #FFFFFF |
-| medium color | --c_medium | #1f9bde |
-| medium text | --t_medium | #FFFFFF |
-| light color | --c_light | #d7ebff |
-| light text | --t_light | #000000 |
+| dark color |  `--c_dark` | #0157b9 |
+| dark text |  `--t_dark` | #FFFFFF |
+| medium color | `--c_medium` | #1f9bde |
+| medium text | `--t_medium` | #FFFFFF |
+| light color | `--c_light` | #d7ebff |
+| light text | `--t_light` | #000000 |
 
 Then I wanted to add variables for contrasting colors when elements were hovered over.  I simplified this by deciding that when the light elements were hovered over, they'd toggle to the medium colors and the medium colors would toggle to dark on hover.  To create colors for the dark hover, I went back to the accessible color palette generator and picked the darkest monochromatic color that matched with #0157b9.
 
@@ -65,18 +65,18 @@ This gave me:
 
 | Color | variable name | Color ID |
 |-----|-----|-----|
-| dark color |  --c_dark | #0157b9 |
-| dark text |  --t_dark | #FFFFFF |
-| dark hover color |  --c_dark | #04368e |
-| dark hover text |  --t_dark | #FFFFFF |
-| medium color | --c_medium | #1f9bde |
-| medium text | --t_medium | #FFFFFF |
-| medium hover color | --c_medium | #0157b9 |
-| medium hover text | --t_medium | #FFFFFF |
-| light color | --c_light | #d7ebff |
-| light text | --t_light | #000000 |
-| light hover color | --c_light | #1f9bde |
-| light hover text | --t_light | #FFFFFF |
+| dark color |  `--c_dark` | #0157b9 |
+| dark text |  `--t_dark` | #FFFFFF |
+| dark hover color |  `--c_dark` | #04368e |
+| dark hover text |  `--t_dark` | #FFFFFF |
+| medium color | `--c_medium` | #1f9bde |
+| medium text | `--t_medium` | #FFFFFF |
+| medium hover color | `--c_medium` | #0157b9 |
+| medium hover text | `--t_medium` | #FFFFFF |
+| light color | `--c_light` | #d7ebff |
+| light text | `--t_light` | #000000 |
+| light hover color | `--c_light` | #1f9bde |
+| light hover text | `--t_light` | #FFFFFF |
 
 
 Next I decided that I wanted the overall text color on all pages to be darker and I wanted to change the green color of all of the links.
@@ -85,80 +85,80 @@ This lead to:
 
 | Color | variable name | Color ID |
 |-----|-----|-----|
-| dark color |  --c_dark | #0157b9 |
-| dark text |  --t_dark | #FFFFFF |
-| dark hover color |  --c_dark | #04368e |
-| dark hover text |  --t_dark | #FFFFFF |
-| medium color | --c_medium | #1f9bde |
-| medium text | --t_medium | #FFFFFF |
-| medium hover color | --c_medium | #0157b9 |
-| medium hover text | --t_medium | #FFFFFF |
-| light color | --c_light | #d7ebff |
-| light text | --t_light | #000000 |
-| light hover color | --c_light | #1f9bde |
-| light hover text | --t_light | #FFFFFF |
+| dark color |  `--c_dark` | #0157b9 |
+| dark text |  `--t_dark` | #FFFFFF |
+| dark hover color |  `--c_dark_hov` | #04368e |
+| dark hover text |  `--t_dark_hov` | #FFFFFF |
+| medium color | `--c_medium` | #1f9bde |
+| medium text | `--t_medium` | #FFFFFF |
+| medium hover color | `--c_medium_hov` | #0157b9 |
+| medium hover text | `--t_medium_hov` | #FFFFFF |
+| light color | `--c_light` | #d7ebff |
+| light text | `--t_light` | #000000 |
+| light hover color | `--c_light_hov` | #1f9bde |
+| light hover text | `--t_light_hov` | #FFFFFF |
 |-----|-----|-----|
-| general text color | --general_text | #000000 |
-| general link color | --general_link | #04368e |
+| general text color | `--general_text` | #000000 |
+| general link color | `--general_link` | #04368e |
 
 Then I wanted to change the header from white on black to black on white.  If I was going to work on a re-theme for Koha that worked as a "Dark" mode, I'd want the header to be white on black.  With our existing colors, though, I found the white on black to be a little oppressive, so I came up with some colors for the header:
 
 | Color | variable name | Color ID |
 |-----|-----|-----|
-| dark color |  --c_dark | #0157b9 |
-| dark text |  --t_dark | #FFFFFF |
-| dark hover color |  --c_dark | #04368e |
-| dark hover text |  --t_dark | #FFFFFF |
-| medium color | --c_medium | #1f9bde |
-| medium text | --t_medium | #FFFFFF |
-| medium hover color | --c_medium | #0157b9 |
-| medium hover text | --t_medium | #FFFFFF |
-| light color | --c_light | #d7ebff |
-| light text | --t_light | #000000 |
-| light hover color | --c_light | #1f9bde |
-| light hover text | --t_light | #FFFFFF |
+| dark color |  `--c_dark` | #0157b9 |
+| dark text |  `--t_dark` | #FFFFFF |
+| dark hover color |  `--c_dark_hov` | #04368e |
+| dark hover text |  `--t_dark_hov` | #FFFFFF |
+| medium color | `--c_medium` | #1f9bde |
+| medium text | `--t_medium` | #FFFFFF |
+| medium hover color | `--c_medium_hov` | #0157b9 |
+| medium hover text | `--t_medium_hov` | #FFFFFF |
+| light color | `--c_light` | #d7ebff |
+| light text | `--t_light` | #000000 |
+| light hover color | `--c_light_hov` | #1f9bde |
+| light hover text | `--t_light_hov` | #FFFFFF |
 |-----|-----|-----|
-| general text color | --general_text | #000000 |
-| general link color | --general_link | #04368e |
+| general text color | `--general_text` | #000000 |
+| general link color | `--general_link` | #04368e |
 |-----|-----|-----|
-| header color | --c_head | #FFFFFF |
-| header text | --t_head | #000000 |
-| header hover color | --c_head_hov | #e0e0e0 |
-| header hover text | --t_head_hov | #000000 |
+| header color | `--c_head` | #FFFFFF |
+| header text | `--t_head` | #000000 |
+| header hover color | `--c_head_hov` | #e0e0e0 |
+| header hover text | `--t_head_hov` | #000000 |
 
 
 Finally, to help me with testing, I added two more variables to help with testing:
 
 | Color | variable name | Color ID |
 |-----|-----|-----|
-| dark color |  --c_dark | #0157b9 |
-| dark text |  --t_dark | #FFFFFF |
-| dark hover color |  --c_dark | #04368e |
-| dark hover text |  --t_dark | #FFFFFF |
-| medium color | --c_medium | #1f9bde |
-| medium text | --t_medium | #FFFFFF |
-| medium hover color | --c_medium | #0157b9 |
-| medium hover text | --t_medium | #FFFFFF |
-| light color | --c_light | #d7ebff |
-| light text | --t_light | #000000 |
-| light hover color | --c_light | #1f9bde |
-| light hover text | --t_light | #FFFFFF |
+| dark color |  `--c_dark` | #0157b9 |
+| dark text |  `--t_dark` | #FFFFFF |
+| dark hover color |  `--c_dark_hov` | #04368e |
+| dark hover text |  `--t_dark_hov` | #FFFFFF |
+| medium color | `--c_medium` | #1f9bde |
+| medium text | `--t_medium` | #FFFFFF |
+| medium hover color | `--c_medium_hov` | #0157b9 |
+| medium hover text | `--t_medium_hov` | #FFFFFF |
+| light color | `--c_light` | #d7ebff |
+| light text | `--t_light` | #000000 |
+| light hover color | `--c_light_hov` | #1f9bde |
+| light hover text | `--t_light_hov` | #FFFFFF |
 |-----|-----|-----|
-| general text color | --general_text | #000000 |
-| general link color | --general_link | #04368e |
+| general text color | `--general_text` | #000000 |
+| general link color | `--general_link` | #04368e |
 |-----|-----|-----|
-| header color | --c_head | #FFFFFF |
-| header text | --t_head | #000000 |
-| header hover color | --c_head_hov | #e0e0e0 |
-| header hover text | --t_head_hov | #000000 |
+| header color | `--c_head` | #FFFFFF |
+| header text | `--t_head` | #000000 |
+| header hover color | `--c_head_hov` | #e0e0e0 |
+| header hover text | `--t_head_hov` | #000000 |
 |-----|-----|-----|
-| test color | --testt | black |
-| test text | --testc | red |
+| test color | `--testt` | black |
+| test text | `--testc` | red |
 
 
 ## 4. The CSS
 
-The CSS I wrote for this project is the first time that I've really extensively used CSS variables.  This simplifies the modifications because, instead of having to remember a dozen hexidecimal color codes, I just had to remember whether this is something I want light, medium, or dark, whether it's something that changes on hover, and whether it's in the background or a piece of text.  And if I am having troulbe finding the right selector, I can use var(--testt) or var(--testc) to manipulate things on the page until I find the selector that works the way I want it to.
+The CSS I wrote for this project is the first time that I've really extensively used CSS variables.  This simplifies the modifications because, instead of having to remember a dozen hexidecimal color codes, I just had to remember whether this is something I want light, medium, or dark, whether it's something that changes on hover, and whether it's in the background or a piece of text.  And if I am having troulbe finding the right selector, I can use `var(--testt)` or `var(--testc)` to manipulate things on the page until I find the selector that works the way I want it to.
 
 To use the colors I selected, the first part of the CSS is a "root" statement that declares the variables that are available for all pages
 
@@ -211,9 +211,9 @@ To use the colors I selected, the first part of the CSS is a "root" statement th
 
 ```
 
-Once those variables are set, anytime I want to change a color in Koha to the medium color, instead of using "#1f9bde", all I have to do is insert "var(--c_medium)".
+Once those variables are set, anytime I want to change a color in Koha to the medium color, instead of using "#1f9bde", all I have to do is insert `var(--c_medium)`.
 
-The big advantage of this is that if I decide I want to use a different color as my medium color, I can change the variable, and all of the CSS that uses "var(--c_medium)" will be changed and I won't have to dig through the CSS and change every instance of "#1f9bde".
+The big advantage of this is that if I decide I want to use a different color as my medium color, I can change the variable, and all of the CSS that uses `var(--c_medium)` will be changed and I won't have to dig through the CSS and change every instance of "#1f9bde".
 
 ## 5.  The (more-or-less) complete CSS
 
