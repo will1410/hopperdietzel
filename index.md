@@ -9,6 +9,10 @@
 
 ## Records / Singles
 
+### THE NIGHTFLY [Donald Fagen](https://open.spotify.com/album/5cOS6szqlcoqmiSoVTqqe8?si=ux0rOYHmSIukUIRSrjPkxg){:target="_blank"}
+
+This is one of my favorite albums.  I've been listening to it repeatedly over the last couple of weeks.  In particular I think of "Walk Between Raindrops" whenever I get close to my wedding anniversary (which is coming up on Saturday).  This song captures the sense of happiness I felt for those first few months after I met my wife.  But the rest of the album is great too.
+
 ### YOU ARE AN EDGY VIDIONARY SEER [Jim Pearce](https://open.spotify.com/album/2IjK48zZABQi454uvxPO0I?si=Uo-Kj9CGRYyrmT30Ud3_Cw){:target="_blank"}
 
 I love Jim Pearce.  He thinks jazz should be fun.  This album is now a few years old, but I find myself listening to it about once a week.  When it first came out I remember listening to it and explaining the song "Old as Dirt" to one of my co-workers at Latah Count Library.  She did not appreciate that I said a song titled "Old as Dirt" reminded me of her that the line "What golden years / my knees are achin'" was the line that made me think of her because she was just about to have knee replacement surgery.
