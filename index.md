@@ -11,7 +11,7 @@
 
 ### THE NIGHTFLY [Donald Fagen](https://open.spotify.com/album/5cOS6szqlcoqmiSoVTqqe8?si=ux0rOYHmSIukUIRSrjPkxg){:target="_blank"}
 
-This is one of my favorite albums.  I've been listening to it repeatedly over the last couple of weeks.  In particular I think of "Walk Between Raindrops" whenever I get close to my wedding anniversary (which is coming up on Saturday).  This song captures the sense of happiness I felt for those first few months after I met my wife.  But the rest of the album is great too.
+This is one of my favorite albums.  I've been listening to it repeatedly over the last couple of weeks.  In particular I think of "Walk Between Raindrops" whenever I get close to my wedding anniversary (which is coming up on Saturday).  This song captures the sense of happiness I felt for those first few months after I met my wife.  But the rest of the album is great too.  A really great CD.
 
 2023.09.06
 
