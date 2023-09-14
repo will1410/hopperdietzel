@@ -295,7 +295,6 @@ I've added some comments (SQL comments are nested inside of "/*  */" comment tag
 
 This is the first piece of SQL you need to add to your Koha in order to make this package work.
 
-
 ```SQL
 
 SELECT
@@ -1119,5 +1118,47 @@ Next Search Catalog colors are some pieces of CSS I created to quickly add our p
     background: #1f9bde;
     color: #FFFFFF;
   }
+
+```
+
+### Step 8: IntranetUserJS
+
+For this final part, you've got two options.
+
+No matter which option you choose, you need to change the variable "to_do_dashboard_report" from 3759 to the number Koha assigned the report in step 4.
+
+In Next Search Catalog we've moved the alert information on the home page to the space above the left-hand news column.  If you've already moved the alert data, then you need to add this jQuery to your IntranetUserJS system preference to make the buttons appear above the alerts:
+
+```Javascript
+
+//Home 
+  //BEGIN holds queue, MIT, and cnx requests buttons on staff interface main page 
+    if ( $('#main_intranet-main').length ) { 
+      var to_do_dashboard_report = "3759"; 
+      $.getJSON('/cgi-bin/koha/svc/report?id=' + to_do_dashboard_report + '&phase=Run+this+report&param_name=branchcode+1&sql_params=' + loglibbc + '&param_name=branchcode+2&sql_params=' + loglibbc + '&param_name=branchcode+3&sql_params=' + loglibbc + '&param_name=branchcode+4&sql_params=' + loglibbc, function(data) { 
+        $.each(data, function(index, value) { 
+          var to_do_dashboard = value; 
+          $('#area-pending').before(to_do_dashboard); 
+        }); 
+      }); 
+    }
+
+```
+
+If you have not moved the alert information to the space above the news column, then you need to use this jQuery.
+
+```Javascript
+
+//Home 
+  //BEGIN holds queue, MIT, and cnx requests buttons on staff interface main page 
+    if ( $('#main_intranet-main').length ) { 
+      var to_do_dashboard_report = "3759"; 
+      $.getJSON('/cgi-bin/koha/svc/report?id=' + to_do_dashboard_report + '&phase=Run+this+report&param_name=branchcode+1&sql_params=' + loglibbc + '&param_name=branchcode+2&sql_params=' + loglibbc + '&param_name=branchcode+3&sql_params=' + loglibbc + '&param_name=branchcode+4&sql_params=' + loglibbc, function(data) { 
+        $.each(data, function(index, value) { 
+          var to_do_dashboard = value; 
+          $('#area-news').before(to_do_dashboard); 
+        }); 
+      }); 
+    }
 
 ```
