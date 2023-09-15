@@ -801,8 +801,7 @@ SELECT
     'Thank you,', 
     '%20%0D%0A%0D%0A', 
     '">Send e-mail</a>' 
-  ) AS MAILTO_LINK, 
-  @SortOrder := <<Sort by|XS_BRANCH>> AS SORTING 
+  ) AS MAILTO_LINK
 FROM 
   branchtransfers JOIN 
   branches frombranches ON branchtransfers.frombranch = frombranches.branchcode JOIN 
@@ -902,8 +901,7 @@ GROUP BY
   item_info.biblionumber, 
   item_info.itemnumber 
 ORDER BY 
-  CASE WHEN SORTING = '1' THEN item_info.HOME_LIBRARY END ASC, 
-  CASE WHEN SORTING = '2' THEN item_info.PERM_LOCATION END ASC, 
+  item_info.HOME_LIBRARY, 
   item_info.PERM_LOCATION, 
   item_info.ITYPE, 
   item_info.CCODE, 
