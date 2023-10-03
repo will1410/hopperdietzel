@@ -1,7 +1,12 @@
 # George H. Williams
 
 ## Notes about Koha
+
 <br />
+<br />
+### [Add "action" buttons to the Koha home page](/koha_notes/homepage_action_buttons)
+Add buttons to the Koha staff interface home page to give staff updates on needed actions and run reports.<br />
+(Very similar to [Holds queue counter](/koha_notes/holds_queue_count))<br />
 <br />
 ### [Add local branding to Koha staff interface](/koha_notes/branding_koha)
 CSS to change the Koha staff interface colors to match your brand colors.<br />
