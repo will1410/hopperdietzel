@@ -4,6 +4,9 @@
 
 <br />
 <br />
+### [Restrict patron circulation by borrower category and home library](/koha_notes/restrict_circulation)
+Prevent staff from checking out or renewing items to borrowers with a specific borrower category except when that borrower is at their home library.<br />
+<br />
 ### [Add "action" buttons to the Koha home page](/koha_notes/homepage_action_buttons)
 Add buttons to the Koha staff interface home page to give staff updates on needed actions and run reports.<br />
 (Very similar to [Holds queue counter](/koha_notes/holds_queue_count))<br />
