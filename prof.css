@@ -1,7 +1,23 @@
-#tab-80Header, .linkTab {
-  text-align: center
+#collectionSpotlight68 {
+  background-color: #d7ebff;
+}
+
+#tab-80Header {
+  text-align: center;
+  color: black;
+  font-size: 1.5em;
+  height: 1.5em;
+}
+
+.linkTab {
+  float: none !important;
+  text-align: center;
+  color: black;
+  font-size: 1.5em;
+  padding-top: 15px;
 }
 
 .embeddedCollectionSpotlightBody, #titleScroller80 {
-  background-color: red
+  background-color: #d7ebff
 }
+
