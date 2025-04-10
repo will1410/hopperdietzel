@@ -21,7 +21,7 @@ The first change I ever made to this page was pretty simple:
 
 The problem with this is that it puts the conten into the box with the username and password input fields.  It crowds a lot of stuff into that box and I wasn't satisfied with the results.
 
-![First attempt](koha_notes\images\stafflogininstructions.png){:class="img-responsive"}
+![First attempt](koha_notes/images/stafflogininstructions.png){:class="img-responsive"}
 
 ## Second attempt
 
