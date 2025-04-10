@@ -59,6 +59,8 @@ function init() {
 
 This script puts the contact information I want above the box at the top of the page and I was happy with this for a very long time.
 
+![Second attempt](/koha_notes/images/stafflogininstructions_0020.png){:class="img-responsive"}
+
 ## Additional enhancements - post upgrade message
 
 After an upgrade we ask staff to clear the cache on their browser before they log in.  I wanted to add a reminder on this page so staff would remember to clear their caches.  Typically I leave this code in the preference all of the time but I add "display: none;" to the style tag.  That way I don't have to remember where I stored the code and paste it back into place every time I need it.  All I have to do is update the message and add or remove the "display: none" attribute from the style tag as needed.
