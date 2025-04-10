@@ -219,6 +219,8 @@ ORDER BY
 
     - Replace "_priority_holds_report_number_" with the number you noted in step 1
 
+## The following SQL is for Koha versions up to 23.05 (maybe 23.11)
+
 ```SQL
 
 Select
@@ -228,6 +230,45 @@ Select
     'href="/cgi-bin/koha/reports/guided_reports.pl?phase=Run+this+report&reports=_priority_holds_report_number_&sql_params=',
     branches.branchcode,
     '&param_name=Choose+your+library|ZBRAN&limit=500" ',
+    'target="_blank"> ',
+    '<i class="fa fa-tasks"></i> Holds queue <br /><span style="font-weight: bold;">(',
+    Count(Distinct request_counts.itemnumber),
+    '</span> items)</a>'
+  ) As COUNT
+From
+  branches Left Join
+  (
+    Select
+      hold_fill_targets.source_branchcode,
+      hold_fill_targets.itemnumber
+    From
+      hold_fill_targets
+    Group By
+      hold_fill_targets.source_branchcode,
+      hold_fill_targets.itemnumber
+  ) request_counts On request_counts.source_branchcode = branches.branchcode
+Where
+    branches.branchcode = <<Enter branchcode>>
+Group By
+    branches.branchcode
+
+```
+
+## The following SQL is for Koha versions 24.05 and after (and maybe 23.11)
+
+There was a change to report links in Koha version 24.05 (or maybe 23.11 - I'm not sure because our library skipped Koha 23.11).  That change required an update in the SQL for this second report.
+
+```SQL
+
+Select
+  CONCAT(
+    '<a class="btn btn-lg btn-info btn-block noprint" ',
+    'style="font-size: 1.75em; color: white;" ',
+    'href="/cgi-bin/koha/reports/guided_reports.pl?id=',
+    '_priority_holds_report_number_',
+    '&param_name=Choose+your+library|branches&sql_params=',
+    branches.branchcode,
+    '&limit=1000&op=run" ',
     'target="_blank"> ',
     '<i class="fa fa-tasks"></i> Holds queue <br /><span style="font-weight: bold;">(',
     Count(Distinct request_counts.itemnumber),
