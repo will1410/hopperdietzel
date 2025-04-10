@@ -4,6 +4,9 @@
 
 <br />
 <br />
+### [Do things to the login page](/koha_notes/StaffLoginInstructions)
+Add content to the login page in Koha.  The examples I use include a post-upgrade message and a contact list that changes depending on our office's open hours.<br />
+<br />
 ### [Restrict patron circulation by borrower category and home library](/koha_notes/restrict_circulation)
 Prevent staff from checking out or renewing items to borrowers with a specific borrower category except when that borrower is at their home library.<br />
 <br />
