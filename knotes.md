@@ -4,6 +4,9 @@
 
 <br />
 <br />
+### [Screenshot tips and tools](/koha_notes/screenshot_tips)
+Some ideas to help taking screenshots for training materials.<br />
+<br />
 ### [Restrict patron circulation by borrower category and home library](/koha_notes/restrict_circulation)
 Prevent staff from checking out or renewing items to borrowers with a specific borrower category except when that borrower is at their home library.<br />
 <br />
