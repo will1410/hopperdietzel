@@ -9,6 +9,14 @@
 
 ## Records / Singles
 
+### [CAPRICORN RECORDS PRESENTS THE SWING TIME RECORDS STORY](https://www.discogs.com/release/10812290-Various-Capricorn-Records-Presents-The-Swing-Time-Records-Story-){:target="_blank"}
+
+I bought this set at Sisters of Sound Records in Manhattan, Kansas, just a few years ago.  Swing Time was a Los Angeles based record label that existed from 1950 - 1954.  Before it was called Swing Time, the label had been called Down Beat and then Swing Beat.
+
+The music that they released is incredible and this set collects 50 of their singles from 1950-54.  Many of the artists on this set are well known, including Jimmy Witherspoon and Big Joe Turner, but the biggest picture on the front of the box is Ray Charles, who recorded several records for Swing Time before he started recording for Atlantic.
+
+My favorite song on this set is the very first recording of "Saturday Night Fish Fry" by Eddie Williams And His Brown Buddies, which was later (and more famously) recorded by Louis Jordan.  It's a great song in and of itself, but I really enjoy it because as we were driving home from Manhattan after I bought this CD, I had it in the car CD player and when this song ended my wife said "I don't think this is really about fish, is it?"
+
 ### "Banana Love" [The Bobs](https://open.spotify.com/track/6cBebxX8yXSIPywkBiFGct?si=e4e9b0a17f6c42c8){:target="_blank"}
 
 I've seen The Bobs live more often than any other group.  I've seen The Bobs live in concert 7 times.  And I did see them perform "Banana Love" back in 1987 at the University of Idaho.  I've been thinking of this song a lot lately for two reasons.  First, I've been listening to The Kinks album LOLA VS POWERMAN AND THE MONEYGOROUND in the car and the song "Apeman" has some similarity to this one, so it makes me think of this one.  Second, I've been re-watching the 2006 BATTLESTAR GALACTICA and the song during the end credits also makes me think of this one.  
