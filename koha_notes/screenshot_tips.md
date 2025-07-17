@@ -10,7 +10,7 @@ There are several open source options available, but I've been using Snagit for 
 
 I use Snagits preset and hotkey features when I take screenshots.  With a couple of keystrokes, I can take screenshots from the same area of the screen again and again.
 
-..todo - add screenshot
+![Snagit](/koha_notes/images/screenshot_tips/snagit.png)
 
 ### Window Resizer
 
@@ -18,13 +18,13 @@ To go along with Snagit I use a Firefox extension called "Window Resizer" wich i
 
 Window Resizer allows me to set Firefox to the same window size and position with the click of a button.  This way I can use Window Resizer to set Firefox in a specific position and then use a Snagit preset to take a picture of the window in just a couple of quick steps.
 
-..todo - add screenshot
+![Window Resizer](/koha_notes/images/screenshot_tips/windows_resizer.png)
 
 ### Rapid Tables > Window size
 
-To help me set the browser window to the size I want with Window Resizer, I have used the Window size tool from Rapid Tables.  This web-based app will tell you the size of your browser window which can help you set the window size and position where you want it.
+To help me set the browser window to the size I want with Window Resizer, I use the Window size tool from Rapid Tables at https://www.rapidtables.com/web/tools/window-size.html.  This web-based app will tell you the size of your browser window which can help you set the window size and position where you want it.
 
-..todo - add screenshot
+![What is my browser window size](/koha_notes/images/screenshot_tips/rapid_tables.png)
 
 ### Reciept printer name
 
