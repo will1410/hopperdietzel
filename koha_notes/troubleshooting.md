@@ -407,7 +407,7 @@ $(document).ready(function () {
         );
 
       //Lets the user know the data has been copied
-        alert("Troubleshooting data has been copied to your clipboard.\r\n\r\nData can be pasted into an e-mail to make troubleshooting problems easier.");
+        alert("Troubleshooting data has been copied to your clipboard.\r\n\r\nThis data can be pasted into an e-mail to your support provider to make troubleshooting problems easier.");
 
     });
 
