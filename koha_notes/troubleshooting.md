@@ -59,6 +59,7 @@ $(document).ready(function () {
         var ts_koha_version = $('head meta[name="generator"]').attr('content');
         var ts_username = $(".loggedinusername").html().trim();
         var ts_branchcode = $('.logged-in-branch-code').first().text().trim();
+        var ts_branchname = $('.logged-in-branch-name').first().text().trim();
         var ts_url = $(location).attr('href');
         var ts_breadcrumbs = $('#breadcrumbs ol li').text().trim().replace(/\n/g, '>').replace(/\s+/g, ' ').replace(/> /g, '>').replace(/>+/g, ' > ');
         var browserName;
@@ -88,6 +89,7 @@ $(document).ready(function () {
         var ts_koha_version = $('head meta[name="generator"]').attr('content');
         var ts_username = $(".loggedinusername").html().trim();
         var ts_branchcode = $('.logged-in-branch-code').first().text().trim();
+        var ts_branchname = $('.logged-in-branch-name').first().text().trim();
         var ts_url = $(location).attr('href');
         var ts_breadcrumbs = $('#breadcrumbs ol li').text().trim().replace(/\n/g, '>').replace(/\s+/g, ' ').replace(/> /g, '>').replace(/>+/g, ' > ');
         var browserName;
@@ -142,7 +144,8 @@ $(document).ready(function () {
         var ts_timestamp = new Date();
         var ts_koha_version = $('head meta[name="generator"]').attr('content');
         var ts_username = $(".loggedinusername").html().trim();
-        var ts_branchcode = $('.logged-in-branch-code').first().text().trim();
+        var ts_branchcode = $('.logged-in-branch-code').first().text().trim(); 
+        var ts_branchname = $('.logged-in-branch-name').first().text().trim();
         var ts_url = $(location).attr('href');
         var ts_breadcrumbs = $('#breadcrumbs ol li').text().trim().replace(/\n/g, '>').replace(/\s+/g, ' ').replace(/> /g, '>').replace(/>+/g, ' > ');
         var browserName;
@@ -214,7 +217,8 @@ $(document).ready(function () {
         var ts_timestamp = new Date();
         var ts_koha_version = $('head meta[name="generator"]').attr('content');
         var ts_username = $(".loggedinusername").html().trim();
-        var ts_branchcode = $('.logged-in-branch-code').first().text().trim();
+        var ts_branchcode = $('.logged-in-branch-code').first().text().trim(); 
+        var ts_branchname = $('.logged-in-branch-name').first().text().trim();
         var ts_url = $(location).attr('href');
         var ts_breadcrumbs = $('#breadcrumbs ol li').text().trim().replace(/\n/g, '>').replace(/\s+/g, ' ').replace(/> /g, '>').replace(/>+/g, ' > ');
         var browserName;
@@ -290,6 +294,9 @@ $(document).ready(function () {
           "\r\n" +
           "\t" +
           "Logged in branchcode: " + ts_branchcode +
+          "\r\n" +
+          "\t" +
+          "Logged in branch name: " + ts_branchname +
           "\r\n" +
           "\r\n" +
           "\t" +
@@ -322,6 +329,7 @@ $(document).ready(function () {
         var ts_koha_version = $('head meta[name="generator"]').attr('content');
         var ts_username = $(".loggedinusername").html().trim();
         var ts_branchcode = $('.logged-in-branch-code').first().text().trim();
+        var ts_branchname = $('.logged-in-branch-name').first().text().trim();
         var ts_url = $(location).attr('href');
         var ts_breadcrumbs = $('#breadcrumbs ol li').text().trim().replace(/\n/g, '>').replace(/\s+/g, ' ').replace(/> /g, '>').replace(/>+/g, ' > ');
         var browserName;
@@ -397,6 +405,9 @@ $(document).ready(function () {
           "\r\n" +
           "\t" +
           "Logged in branchcode: " + ts_branchcode +
+          "\r\n" +
+          "\t" +
+          "Logged in branch name: " + ts_branchname +
           "\r\n" +
           "\r\n" +
           "\t" +
