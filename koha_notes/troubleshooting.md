@@ -12,10 +12,10 @@ Something that looks like this:
 
 This steps below are how I added a "Copy troubleshooting data" link to the logged-in dropdown menu that's on almost every page in Koha.
 
-#. The first step is to create the link and add it to the drop-down:
+1. The first step is to create the link and add it to the drop-down:
 
 ```javascript
-$(document).ready(function () { 
+$(document).ready(function () {
 
   //This creates the link in the drop-down
     $('#logged-in-dropdown ul').append('<li class="nav-item"><a id="next_troubleshooting_data" class="toplinks dropdown-item">Copy troubleshooting data</a></li>');
@@ -25,16 +25,16 @@ $(document).ready(function () {
 
 The nav-item, toplinks, and dropdown-item classes are there to make the link conform the look of the other links in this drop-down.
 
-#. Now that we have a link in the drop-down menu, we need to make something happen when someone clicks the link:
+2. Now that we have a link in the drop-down menu, we need to make something happen when someone clicks the link:
 
 ```javascript
-$(document).ready(function () { 
+$(document).ready(function () {
 
   //This creates the link in the drop-down
     $('#logged-in-dropdown ul').append('<li class="nav-item"><a id="next_troubleshooting_data" class="toplinks dropdown-item">Copy troubleshooting data</a></li>');
 
   //Adds function to the #next_troubleshooting_data link
-    $('#next_troubleshooting_data').click(function () { 
+    $('#next_troubleshooting_data').click(function () {
 
       /*  The code you put in this area will happen when you click on the link you created */
 
@@ -43,16 +43,16 @@ $(document).ready(function () {
 });
 ```
 
-#. Next we need to create some variables to grab the data we want from the browser and the web page:
+3. Next we need to create some variables to grab the data we want from the browser and the web page:
 
 ```javascript
-$(document).ready(function () { 
+$(document).ready(function () {
 
   //This creates the link in the drop-down
     $('#logged-in-dropdown ul').append('<li class="nav-item"><a id="next_troubleshooting_data" class="toplinks dropdown-item">Copy troubleshooting data</a></li>');
 
   //Adds function to the #next_troubleshooting_data link
-    $('#next_troubleshooting_data').click(function () { 
+    $('#next_troubleshooting_data').click(function () {
 
       //Creates variables to be copied to the clipboard
         var ts_timestamp = new Date();
@@ -73,16 +73,16 @@ $(document).ready(function () {
 });
 ```
 
-#. Now that we have the data, I want to manipulate parts of the breadcrumbs for two reasons.  First, the breadcrumbs can be really long.  Part of this is to shorten that big piece of text.  Second, breadcrumb data can contain patron names.  Since I'll be getting the URL, which will have the borrowernumber in the URL if it's for a patron page, I don't need the card number or patron name to be sent insecurely by e-mail, so this will remove that confidential information:
+4. Now that we have the data, I want to manipulate parts of the breadcrumbs for two reasons.  First, the breadcrumbs can be really long.  Part of this is to shorten that big piece of text.  Second, breadcrumb data can contain patron names.  Since I'll be getting the URL, which will have the borrowernumber in the URL if it's for a patron page, I don't need the card number or patron name to be sent insecurely by e-mail, so this will remove that confidential information:
 
 ```javascript
-$(document).ready(function () { 
+$(document).ready(function () {
 
   //This creates the link in the drop-down
     $('#logged-in-dropdown ul').append('<li class="nav-item"><a id="next_troubleshooting_data" class="toplinks dropdown-item">Copy troubleshooting data</a></li>');
 
   //Adds function to the #next_troubleshooting_data link
-    $('#next_troubleshooting_data').click(function () { 
+    $('#next_troubleshooting_data').click(function () {
 
       //Creates variables to be copied to the clipboard
         var ts_timestamp = new Date();
@@ -109,7 +109,7 @@ $(document).ready(function () {
         const ts_borrower_credit_details = /(?<=Details of credit).+/;
         const ts_catalog_search_results = /(?<=Catalog > Search for ).+/;
         const ts_modify_patron = /(?<=Modify patron ).+/;
-      
+
       //replaces values from breadcrumbs with replacement parts
         let breadcrumbs = ts_breadcrumbs;
         let ts_breadcrumbs_simplified = breadcrumbs
@@ -129,22 +129,22 @@ $(document).ready(function () {
 });
 ```
 
-#. Then it's really helpful to know which browser the staff member is using.  We encourage our libraries to use Firefox, but some use Chrome, some use Safari, etc.  This code will help identify which browser the staff member is using:
+5. Then it's really helpful to know which browser the staff member is using.  We encourage our libraries to use Firefox, but some use Chrome, some use Safari, etc.  This code will help identify which browser the staff member is using:
 
 ```javascript
-$(document).ready(function () { 
+$(document).ready(function () {
 
   //This creates the link in the drop-down
     $('#logged-in-dropdown ul').append('<li class="nav-item"><a id="next_troubleshooting_data" class="toplinks dropdown-item">Copy troubleshooting data</a></li>');
 
   //Adds function to the #next_troubleshooting_data link
-    $('#next_troubleshooting_data').click(function () { 
+    $('#next_troubleshooting_data').click(function () {
 
       //Creates variables to be copied to the clipboard
         var ts_timestamp = new Date();
         var ts_koha_version = $('head meta[name="generator"]').attr('content');
         var ts_username = $(".loggedinusername").html().trim();
-        var ts_branchcode = $('.logged-in-branch-code').first().text().trim(); 
+        var ts_branchcode = $('.logged-in-branch-code').first().text().trim();
         var ts_branchname = $('.logged-in-branch-name').first().text().trim();
         var ts_url = $(location).attr('href');
         var ts_breadcrumbs = $('#breadcrumbs ol li').text().trim().replace(/\n/g, '>').replace(/\s+/g, ' ').replace(/> /g, '>').replace(/>+/g, ' > ');
@@ -165,7 +165,7 @@ $(document).ready(function () {
         const ts_borrower_credit_details = /(?<=Details of credit).+/;
         const ts_catalog_search_results = /(?<=Catalog > Search for ).+/;
         const ts_modify_patron = /(?<=Modify patron ).+/;
-      
+
       //replaces values from breadcrumbs with replacement parts
         let breadcrumbs = ts_breadcrumbs;
         let ts_breadcrumbs_simplified = breadcrumbs
@@ -202,22 +202,22 @@ $(document).ready(function () {
 });
 ```
 
-#. Now that we have all of the data we want in variables, this copies the data to the clipboard:
+6. Now that we have all of the data we want in variables, this copies the data to the clipboard:
 
 ```javascript
-$(document).ready(function () { 
+$(document).ready(function () {
 
   //This creates the link in the drop-down
     $('#logged-in-dropdown ul').append('<li class="nav-item"><a id="next_troubleshooting_data" class="toplinks dropdown-item">Copy troubleshooting data</a></li>');
 
   //Adds function to the #next_troubleshooting_data link
-    $('#next_troubleshooting_data').click(function () { 
+    $('#next_troubleshooting_data').click(function () {
 
       //Creates variables to be copied to the clipboard
         var ts_timestamp = new Date();
         var ts_koha_version = $('head meta[name="generator"]').attr('content');
         var ts_username = $(".loggedinusername").html().trim();
-        var ts_branchcode = $('.logged-in-branch-code').first().text().trim(); 
+        var ts_branchcode = $('.logged-in-branch-code').first().text().trim();
         var ts_branchname = $('.logged-in-branch-name').first().text().trim();
         var ts_url = $(location).attr('href');
         var ts_breadcrumbs = $('#breadcrumbs ol li').text().trim().replace(/\n/g, '>').replace(/\s+/g, ' ').replace(/> /g, '>').replace(/>+/g, ' > ');
@@ -238,7 +238,7 @@ $(document).ready(function () {
         const ts_borrower_credit_details = /(?<=Details of credit).+/;
         const ts_catalog_search_results = /(?<=Catalog > Search for ).+/;
         const ts_modify_patron = /(?<=Modify patron ).+/;
-      
+
       //replaces values from breadcrumbs with replacement parts
         let breadcrumbs = ts_breadcrumbs;
         let ts_breadcrumbs_simplified = breadcrumbs
@@ -272,14 +272,14 @@ $(document).ready(function () {
 
       //Copies all of the data to the clipboard
         navigator.clipboard.writeText(
-          "Troubleshooting information" + 
+          "Troubleshooting information" +
           "\r\n" +
           "\r\n" +
           "\t" +
-          "Date: " + ts_timestamp + 
+          "Date: " + ts_timestamp +
           "\r\n" +
           "\t" +
-          "Koha version: " + ts_koha_version + 
+          "Koha version: " + ts_koha_version +
           "\r\n" +
           "\r\n" +
           "\t" +
@@ -290,7 +290,7 @@ $(document).ready(function () {
           "\r\n" +
           "\r\n" +
           "\t" +
-          "Logged in user: " + ts_username + 
+          "Logged in user: " + ts_username +
           "\r\n" +
           "\t" +
           "Logged in branchcode: " + ts_branchcode +
@@ -311,18 +311,18 @@ $(document).ready(function () {
 });
 ```
 
-#. This final piece of code makes an alert pop-up on the page when you click the link.  This lets the user know the data has been copied to the clipboard.
+7. This final piece of code makes an alert pop-up on the page when you click the link.  This lets the user know the data has been copied to the clipboard.
 
 The final code for this full package is:
 
 ```javascript
-$(document).ready(function () { 
+$(document).ready(function () {
 
   //This creates the link in the drop-down
     $('#logged-in-dropdown ul').append('<li class="nav-item"><a id="next_troubleshooting_data" class="toplinks dropdown-item">Copy troubleshooting data</a></li>');
 
   //Adds function to the #next_troubleshooting_data link
-    $('#next_troubleshooting_data').click(function () { 
+    $('#next_troubleshooting_data').click(function () {
 
       //Creates variables to be copied to the clipboard
         var ts_timestamp = new Date();
@@ -349,7 +349,7 @@ $(document).ready(function () {
         const ts_borrower_credit_details = /(?<=Details of credit).+/;
         const ts_catalog_search_results = /(?<=Catalog > Search for ).+/;
         const ts_modify_patron = /(?<=Modify patron ).+/;
-      
+
       //replaces values from breadcrumbs with replacement parts
         let breadcrumbs = ts_breadcrumbs;
         let ts_breadcrumbs_simplified = breadcrumbs
@@ -383,14 +383,14 @@ $(document).ready(function () {
 
       //Copies all of the data to the clipboard
         navigator.clipboard.writeText(
-          "Troubleshooting information" + 
+          "Troubleshooting information" +
           "\r\n" +
           "\r\n" +
           "\t" +
-          "Date: " + ts_timestamp + 
+          "Date: " + ts_timestamp +
           "\r\n" +
           "\t" +
-          "Koha version: " + ts_koha_version + 
+          "Koha version: " + ts_koha_version +
           "\r\n" +
           "\r\n" +
           "\t" +
@@ -401,7 +401,7 @@ $(document).ready(function () {
           "\r\n" +
           "\r\n" +
           "\t" +
-          "Logged in user: " + ts_username + 
+          "Logged in user: " + ts_username +
           "\r\n" +
           "\t" +
           "Logged in branchcode: " + ts_branchcode +
@@ -424,4 +424,3 @@ $(document).ready(function () {
 
 });
 ```
-
