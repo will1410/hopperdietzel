@@ -1,6 +1,6 @@
 ## Getting troubleshooting data from Koha
 
-NEKLS uses an open source ticketing system called OS Ticket (https://osticket.com/) to manage support issues for Next Search Catalog and other support related areas.
+NEKLS uses an open source ticketing system called OS Ticket [OS Ticket](https://osticket.com/) to manage support issues for Next Search Catalog and other support related areas.
 
 When someone at one of our libraries has a support issue issue, they can e-mail the ticketing system and it creates a ticket and notifies the appropriate people and then we can track what's going on as we work to resolve the issue.  An issue that often arises, though, is people will send in e-mail that simply say "Koha doesn't work" or "Why am I seeing an error message?"  My response to about 40% of all tickets that get created is "Which page?" or "Is this in Koha or Aspen Discovery?" or "Could you walk-through the steps of how you got to that error message?" or "Which account is logged in?"  And one of my favorites is "This happened on Monday?  But today's Thursday -- is it still doing it today?"
 
@@ -8,7 +8,7 @@ So I asked myself, wouldn't it be great if there was a button or a link that a s
 
 Something that looks like this:
 
-![Location of link on Koha home page](koha_notes\images\troubleshooting\0010.png)
+![Location of link on Koha home page](/koha_notes/images/troubleshooting/0010.png)
 
 This steps below are how I added a "Copy troubleshooting data" link to the logged-in dropdown menu that's on almost every page in Koha.
 
