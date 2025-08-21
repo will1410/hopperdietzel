@@ -2,8 +2,6 @@
 
 ## Notes about Koha
 
-koha_notes\troubleshooting.md
-
 <br />
 <br />
 ### [Koha troubleshooting tool](/koha_notes/troubleshooting)
