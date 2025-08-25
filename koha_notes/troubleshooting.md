@@ -181,13 +181,13 @@ $(document).ready(function () {
           .replace(ts_modify_patron, "'([CATEGORY])'");
 
       //Simplifies browsername
-        if (userAgent.indexOf("Chrome") > -1 && !userAgent.indexOf("Edge") > -1) {
+        if (userAgent.indexOf("Chrome") > -1 && userAgent.indexOf("Edg") === -1) {
         browserName = "Chrome";
         } else if (userAgent.indexOf("Firefox") > -1) {
             browserName = "Firefox";
-        } else if (userAgent.indexOf("Safari") > -1 && !userAgent.indexOf("Chrome") > -1) {
+        } else if (userAgent.indexOf("Safari") > -1 && userAgent.indexOf("Chrome") === -1) {
             browserName = "Safari";
-        } else if (userAgent.indexOf("Edge") > -1) {
+        } else if (userAgent.indexOf("Edg") > -1) {
             browserName = "Edge";
         } else if (userAgent.indexOf("MSIE") > -1 || userAgent.indexOf("Trident") > -1) {
             browserName = "Internet Explorer";
@@ -254,13 +254,13 @@ $(document).ready(function () {
           .replace(ts_modify_patron, "'([CATEGORY])'");
 
       //Simplifies browsername
-        if (userAgent.indexOf("Chrome") > -1 && !userAgent.indexOf("Edge") > -1) {
+        if (userAgent.indexOf("Chrome") > -1 && userAgent.indexOf("Edg") === -1) {
         browserName = "Chrome";
         } else if (userAgent.indexOf("Firefox") > -1) {
             browserName = "Firefox";
-        } else if (userAgent.indexOf("Safari") > -1 && !userAgent.indexOf("Chrome") > -1) {
+        } else if (userAgent.indexOf("Safari") > -1 && userAgent.indexOf("Chrome") === -1) {
             browserName = "Safari";
-        } else if (userAgent.indexOf("Edge") > -1) {
+        } else if (userAgent.indexOf("Edg") > -1) {
             browserName = "Edge";
         } else if (userAgent.indexOf("MSIE") > -1 || userAgent.indexOf("Trident") > -1) {
             browserName = "Internet Explorer";
@@ -365,13 +365,13 @@ $(document).ready(function () {
           .replace(ts_modify_patron, "'([CATEGORY])'");
 
       //Simplifies browsername
-        if (userAgent.indexOf("Chrome") > -1 && !userAgent.indexOf("Edge") > -1) {
+        if (userAgent.indexOf("Chrome") > -1 && userAgent.indexOf("Edg") === -1) {
         browserName = "Chrome";
         } else if (userAgent.indexOf("Firefox") > -1) {
             browserName = "Firefox";
-        } else if (userAgent.indexOf("Safari") > -1 && !userAgent.indexOf("Chrome") > -1) {
+        } else if (userAgent.indexOf("Safari") > -1 && userAgent.indexOf("Chrome") === -1) {
             browserName = "Safari";
-        } else if (userAgent.indexOf("Edge") > -1) {
+        } else if (userAgent.indexOf("Edg") > -1) {
             browserName = "Edge";
         } else if (userAgent.indexOf("MSIE") > -1 || userAgent.indexOf("Trident") > -1) {
             browserName = "Internet Explorer";
