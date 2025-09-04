@@ -7,6 +7,9 @@
 ### [Sort unsorted drop-down menus](/koha_notes/sort_function)
 Sort drop-down menus that aren't sorted alphabetically.<br />
 <br />
+### [Koha troubleshooting tool](/koha_notes/troubleshooting)
+Get relevant support data from any page in one click.<br />
+<br />
 ### [Screenshot tips and tools](/koha_notes/screenshot_tips)
 Some ideas to help taking screenshots for training materials.<br />
 <br />
