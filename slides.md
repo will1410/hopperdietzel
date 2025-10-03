@@ -2,6 +2,8 @@
 
 ## Presentations
 
+### [WOLFcon 2025 - Ad Astra per Aspera (with Jason Robb)](https://docs.google.com/presentation/d/1lXCrnLuSv_z35IgDfBn-r_WwMEMlu5yPep8m-rysPIQ/edit?usp=sharing){:target="_blank"}
+
 ### [KohaCon21 - What's going on with koha-US](/presentations/kohacon.2021/kohacon2021.html)
 
 This is a presentation given on December 14, 2021
