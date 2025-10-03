@@ -9,6 +9,12 @@
 
 ## Records / Singles
 
+### "Rock and Roll Fantasy" [The Kinks](https://open.spotify.com/track/5cDPuvRjbVRcmpE8ds4394?si=1825bbe138204b0f){:target="_blank"}
+
+I was at a record store today in Grand Forks, North Dakota, and I always think of this song when I'm in a record store.  I have about 1200 records and it would be nice to retire and just sit around and listen to records all day long.  This is what I think about when I hear this song.  I haven't spent my life living in a rock and roll fantasy, but I wish I could.
+
+2025.10.02
+
 ### [CAPRICORN RECORDS PRESENTS THE SWING TIME RECORDS STORY](https://www.discogs.com/release/10812290-Various-Capricorn-Records-Presents-The-Swing-Time-Records-Story-){:target="_blank"}
 
 I bought this set at Sisters of Sound Records in Manhattan, Kansas, just a few years ago.  Swing Time was a Los Angeles based record label that existed from 1950 - 1954.  Before it was called Swing Time, the label had been called Down Beat and then Swing Beat.
