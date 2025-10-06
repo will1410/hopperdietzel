@@ -2,6 +2,10 @@
 
 ## Presentations
 
+### [Using Koha in a large consortium](/presentations/using_koha_in_a_large_consortium/index.html){:target="_blank"}
+
+These are the slides from a presentation I did at the MPLA conference in Grand Forks, North Dakota, on October 3, 2025.
+
 ### [WOLFcon 2025 - Ad Astra per Aspera (with Jason Robb)](https://docs.google.com/presentation/d/1lXCrnLuSv_z35IgDfBn-r_WwMEMlu5yPep8m-rysPIQ/edit?usp=sharing){:target="_blank"}
 
 This is a presentation that Jason Robb and I gave at WOLFcon 2025 about Koha use in Kansas
