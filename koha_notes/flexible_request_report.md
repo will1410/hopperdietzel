@@ -10,9 +10,11 @@ It requires a few things:
 - A report to get action logs by request id
 - A report to get in-transit history
 
-## Authorized values entries
+## Dependencies
 
-### Request progress
+### Authorized values entries
+
+#### Request progress
 
 In my Koha, this set of authorized values is called LHOLDPROG
 
@@ -27,7 +29,7 @@ If you add "Flexible requests history" to your Koha, you will need to add this a
 | LHOLDPROG | %Can%            | Cancelled          | Cancelled          |
 | LHOLDPROG | %active%         | Still active       | Still active       |
 
-### Suspended request information
+#### Suspended request information
 
 In my Koha, this set of authorized values is called LHOLDSUS
 
@@ -39,7 +41,7 @@ If you add this Flexible requests history report to your Koha, you will need to 
 | LHOLDSUS | Suspended        | Suspended requests         | Suspended requests         |
 | LHOLDSUS | -                | All non-suspended requests | All non-suspended requests |
 
-### Active/inactive request information
+#### Active/inactive request information
 
 In my Koha, this set of authorized values is called LHOLDACT 
 
@@ -52,9 +54,9 @@ If you add "Flexible requests history" to your Koha, you will need to add this a
 | LHOLDACT | Filled           | Filled requests    | Filled requests    |
 | LHOLDACT | Cancelled        | Cancelled requests | Cancelled requests |
 
-## Connected reports
+### Connected reports
 
-###
+#### Request action logs by request ID
 
 In my Koha, this is report 3040
 
@@ -91,11 +93,306 @@ ORDER BY
   DESC
 ```
 
-### Item in-transit history 
+#### Item in-transit history 
 
 In my Koha, this is report 2784
 
 If you add "Flexible requests history" you would need to change the reference to report 2784 to match the report number in your Koha
+
+```SQL
+SELECT
+  UPPER(items.barcode) AS ITEM_BC,
+  branchtransfers.itemnumber,
+  branchtransfers.frombranch,
+  branchtransfers.datesent,
+  branchtransfers.tobranch,
+  branchtransfers.datecancelled,
+  branchtransfers.datearrived,
+  branchtransfers.comments,
+  branchtransfers.cancellation_reason,
+  branchtransfers.reason
+FROM
+  items
+  JOIN branchtransfers ON branchtransfers.itemnumber = items.itemnumber
+WHERE
+  items.barcode LIKE Concat("%", <<Enter item barcode number>>,"%")
+GROUP BY
+  branchtransfers.branchtransfer_id
+ORDER BY
+  branchtransfers.datesent DESC
+```
+
+## Flexible requests history - a step-by-step guide to building this report
+
+### Step 1 - getting request data
+
+#### Step 1A
+
+The first thing I needed to do to create this report was to get data about requests from the reserves table.  This was my first pass:
+
+```SQL
+SELECT 
+  reserves.reserve_id,
+  reserves.borrowernumber,
+  reserves.reservedate,
+  reserves.biblionumber,
+  reserves.branchcode,
+  reserves.notificationdate,
+  reserves.reminderdate,
+  reserves.cancellationdate,
+  reserves.reservenotes,
+  reserves.priority,
+  reserves.found,
+  reserves.timestamp,
+  reserves.itemnumber,
+  reserves.waitingdate,
+  reserves.expirationdate,
+  reserves.lowestPriority,
+  reserves.suspend,
+  reserves.suspend_until,
+  reserves.itemtype
+FROM 
+  reserves
+```
+
+#### Step 1B
+
+But that first pass only gets me the data for requests that are still active.  To get history I needed to add in the old_reserves table.
+
+```SQL
+SELECT
+  old_reserves.reserve_id,
+  old_reserves.borrowernumber,
+  old_reserves.reservedate,
+  old_reserves.biblionumber,
+  old_reserves.branchcode,
+  old_reserves.notificationdate,
+  old_reserves.reminderdate,
+  old_reserves.cancellationdate,
+  old_reserves.reservenotes,
+  old_reserves.priority,
+  old_reserves.found,
+  old_reserves.timestamp,
+  old_reserves.itemnumber,
+  old_reserves.waitingdate,
+  old_reserves.expirationdate,
+  old_reserves.lowestPriority,
+  old_reserves.suspend,
+  old_reserves.suspend_until,
+  old_reserves.itemtype
+FROM
+  old_reserves 
+```
+
+#### Step 1C
+
+To make this useful I need to join the results with a union - but the union query needs to distinguish between which results are from the reserves table (requests that are still active) and the old_reserves table (requests that have been filled, cancelled, or expired).  To make the union work, both SQL statements need to produce the same number of columns, so I decided to add a column at the end of the first query with a simple "Active"/"-" switch.  Theorhetically, everything in this SQL will say "Active" but I left a "-" marker to catch any weird errors that might crop up.  Then for the second SQL I created a "Cancelled"/"Finished / Filled" switch that would be based on whether or not there's any data in the cancellation date field.
+
+This is what I came up with:
+
+```SQL
+SELECT
+  reserves.reserve_id,
+  reserves.borrowernumber,
+  reserves.reservedate,
+  reserves.biblionumber,
+  reserves.branchcode,
+  reserves.notificationdate,
+  reserves.reminderdate,
+  reserves.cancellationdate,
+  reserves.reservenotes,
+  reserves.priority,
+  reserves.found,
+  reserves.timestamp,
+  reserves.itemnumber,
+  reserves.waitingdate,
+  reserves.expirationdate,
+  reserves.lowestPriority,
+  reserves.suspend,
+  reserves.suspend_until,
+  reserves.itemtype,
+  If(
+    reserves.reserve_id IS NOT NULL, 
+    'Active', 
+    '-'
+  ) AS statuss
+FROM
+  reserves
+UNION
+SELECT
+  old_reserves.reserve_id,
+  old_reserves.borrowernumber,
+  old_reserves.reservedate,
+  old_reserves.biblionumber,
+  old_reserves.branchcode,
+  old_reserves.notificationdate,
+  old_reserves.reminderdate,
+  old_reserves.cancellationdate,
+  old_reserves.reservenotes,
+  old_reserves.priority,
+  old_reserves.found,
+  old_reserves.timestamp,
+  old_reserves.itemnumber,
+  old_reserves.waitingdate,
+  old_reserves.expirationdate,
+  old_reserves.lowestPriority,
+  old_reserves.suspend,
+  old_reserves.suspend_until,
+  old_reserves.itemtype,
+  If(
+    old_reserves.cancellationdate IS NOT NULL, 
+    'Cancelled',
+    'Finished / Filled'
+  ) AS statuss
+FROM
+  old_reserves
+```
+
+### Step 2
+
+#### Step 2A
+
+Once the requests and the request history is connected in this table, all of the work needed to be done hangs off of this union query.  First I know there are a bunch of elements I want to get from this initial query, so I move my union query into a sub-query creating a derived table that I'm just calling requests and I pull the bits and pieces I need from this derived table.
+
+```SQL
+SELECT
+  requests.branchcode,
+  requests.reservedate,
+  requests.waitingdate,
+  requests.expirationdate,
+  requests.cancellationdate,
+  requests.timestamp,
+  requests.suspend,
+  requests.suspend_until,
+  requests.biblionumber
+FROM
+  (SELECT
+      reserves.reserve_id,
+      reserves.borrowernumber,
+      reserves.reservedate,
+      reserves.biblionumber,
+      reserves.branchcode,
+      reserves.notificationdate,
+      reserves.reminderdate,
+      reserves.cancellationdate,
+      reserves.reservenotes,
+      reserves.priority,
+      reserves.found,
+      reserves.timestamp,
+      reserves.itemnumber,
+      reserves.waitingdate,
+      reserves.expirationdate,
+      reserves.lowestPriority,
+      reserves.suspend,
+      reserves.suspend_until,
+      reserves.itemtype,
+      If(reserves.reserve_id IS NOT NULL, 'Active', '-') AS statuss
+    FROM
+      reserves
+    UNION
+    SELECT
+      old_reserves.reserve_id,
+      old_reserves.borrowernumber,
+      old_reserves.reservedate,
+      old_reserves.biblionumber,
+      old_reserves.branchcode,
+      old_reserves.notificationdate,
+      old_reserves.reminderdate,
+      old_reserves.cancellationdate,
+      old_reserves.reservenotes,
+      old_reserves.priority,
+      old_reserves.found,
+      old_reserves.timestamp,
+      old_reserves.itemnumber,
+      old_reserves.waitingdate,
+      old_reserves.expirationdate,
+      old_reserves.lowestPriority,
+      old_reserves.suspend,
+      old_reserves.suspend_until,
+      old_reserves.itemtype,
+      If(old_reserves.cancellationdate IS NOT NULL, 'Cancelled',
+      'Finished / Filled') AS statuss
+    FROM
+      old_reserves) requests
+```
+#### Step 2B
+
+To make this report useful, I need borrower information, so at this point I'm connecting to the borrowers table so I can grab the borrower's card number.
+
+```SQL
+SELECT
+  requests.branchcode,
+  requests.reservedate,
+  requests.waitingdate,
+  requests.expirationdate,
+  requests.cancellationdate,
+  requests.timestamp,
+  requests.suspend,
+  requests.suspend_until,
+  requests.biblionumber,
+  borrowers.cardnumber
+FROM
+  (SELECT
+      reserves.reserve_id,
+      reserves.borrowernumber,
+      reserves.reservedate,
+      reserves.biblionumber,
+      reserves.branchcode,
+      reserves.notificationdate,
+      reserves.reminderdate,
+      reserves.cancellationdate,
+      reserves.reservenotes,
+      reserves.priority,
+      reserves.found,
+      reserves.timestamp,
+      reserves.itemnumber,
+      reserves.waitingdate,
+      reserves.expirationdate,
+      reserves.lowestPriority,
+      reserves.suspend,
+      reserves.suspend_until,
+      reserves.itemtype,
+      If(reserves.reserve_id IS NOT NULL, 'Active', '-') AS statuss
+    FROM
+      reserves
+    UNION
+    SELECT
+      old_reserves.reserve_id,
+      old_reserves.borrowernumber,
+      old_reserves.reservedate,
+      old_reserves.biblionumber,
+      old_reserves.branchcode,
+      old_reserves.notificationdate,
+      old_reserves.reminderdate,
+      old_reserves.cancellationdate,
+      old_reserves.reservenotes,
+      old_reserves.priority,
+      old_reserves.found,
+      old_reserves.timestamp,
+      old_reserves.itemnumber,
+      old_reserves.waitingdate,
+      old_reserves.expirationdate,
+      old_reserves.lowestPriority,
+      old_reserves.suspend,
+      old_reserves.suspend_until,
+      old_reserves.itemtype,
+      If(old_reserves.cancellationdate IS NOT NULL, 'Cancelled',
+      'Finished / Filled') AS statuss
+    FROM
+      old_reserves) requests JOIN
+  borrowers ON borrowers.borrowernumber = requests.borrowernumber
+  ```
+#### Step 2C
+
+I'll also need biblio and deleted biblio information, so I'll join to those tables.
+
+
+
+
+
+
+
+## Flexible requests history - The final report
 
 ```SQL
 SELECT 
