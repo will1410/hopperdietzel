@@ -4,6 +4,9 @@
 
 <br />
 <br />
+### [Repurpose quote of the day](/koha_notes/quote_of_the_day)
+Turn "Quote of the day" into "Training tip of the day."<br />
+<br />
 ### [Sort unsorted drop-down menus](/koha_notes/sort_function)
 Sort drop-down menus that aren't sorted alphabetically.<br />
 <br />
