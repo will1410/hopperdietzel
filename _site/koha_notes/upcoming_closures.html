@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Adding upcoming closures to the Koha home Page | Untitled self-indulgent website</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Adding upcoming closures to the Koha home Page" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Website for George H. Williams" />
+<meta property="og:description" content="Website for George H. Williams" />
+<link rel="canonical" href="http://localhost:4000/koha_notes/upcoming_closures.html" />
+<meta property="og:url" content="http://localhost:4000/koha_notes/upcoming_closures.html" />
+<meta property="og:site_name" content="Untitled self-indulgent website" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Adding upcoming closures to the Koha home Page" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Website for George H. Williams","headline":"Adding upcoming closures to the Koha home Page","url":"http://localhost:4000/koha_notes/upcoming_closures.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="/assets/js/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="/assets/css/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <!--<li class="fork"><a href="">View On GitHub</a></li>-->
+          
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Untitled self-indulgent website</h1>
+          <p>Website for George H. Williams</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href=""></a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/mattgraham">mattgraham</a></span>
+        </div>
+
+        <h2 id="adding-upcoming-closures-to-the-koha-home-page">Adding upcoming closures to the Koha home Page</h2>
+
+<p>Every year I remind libraries to update their calendar for the following year using the Calendar tool.  They often forget.  So I wanted to put a reminder on the home page in the staff interface that would also show them what days their library was closed for in the next 12 months.  I built a report to output the data into a table, then I created a block of HTML that I could put on the home page to hold the table data, then I created some jQuery to populate the table.</p>
+
+<p>You can follow these steps to reproduce this table:</p>
+
+<ol>
+  <li>
+    <p>Create a report with this SQL in your Koha and make a note of the report number</p>
+
+    <ul>
+      <li>The report will list 1 time only holidays – holidays that repeat weekly – and holidays that repeat annually</li>
+    </ul>
+  </li>
+</ol>
+
+<pre><code class="language-SQL">
+Select
+    special_holidays.branchcode As BRANCH,
+    Concat_WS(
+      ' - ',
+      Str_To_Date(
+        Concat(
+          special_holidays.month,
+          '/',
+          special_holidays.day,
+          '/',
+          special_holidays.year
+        ),
+        '%m/%d/%Y'
+      ),  
+      Date_Format(
+        Str_To_Date(
+          Concat(
+            special_holidays.month,
+            '/',
+            special_holidays.day,
+            '/',
+            special_holidays.year
+          ),
+        '%m/%d/%Y'
+        ),
+       '%W'
+      )
+    ) As CLOSED_DATE,
+    special_holidays.title As TITLE,
+    If(
+      special_holidays.year Is Null,
+      "X",
+      special_holidays.year
+    ) As FREQUENCY
+From
+    special_holidays
+Where
+    special_holidays.branchcode Like &lt;&lt;branchcode1&gt;&gt; And
+    Str_To_Date(
+      Concat(
+        special_holidays.month,
+        '/',
+        special_holidays.day,
+        '/',
+        special_holidays.year
+      ),
+      '%m/%d/%Y'
+    ) &gt; Now() - Interval 1 Day
+Group By
+    special_holidays.id
+UNION
+Select
+    repeatable_holidays.branchcode As BRANCH,
+    CONCAT_WS(
+      ' - ',
+      Str_To_Date(
+        Concat(
+          repeatable_holidays.month,
+          '/',
+          repeatable_holidays.day,
+          '/',
+          If(
+            repeatable_holidays.month &gt;= Month(CurDate()),
+            Year(CurDate()),
+            Year(CurDate()) + 1
+          )
+        ),
+        '%m/%d/%Y'
+      ),
+      If(
+        repeatable_holidays.weekday = 0,
+        ' Every Sunday',
+        If(
+          repeatable_holidays.weekday = 1,
+          ' Every Monday',
+          If(
+            repeatable_holidays.weekday = 2,
+            ' Every Tuesday',
+            If(
+              repeatable_holidays.weekday = 3,
+              ' Every Wednesday',
+              If(
+                repeatable_holidays.weekday = 4,
+                ' Every Thursday',
+                If(
+                  repeatable_holidays.weekday = 5,
+                  ' Every Friday',
+                  If(
+                    repeatable_holidays.weekday = 6,
+                    ' Every Saturday',
+                    Date_Format(
+                      Str_To_Date(
+                        Concat(
+                          repeatable_holidays.month,
+                          '/',
+                          repeatable_holidays.day,
+                          '/',
+                          If(
+                            repeatable_holidays.month &gt;= Month(CurDate()),
+                            Year(CurDate()),
+                            Year(CurDate()) + 1
+                          )
+                        ),
+                        '%m/%d/%Y'
+                      ),
+                      '%W'
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    ) As CLOSED_DATE,
+    repeatable_holidays.title As TITLE,
+    If(
+      repeatable_holidays.weekday Is Null,
+      CONCAT(
+        "Repeats every year on ",
+        LPAD(repeatable_holidays.month, 2, 0),
+        '-',
+        LPAD(repeatable_holidays.day, 2, 0)
+      ) ,
+      "Repeats every week"
+    ) As FREQUENCY
+From
+    repeatable_holidays
+Where
+    (
+      repeatable_holidays.branchcode Like &lt;&lt;branchcode2&gt;&gt; And
+      Str_To_Date(
+        Concat(
+          repeatable_holidays.month,
+          '/',
+          repeatable_holidays.day,
+          '/',
+          If(
+            repeatable_holidays.month &gt;= Month(CurDate()),
+            Year(CurDate()),
+            Year(CurDate()) + 1
+          )
+        ),
+        '%m/%d/%Y'
+      ) &gt; Now() - Interval 1 Day
+    )
+    Or
+    (
+      repeatable_holidays.branchcode Like &lt;&lt;branchcode3&gt;&gt; And
+      Str_To_Date(
+        Concat(
+          repeatable_holidays.month,
+          '/',
+          repeatable_holidays.day,
+          '/',
+          If(
+            repeatable_holidays.month &gt;= Month(CurDate()),
+            Year(CurDate()),
+            Year(CurDate()) + 1
+          )
+        ), '%m/%d/%Y'
+      ) Is Null
+    )
+Group By
+    repeatable_holidays.id
+Order By
+    BRANCH,
+    CLOSED_DATE
+
+</code></pre>
+
+<ol>
+  <li>
+    <p>Add this html to your IntranetmainUserblock system preference</p>
+
+    <ul>
+      <li>All this HTML is doing is really creating a space for the table data to go</li>
+    </ul>
+  </li>
+</ol>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nt">&lt;h2&gt;</span>Upcoming closures at your library<span class="nt">&lt;/h2&gt;</span>
+
+  <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"closures"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;p&gt;&lt;br</span> <span class="nt">/&gt;</span>This is a list of the upcoming closures at your library in the next 12 months.<span class="nt">&lt;/p&gt;</span>
+
+    <span class="nt">&lt;table</span> <span class="na">id=</span><span class="s">"closures_table"</span> <span class="na">class=</span><span class="s">"table table-hover table-bordered"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;thead&gt;</span>
+        <span class="nt">&lt;tr&gt;</span>
+          <span class="nt">&lt;th&gt;</span>Branch Code<span class="nt">&lt;/th&gt;</span>
+          <span class="nt">&lt;th&gt;</span>Closed date<span class="nt">&lt;/th&gt;</span>
+          <span class="nt">&lt;th&gt;</span>Title<span class="nt">&lt;/th&gt;</span>
+          <span class="nt">&lt;th&gt;</span>Frequency<span class="nt">&lt;/th&gt;</span>
+        <span class="nt">&lt;/tr&gt;</span>
+      <span class="nt">&lt;/thead&gt;</span>
+      <span class="nt">&lt;tbody&gt;</span>
+        <span class="c">&lt;!-- this is the spot where the table data will go --&gt;</span>
+      <span class="nt">&lt;/tbody&gt;</span>
+    <span class="nt">&lt;/table&gt;</span>
+    <span class="nt">&lt;p&gt;</span>You can add whatever instructional text you'd like in this area.<span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+
+
+</code></pre></div></div>
+
+<ol>
+  <li>
+    <p>Add this jQuery to IntranetUserJS</p>
+
+    <ul>
+      <li>remove ‘<em>closure_report_number</em>’ and put the report number from step 1 in its place</li>
+      <li>The jQuery runs the report, and collects the data from the report as a JSON array</li>
+      <li>Once the jQuery has the JSON data it appends the data to the table header created in the HTML and formats it as a batch of table rows</li>
+      <li>This jQuery will automatically fill in the branchcode data for the report so that the table will always populate with only the closure dates for the logged in library</li>
+    </ul>
+  </li>
+</ol>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="c1">//HOME</span>
+  <span class="c1">//Populate upcoming closures table</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#area-userblock</span><span class="dl">'</span><span class="p">).</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="dl">"</span><span class="s2">/cgi-bin/koha/svc/report?id=_closure_report_number_&amp;param_name=branchcode1&amp;sql_params=</span><span class="dl">"</span> <span class="o">+</span> <span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">.logged-in-branch-code</span><span class="dl">"</span><span class="p">).</span><span class="nx">html</span><span class="p">().</span><span class="nx">trim</span><span class="p">())</span> <span class="o">+</span> <span class="dl">"</span><span class="s2">&amp;param_name=branchcode2&amp;sql_params=</span><span class="dl">"</span> <span class="o">+</span> <span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">.logged-in-branch-code</span><span class="dl">"</span><span class="p">).</span><span class="nx">html</span><span class="p">().</span><span class="nx">trim</span><span class="p">())</span> <span class="o">+</span> <span class="dl">"</span><span class="s2">&amp;param_name=branchcode3&amp;sql_params=</span><span class="dl">"</span> <span class="o">+</span> <span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">.logged-in-branch-code</span><span class="dl">"</span><span class="p">).</span><span class="nx">html</span><span class="p">().</span><span class="nx">trim</span><span class="p">()),</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data1</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">$</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">data1</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">json</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">closure_row</span><span class="p">;</span>
+        <span class="nx">closure_row</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">&lt;tr/&gt;</span><span class="dl">'</span><span class="p">);</span>
+        <span class="nx">$</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">json</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">closure_row</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="dl">"</span><span class="s2">&lt;td&gt;</span><span class="dl">"</span> <span class="o">+</span> <span class="nx">value</span> <span class="o">+</span> <span class="dl">"</span><span class="s2">&lt;/td&gt;</span><span class="dl">"</span><span class="p">);</span>
+        <span class="p">});</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#closures_table</span><span class="dl">'</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">closure_row</span><span class="p">);</span>
+      <span class="p">});</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>This is what it looks like on the koha-US test site</p>
+
+<p><img src="/koha_notes/images/upcoming_closures_0010.png" alt="Upcoming closures example" class="img-responsive" /></p>
+
+
+      </section>
+
+    </div>
+
+    
+  </body>
+</html>

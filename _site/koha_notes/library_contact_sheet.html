@@ -1,0 +1,1008 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Library contact sheet | Untitled self-indulgent website</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Library contact sheet" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Website for George H. Williams" />
+<meta property="og:description" content="Website for George H. Williams" />
+<link rel="canonical" href="http://localhost:4000/koha_notes/library_contact_sheet.html" />
+<meta property="og:url" content="http://localhost:4000/koha_notes/library_contact_sheet.html" />
+<meta property="og:site_name" content="Untitled self-indulgent website" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Library contact sheet" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Website for George H. Williams","headline":"Library contact sheet","url":"http://localhost:4000/koha_notes/library_contact_sheet.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="/assets/js/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="/assets/css/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <!--<li class="fork"><a href="">View On GitHub</a></li>-->
+          
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Untitled self-indulgent website</h1>
+          <p>Website for George H. Williams</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href=""></a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/mattgraham">mattgraham</a></span>
+        </div>
+
+        <h1 id="library-contact-sheet">Library contact sheet</h1>
+
+<p>We have 54 “branches” in our Koha and a courier system that delivers materials between our libraries.  Staff at 1 library frequently need to contact staff at other libraries.  For years we’ve maintained a library directory on our system’s home page at https://www.nekls.org/</p>
+
+<p>The problem that staff have had with this is that, if you need to contact someone, you need to leave Koha, go to a different website, search through the directory (which includes all 117 of our member libraries - not just the ones using Koha) and search through the member directory to find the library information you need.  It was clunky and awkward and the information that was in the directory did not always match the information in Koha because the library informaiton from the directory is not linked to the Koha library information in any way, shape, or form.</p>
+
+<p>So, in 2017 I created a report that gathered all of the library contact information from the branches table in Koha and laid it out in a table that could be posted into the  IntranetCirculationHomeHTML system preference.  Since this report took some time to run I went ahead and set its cache period for 12 hours.  That way it wouldn’t re-run every time the page loaded.  It would load once in the morning and then be cached for 12 hours.  This meant that if I made any changed to a library record in Koha, the changes wouldn’t be visible until the next day.</p>
+
+<p>Over time I added some information beyond contact information.  Specifically we had several months where many libraries were working with a third party vendor and they were frequently asking me “What was our circulation in previous 12 months?,” “How many items does my library own?,” and “How many patrons do I have right now?”  By adding to this report I could answer most of these questions with “Go look at your library informaiton on the circulation page.”  The report got slower, but it still ran in about 30-40 seconds and it cached for 12 hours, so it wasn’t really a problem.</p>
+
+<p>Then in February of 2023 we did a MariaDB upgrade that changed the way the report ran.  Instead of running in 30-40 seconds, it crashed after 5 minutes.  This meant that the report never cached.  This meant that every time someone opened the circulation page, the report tried to run.  When 7 or 8 libraires opened in the morning and tried to go to the circulation page, this meant that Koha crashed.</p>
+
+<p>The solution was to either monkey around with the settings on MariaDB or to abandon the report as a report.  Since people had come to rely on having that library contact information on the circulation page, I decided the best way to deal with the situation was to re-write the table using the Rest API rather than a report.  This meant two things.  First, it meant that the table would be live.  If I updated something in a library record in Koha, there would no longer be a 12 hour delay in the table update.  Second, it meant that I couldn’t include information beyond what’s in the library record.  I couldn’t have the contact sheet answer the “How many items does my library own?” question or other related questions any more.  That seemed like something that was worth sacrificing.</p>
+
+<p>Here are the steps I took to create a library contact table on the circulation page in Next Search Catalog:</p>
+
+<h2 id="change-labels-on-branchespl">Change labels on branches.pl</h2>
+
+<p>The first part of my process in managing library contact information in Koha is to modify the labels on the “New library/Modify library” pages.  The URL for this page sends you to some variation of branche.pl, or to describe it using the Koha breadcrumbs, these pages are <strong>Home &gt; Administration &gt; Libraries &gt; New library</strong> and <strong>Home &gt; Administration &gt; Libraries &gt; Modify library</strong>.</p>
+
+<p>As an example of the types of changes I make to these pages, the label on the New/modify page for branches.branchaddress1 is “Address line 1:”  For our system this field is always used for a library’s mailing address, so I use jQuery to update that label to “Mailing address:”  “Library address 2:” becomes “Street address/Physical address:”  And “Library address 3:” becomes “Director/ILL contact:”</p>
+
+<p>The full set of labels, their CSS selectors, and the database fields they relate to in Koha 22.05 are:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Standard Koha label</th>
+      <th>CSS selector</th>
+      <th>Database field</th>
+      <th>Next Search Catalog</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Library code:</td>
+      <td>#admin_branches.admin label[for=”branchcode”]</td>
+      <td>branches.branchcode</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Name:</td>
+      <td>#admin_branches.admin label[for=”branchname”]</td>
+      <td>branches.branchname</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Address line 1:</td>
+      <td>#admin_branches.admin label[for=”branchaddress1”]</td>
+      <td>branches.branchaddress1</td>
+      <td>Mailing address:</td>
+    </tr>
+    <tr>
+      <td>Address line 2:</td>
+      <td>#admin_branches.admin label[for=”branchaddress2”]</td>
+      <td>branches.branchaddress2</td>
+      <td>Street address/Physical address:</td>
+    </tr>
+    <tr>
+      <td>Address line 3:</td>
+      <td>#admin_branches.admin label[for=”branchaddress3”]</td>
+      <td>branches.branchaddress3</td>
+      <td>Director/ILL contact:</td>
+    </tr>
+    <tr>
+      <td>City:</td>
+      <td>#admin_branches.admin label[for=”branchcity”]</td>
+      <td>branches.branchcity</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>State:</td>
+      <td>#admin_branches.admin label[for=”branchstate”]</td>
+      <td>branches.branchstate</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>ZIP/Postal code:</td>
+      <td>#admin_branches.admin label[for=”branchzip”]</td>
+      <td>branches.branchzip</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Country:</td>
+      <td>#admin_branches.admin label[for=”branchcountry”]</td>
+      <td>branches.branchcountry</td>
+      <td>KLE code:</td>
+    </tr>
+    <tr>
+      <td>Phone:</td>
+      <td>#admin_branches.admin label[for=”branchphone”]</td>
+      <td>branches.branchphone</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Fax:</td>
+      <td>#admin_branches.admin label[for=”branchfax”]</td>
+      <td>branches.branchfax</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Email:</td>
+      <td>#admin_branches.admin label[for=”branchemail”]</td>
+      <td>branches.branchemail</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Reply-To:</td>
+      <td>#admin_branches.admin label[for=”branchreplyto”]</td>
+      <td>branches.branchreplyto</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Return-Path:</td>
+      <td>#admin_branches.admin label[for=”branchreturnpath”]</td>
+      <td>branches.branchreturnpath</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>SMTP server:</td>
+      <td>#admin_branches.admin label[for=”smtp_server”]</td>
+      <td>smtp_server.name</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>URL:</td>
+      <td>#admin_branches.admin label[for=”branchurl”]</td>
+      <td>branches.branchurl</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>OPAC info:</td>
+      <td>#admin_branches.admin label[for=”opac_info”]</td>
+      <td>branches.opac_info</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>IP:</td>
+      <td>#admin_branches.admin label[for=”branchip”]</td>
+      <td>branches.branchip</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Notes:</td>
+      <td>#admin_branches.admin label[for=”branchnotes”]</td>
+      <td>branches.branchnotes</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Pickup location:</td>
+      <td>#admin_branches.admin label[for=”pickup_location”]</td>
+      <td>branches.pickup_location</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Public:</td>
+      <td>#admin_branches.admin label[for=”public”]</td>
+      <td>branches.public</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The formula for using jQuery to re-write any of these labels is to write</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">_CSS_Selector_from_column_B</span><span class="dl">'</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="dl">'</span><span class="s1">New_label_text</span><span class="dl">'</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>So for Next Search Catalog, the jQuery to change “Address line 1:” to “Mailing address:” is:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#admin_branches.admin label[for="branchaddress1"]</span><span class="dl">'</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="dl">'</span><span class="s1">Mailing address:</span><span class="dl">'</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>And changing “Country:” to “KLE code:” is:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#admin_branches.admin label[for="branchcountry"]</span><span class="dl">'</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="dl">'</span><span class="s1">KLE code:</span><span class="dl">'</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="other-things-i-do-with-the-data-on-branchespl">Other things I do with the data on branches.pl</h2>
+
+<p>Two other things that I currently do with the data in a library record are related to how I’ve used the report and now the API to display data I want to share in a way that looks good in the table.</p>
+
+<p>For “Address line 3:” that I’ve renamed “Director/ILL contact:” I separate add the director’s name and e-mail address; followed by a space, a pipe, and a space (i.e. <code class="language-plaintext highlighter-rouge">" | "</code>); followed by the name of that library’s primary ILL contact and e-mail address (if they have a dedicated ILL contact); followed again by a space, pipe, and a space; followed by that library’s accredation type.</p>
+
+<p>The pipes allow me to use a search/replace function when I’m building the table so that the pipes become line breaks in the final table output.</p>
+
+<p>The final thing I do on branches.pl is to add an IMG tag to the OPAC information for each library that links to that library’s logo (or the Next Search Catalog log if they don’t have their own logo).</p>
+
+<p>For example, I enter the logo for the Baldwin City library into the “Opac info” field as:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;p&gt;&lt;img</span> <span class="na">src=</span><span class="s">"https://baldwin.mykansaslibrary.org/wp-content/uploads/B.C.L.Rainbow.Logo_.10.2020.3.png"</span> <span class="na">alt=</span><span class="s">""</span> <span class="na">width=</span><span class="s">"150"</span> <span class="na">height=</span><span class="s">"54"</span> <span class="nt">/&gt;&lt;/p&gt;</span>
+</code></pre></div></div>
+
+<p>This way, when the API builds the final table, I can display the library’s logo in the contact table.</p>
+
+<h2 id="adding-a-table-header-to-the-intranetcirculationhomehtml-system-preference">Adding a table header to the IntranetCirculationHomeHTML system preference</h2>
+
+<p>In order to have the API take the library information and add it to a table, I need a table somewhere on IntranetCirculationHomeHTML.  I also have some custom code in my IntranetCirculationHomeHTML that tabs the content in this preference.  How you add this code will depend on what other html you have in this system preference.</p>
+
+<p>For Next Search Catalog I put this HTML somewhere in the IntranetCirculationHomeHTML system preference:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"libtable"</span><span class="nt">&gt;</span>
+
+  <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"libtable"</span> <span class="na">class=</span><span class="s">"dataTables_wrapper"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;span</span> <span class="na">style=</span><span class="s">"padding: 10px"</span><span class="nt">&gt;&lt;input</span> <span class="na">id=</span><span class="s">"myInput"</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">placeholder=</span><span class="s">"Search.."</span> <span class="na">style=</span><span class="s">"padding: 10px"</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">"#"</span> <span class="na">class=</span><span class="s">"clear"</span> <span class="na">rel=</span><span class="s">"nofollow"</span><span class="nt">&gt;&lt;span</span> <span class="na">style=</span><span class="s">"padding: 10px"</span><span class="nt">&gt;</span>Clear<span class="nt">&lt;/span&gt;&lt;/a&gt;&lt;/span&gt;</span>
+    
+    <span class="nt">&lt;table</span> <span class="na">id=</span><span class="s">"library_table"</span> <span class="na">class=</span><span class="s">"table table-hover table-bordered"</span><span class="nt">&gt;</span>
+    
+      <span class="nt">&lt;thead&gt;</span>
+        <span class="nt">&lt;tr&gt;</span>
+          <span class="nt">&lt;th</span> <span class="na">scope=</span><span class="s">"col"</span><span class="nt">&gt;</span>Library<span class="nt">&lt;/th&gt;</span>
+          <span class="nt">&lt;th</span> <span class="na">scope=</span><span class="s">"col"</span><span class="nt">&gt;</span>Contact information<span class="nt">&lt;/th&gt;</span>
+          <span class="nt">&lt;th</span> <span class="na">scope=</span><span class="s">"col"</span><span class="nt">&gt;</span>Staff contacts / report link<span class="nt">&lt;/th&gt;</span>
+          <span class="nt">&lt;th</span> <span class="na">scope=</span><span class="s">"col"</span> <span class="na">class=</span><span class="s">"noprint"</span><span class="nt">&gt;</span>Logo/photo<span class="nt">&lt;/th&gt;</span>
+        <span class="nt">&lt;/tr&gt;</span>
+      <span class="nt">&lt;/thead&gt;</span>
+
+      <span class="nt">&lt;tfoot&gt;</span>
+        <span class="nt">&lt;td</span> <span class="na">scope=</span><span class="s">"row"</span> <span class="na">style=</span><span class="s">"text-align: center; font-weight: 700; background-color: #e8e8e8;"</span><span class="nt">&gt;</span>Library<span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;td</span> <span class="na">style=</span><span class="s">"text-align: center; font-weight: 700; background-color: #e8e8e8;"</span><span class="nt">&gt;</span>Contact information<span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;td</span> <span class="na">style=</span><span class="s">"text-align: center; font-weight: 700; background-color: #e8e8e8;"</span><span class="nt">&gt;</span>Staff contacts / holdings<span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;td</span> <span class="na">style=</span><span class="s">"text-align: center; font-weight: 700; background-color: #e8e8e8;"</span> <span class="na">class=</span><span class="s">"noprint"</span><span class="nt">&gt;</span>Logo/photo<span class="nt">&lt;/td&gt;</span>
+      <span class="nt">&lt;/tfoot&gt;</span>  
+
+    <span class="nt">&lt;/table&gt;</span>
+
+  <span class="nt">&lt;/div&gt;</span>
+
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
+
+<h3 id="step-by-step-walk-through">Step-by-step walk through</h3>
+
+<h4 id="step-1">Step 1</h4>
+
+<p>The first thing I do is to build a div to hold the data and I’m going give it an id of  “libtable.”  This will help me identify the table when I want to do things with it later.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"libtable"</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;/div&gt;</span>
+
+</code></pre></div></div>
+
+<h4 id="step-2">Step 2</h4>
+
+<p>Next I want to create the actual table and I’m going to give it an id of “library_table” and put it inside of the div I just created.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"libtable"</span><span class="nt">&gt;</span>
+  
+  <span class="nt">&lt;table</span> <span class="na">id=</span><span class="s">"library_table"</span> <span class="na">class=</span><span class="s">"table table-hover table-bordered"</span><span class="nt">&gt;</span>
+
+  <span class="nt">&lt;/table&gt;</span>
+
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
+<h4 id="step-3">Step 3</h4>
+
+<p>Then I want to add a header and a footer to the table.  HTML includes a “th” element for header elements that adds style to those elements, but in order to get the informaiton in the footer to be styled similarly to the header, it’s easiest to add css to make the footer act and look like the header.  I’m adding the css inline in this example rather than adding it to the intranetusercss system preference in Koha so that it’s easier to see what I’m doing in this example.</p>
+
+<p>You’ll also note that I’m adding a “noprint” class to the logo column which will prevent that cell from being printed if someone tries to print the table from the screen.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"libtable"</span><span class="nt">&gt;</span>
+  
+  <span class="nt">&lt;table</span> <span class="na">id=</span><span class="s">"library_table"</span> <span class="na">class=</span><span class="s">"table table-hover table-bordered"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;thead&gt;</span>
+      <span class="nt">&lt;tr&gt;</span>
+        <span class="nt">&lt;th</span> <span class="na">scope=</span><span class="s">"col"</span><span class="nt">&gt;</span>Library<span class="nt">&lt;/th&gt;</span>
+        <span class="nt">&lt;th</span> <span class="na">scope=</span><span class="s">"col"</span><span class="nt">&gt;</span>Contact information<span class="nt">&lt;/th&gt;</span>
+        <span class="nt">&lt;th</span> <span class="na">scope=</span><span class="s">"col"</span><span class="nt">&gt;</span>Staff contacts / report link<span class="nt">&lt;/th&gt;</span>
+        <span class="nt">&lt;th</span> <span class="na">scope=</span><span class="s">"col"</span> <span class="na">class=</span><span class="s">"noprint"</span><span class="nt">&gt;</span>Logo/photo<span class="nt">&lt;/th&gt;</span>
+      <span class="nt">&lt;/tr&gt;</span>
+    <span class="nt">&lt;/thead&gt;</span>
+
+    <span class="nt">&lt;tfoot&gt;</span>
+      <span class="nt">&lt;td</span> <span class="na">scope=</span><span class="s">"row"</span> <span class="na">style=</span><span class="s">"text-align: center; font-weight: 700; background-color: #e8e8e8;"</span><span class="nt">&gt;</span>Library<span class="nt">&lt;/td&gt;</span>
+      <span class="nt">&lt;td</span> <span class="na">style=</span><span class="s">"text-align: center; font-weight: 700; background-color: #e8e8e8;"</span><span class="nt">&gt;</span>Contact information<span class="nt">&lt;/td&gt;</span>
+      <span class="nt">&lt;td</span> <span class="na">style=</span><span class="s">"text-align: center; font-weight: 700; background-color: #e8e8e8;"</span><span class="nt">&gt;</span>Staff contacts / holdings<span class="nt">&lt;/td&gt;</span>
+      <span class="nt">&lt;td</span> <span class="na">style=</span><span class="s">"text-align: center; font-weight: 700; background-color: #e8e8e8;"</span> <span class="na">class=</span><span class="s">"noprint"</span><span class="nt">&gt;</span>Logo/photo<span class="nt">&lt;/td&gt;</span>
+    <span class="nt">&lt;/tfoot&gt;</span>
+
+  <span class="nt">&lt;/table&gt;</span>
+
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
+
+<h3 id="step-4">Step 4</h3>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"libtable"</span><span class="nt">&gt;</span>
+
+  <span class="c">&lt;!-- I'll explain this line at the end --&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"libtable"</span> <span class="na">class=</span><span class="s">"dataTables_wrapper"</span><span class="nt">&gt;</span>
+
+    <span class="c">&lt;!-- I'll explain this line at the end --&gt;</span>
+    <span class="nt">&lt;span</span> <span class="na">style=</span><span class="s">"padding: 10px"</span><span class="nt">&gt;&lt;input</span> <span class="na">id=</span><span class="s">"myInput"</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">placeholder=</span><span class="s">"Search.."</span> <span class="na">style=</span><span class="s">"padding: 10px"</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">"#"</span> <span class="na">class=</span><span class="s">"clear"</span> <span class="na">rel=</span><span class="s">"nofollow"</span><span class="nt">&gt;&lt;span</span> <span class="na">style=</span><span class="s">"padding: 10px"</span><span class="nt">&gt;</span>Clear<span class="nt">&lt;/span&gt;&lt;/a&gt;&lt;/span&gt;</span>
+    
+    <span class="nt">&lt;table</span> <span class="na">id=</span><span class="s">"library_table"</span> <span class="na">class=</span><span class="s">"table table-hover table-bordered"</span><span class="nt">&gt;</span>
+    
+      <span class="nt">&lt;thead&gt;</span>
+        <span class="nt">&lt;tr&gt;</span>
+          <span class="nt">&lt;th</span> <span class="na">scope=</span><span class="s">"col"</span><span class="nt">&gt;</span>Library<span class="nt">&lt;/th&gt;</span>
+          <span class="nt">&lt;th</span> <span class="na">scope=</span><span class="s">"col"</span><span class="nt">&gt;</span>Contact information<span class="nt">&lt;/th&gt;</span>
+          <span class="nt">&lt;th</span> <span class="na">scope=</span><span class="s">"col"</span><span class="nt">&gt;</span>Staff contacts / report link<span class="nt">&lt;/th&gt;</span>
+          <span class="nt">&lt;th</span> <span class="na">scope=</span><span class="s">"col"</span> <span class="na">class=</span><span class="s">"noprint"</span><span class="nt">&gt;</span>Logo/photo<span class="nt">&lt;/th&gt;</span>
+        <span class="nt">&lt;/tr&gt;</span>
+      <span class="nt">&lt;/thead&gt;</span>
+
+      <span class="nt">&lt;tfoot&gt;</span>
+        <span class="nt">&lt;td</span> <span class="na">scope=</span><span class="s">"row"</span> <span class="na">style=</span><span class="s">"text-align: center; font-weight: 700; background-color: #e8e8e8;"</span><span class="nt">&gt;</span>Library<span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;td</span> <span class="na">style=</span><span class="s">"text-align: center; font-weight: 700; background-color: #e8e8e8;"</span><span class="nt">&gt;</span>Contact information<span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;td</span> <span class="na">style=</span><span class="s">"text-align: center; font-weight: 700; background-color: #e8e8e8;"</span><span class="nt">&gt;</span>Staff contacts / holdings<span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;td</span> <span class="na">style=</span><span class="s">"text-align: center; font-weight: 700; background-color: #e8e8e8;"</span> <span class="na">class=</span><span class="s">"noprint"</span><span class="nt">&gt;</span>Logo/photo<span class="nt">&lt;/td&gt;</span>
+      <span class="nt">&lt;/tfoot&gt;</span>  
+
+    <span class="nt">&lt;/table&gt;</span>
+
+  <span class="c">&lt;!-- I'll explain this line at the end --&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
+
+<p>Finally, I’m wrapping the table in a “dataTables_Wrapper” div and adding a search box.  I’ll explain that bit at the end of this document.</p>
+
+<h2 id="adding-the-jquery-to-intranetuserjs">Adding the jQuery to IntranetUserJS</h2>
+
+<p>The jQuery that calls up the data from the API and plugs it into the table follows:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="cm">/* ========== Contact sheet for circulation page ========== */</span> 
+
+<span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> 
+
+<span class="c1">//Home &gt; Circulation </span>
+  <span class="c1">//BEGIN - adds contact sheet to "Library contact information" tab in tabbed section of IntranetCirculationHomeHTML system preference </span>
+    <span class="kd">var</span> <span class="nx">contact_sheet_url</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">location</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">href</span><span class="dl">'</span><span class="p">);</span> 
+    <span class="k">if</span> <span class="p">(</span><span class="nx">contact_sheet_url</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">circulation-home.pl</span><span class="dl">"</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span> 
+
+      <span class="nx">$</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="dl">"</span><span class="s2">/api/v1/libraries</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span> 
+
+        <span class="kd">var</span> <span class="nx">contact_sheet</span> <span class="o">=</span> <span class="dl">''</span><span class="p">;</span> 
+
+        <span class="nx">$</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span> 
+
+          <span class="kd">var</span> <span class="nx">address4</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">address2</span> <span class="o">||</span> <span class="dl">''</span><span class="p">;</span> 
+          <span class="kd">var</span> <span class="nx">physical_address</span> <span class="o">=</span> <span class="nx">address4</span> <span class="o">||</span> <span class="nx">value</span><span class="p">.</span><span class="nx">address1</span><span class="p">;</span> 
+          <span class="kd">var</span> <span class="nx">fax_machine</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">fax</span> <span class="o">||</span> <span class="dl">''</span><span class="p">;</span> 
+          <span class="kd">var</span> <span class="nx">zipcode</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">postal_code</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span> 
+          <span class="kd">var</span> <span class="nx">director</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">address3</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="dl">"</span><span class="s2"> | </span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span&gt;</span><span class="dl">"</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="dl">"</span><span class="s2"> | </span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span&gt;</span><span class="dl">"</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="dl">"</span><span class="s2"> | </span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">&lt;/span&gt;&lt;/p&gt;</span><span class="dl">"</span><span class="p">);</span> 
+          <span class="kd">var</span> <span class="nx">report_branch</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">library_id</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">(</span><span class="sr">DONI</span><span class="se">)\w</span><span class="sr">+/</span><span class="p">,</span> <span class="dl">'</span><span class="s1">DONI%</span><span class="dl">'</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">(</span><span class="sr">PH</span><span class="se">)\w</span><span class="sr">+/</span><span class="p">,</span> <span class="dl">'</span><span class="s1">PH%</span><span class="dl">'</span><span class="p">);</span> 
+
+          <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;tr class="filterme"&gt;</span><span class="dl">'</span><span class="p">;</span> 
+
+          <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;td scope="row"&gt;&lt;p style="font-size: 1.5em"&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;p&gt;&lt;ins&gt;Mailing address:&lt;/ins&gt;&lt;/p&gt;&lt;p&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">address1</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;br /&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">city</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">, </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">state</span> <span class="o">+</span> <span class="dl">'</span><span class="s1"> </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">zipcode</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;p&gt;&lt;ins&gt;Physical address:&lt;/ins&gt;&lt;/p&gt;&lt;p&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">physical_address</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;br /&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">city</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">, </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">state</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;p&gt;&lt;ins&gt;Branch code: &lt;/ins&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">library_id</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;/td&gt;</span><span class="dl">'</span><span class="p">;</span> 
+
+          <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;td&gt;</span><span class="dl">'</span><span class="p">;</span> 
+
+          <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;p&gt;Phone: </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">phone</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;p&gt;Fax: </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">fax_machine</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;p&gt;e-mail: </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">email</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;p&gt;Courier route #: </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">notes</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;br /&gt;&lt;p class="noprint"&gt;&lt;a class="badge btn-sm btn-success" style="color: white;" href="</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">url</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">" target="_blank"&gt;Website&lt;/a&gt;&lt;/p&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/td&gt;</span><span class="dl">'</span><span class="p">;</span> 
+
+          <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;td&gt;&lt;p&gt;&lt;span style="font-size: 1.5em;"&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">director</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/span&gt;&lt;/p&gt;&lt;br /&gt;&lt;p&gt;&lt;a class="btn btn-lg btn-info noprint" style="color: white;" href="/cgi-bin/koha/reports/guided_reports.pl?reports=3716&amp;phase=Run+this+report&amp;param_name=Choose+your+library|ZBRAN&amp;sql_params=</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">report_branch</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">" target="_blank"&gt;Current statistics report for this library&lt;/a&gt;&lt;/p&gt;&lt;/td&gt;</span><span class="dl">'</span><span class="p">;</span> 
+
+          <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;td class="noprint"&gt;&lt;p&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">opac_info</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;</span><span class="dl">'</span><span class="p">;</span> 
+
+          <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;/tr&gt;</span><span class="dl">'</span><span class="p">;</span> 
+
+        <span class="p">});</span> 
+
+        <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#library_table th</span><span class="dl">'</span><span class="p">).</span><span class="nx">parent</span><span class="p">().</span><span class="nx">after</span><span class="p">(</span><span class="nx">contact_sheet</span><span class="p">);</span> 
+
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">contact_sheet</span><span class="p">);</span> 
+
+      <span class="p">});</span> 
+    <span class="p">}</span> 
+
+    <span class="c1">//add filter function to search the table </span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#myInput</span><span class="dl">"</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">keyup</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> 
+      <span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">val</span><span class="p">().</span><span class="nx">toLowerCase</span><span class="p">();</span> 
+      <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">.filtertable .filterme</span><span class="dl">"</span><span class="p">).</span><span class="nx">filter</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> 
+        <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">toggle</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">text</span><span class="p">().</span><span class="nx">toLowerCase</span><span class="p">().</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span> 
+      <span class="p">});</span> 
+    <span class="p">});</span> 
+
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">.clear</span><span class="dl">"</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span> 
+      <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#myInput</span><span class="dl">"</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="dl">""</span><span class="p">).</span><span class="nx">keyup</span><span class="p">();</span> 
+      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> 
+    <span class="p">});</span> 
+
+<span class="p">});</span> 
+
+<span class="cm">/* ========== END Contact sheet for circulation page ========== */</span> 
+
+</code></pre></div></div>
+<h3 id="step-by-step-walkthrough-of-the-jquery">Step-by-step walkthrough of the jQuery</h3>
+
+<h4 id="step-1-1">Step 1</h4>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="cm">/* ========== Contact sheet for circulation page ========== */</span> 
+
+<span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> 
+
+
+
+<span class="p">});</span> 
+
+<span class="cm">/* ========== END Contact sheet for circulation page ========== */</span> 
+
+</code></pre></div></div>
+
+<p>These are the basics.  Anything between a <code class="language-plaintext highlighter-rouge">/* */</code> in Javascript or jQuery is a comment, so the first line and the last line are just to help keep track of what this piece of code does in your Koha.  If you don’t comment your code you often run into the quesion “What does this code do?” because you will have it in your system so long you can’t remember why you wrote it or what it does.</p>
+
+<p>And the <code class="language-plaintext highlighter-rouge">$(document).ready(function () { /*_jquery_goes_here_*/ });</code> is the piece of code you need to wrap around any jQuery you write to make it work in Koha.</p>
+
+<h4 id="step-2-1">Step 2</h4>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="cm">/* ========== Contact sheet for circulation page ========== */</span> 
+
+<span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> 
+
+  <span class="cm">/* New section for step 2 */</span>
+  <span class="kd">var</span> <span class="nx">contact_sheet_url</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">location</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">href</span><span class="dl">'</span><span class="p">);</span> 
+
+  <span class="k">if</span> <span class="p">(</span><span class="nx">contact_sheet_url</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">circulation-home.pl</span><span class="dl">"</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+
+
+
+  <span class="p">}</span>
+  <span class="cm">/* END New section for step 2 */</span>
+
+
+<span class="p">});</span> 
+
+<span class="cm">/* ========== END Contact sheet for circulation page ========== */</span> 
+
+</code></pre></div></div>
+
+<p>The new section for step 2 does two things.  The first creates a variable called “contact_sheet_url” based on the URL of the page you’re looking at.</p>
+
+<p>The second section says if “contact_sheet_url” contains the phrase “circulation-home.pl” that Javascript should execute the function that will appear between the {}.</p>
+
+<h4 id="step-3-1">Step 3</h4>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="cm">/* ========== Contact sheet for circulation page ========== */</span> 
+
+<span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> 
+
+  <span class="kd">var</span> <span class="nx">contact_sheet_url</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">location</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">href</span><span class="dl">'</span><span class="p">);</span> 
+
+  <span class="k">if</span> <span class="p">(</span><span class="nx">contact_sheet_url</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">circulation-home.pl</span><span class="dl">"</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+
+
+    <span class="cm">/* New section for step 3 */</span>
+    <span class="nx">$</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="dl">"</span><span class="s2">/api/v1/libraries</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span> 
+
+
+
+    <span class="p">});</span> 
+    <span class="cm">/* END New section for step 3 */</span>
+
+
+  <span class="p">}</span>
+
+<span class="p">});</span> 
+
+<span class="cm">/* ========== END Contact sheet for circulation page ========== */</span> 
+
+</code></pre></div></div>
+
+<p>The new section for step 3 tells Koha that, if we are on “circulation-home.pl” to go ahead and get the “libraries” data from the API.</p>
+
+<p>The API includes two methods for getting library data. “getLibrary” requires a branchcode and gets the data for 1 single library.  “listLibraries” gets the data from all of the libraries in Koha at once.  We want the second method.</p>
+
+<h4 id="step-4-1">Step 4</h4>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="cm">/* ========== Contact sheet for circulation page ========== */</span> 
+
+<span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> 
+
+  <span class="kd">var</span> <span class="nx">contact_sheet_url</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">location</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">href</span><span class="dl">'</span><span class="p">);</span> 
+
+  <span class="k">if</span> <span class="p">(</span><span class="nx">contact_sheet_url</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">circulation-home.pl</span><span class="dl">"</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="nx">$</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="dl">"</span><span class="s2">/api/v1/libraries</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span> 
+
+
+      <span class="cm">/* New section for step 4 */</span>
+      <span class="kd">var</span> <span class="nx">contact_sheet</span> <span class="o">=</span> <span class="dl">''</span><span class="p">;</span> 
+
+      <span class="nx">$</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span> 
+
+
+
+      <span class="p">});</span> 
+      <span class="cm">/* END New section for step 4 */</span>
+
+
+    <span class="p">});</span> 
+    
+  <span class="p">}</span>
+
+<span class="p">});</span> 
+
+<span class="cm">/* ========== END Contact sheet for circulation page ========== */</span> 
+
+</code></pre></div></div>
+
+<p>The new section for step 4 does two things.</p>
+
+<p>First it creates a new variable called “contact_sheet” and then it sets that variable to a blank space.  In a couple of steps from now we’ll start replacing that blank space wtih some data.</p>
+
+<p>Then it says that for each row of API data for libraries, to index rows and extract their values from the api results.</p>
+
+<h4 id="step-5">Step 5</h4>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="cm">/* ========== Contact sheet for circulation page ========== */</span> 
+
+<span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> 
+
+  <span class="kd">var</span> <span class="nx">contact_sheet_url</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">location</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">href</span><span class="dl">'</span><span class="p">);</span> 
+
+  <span class="k">if</span> <span class="p">(</span><span class="nx">contact_sheet_url</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">circulation-home.pl</span><span class="dl">"</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="nx">$</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="dl">"</span><span class="s2">/api/v1/libraries</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span> 
+
+      <span class="kd">var</span> <span class="nx">contact_sheet</span> <span class="o">=</span> <span class="dl">''</span><span class="p">;</span> 
+
+      <span class="nx">$</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span> 
+
+        <span class="cm">/* New section for step 5 */</span>
+        
+        <span class="c1">//Creates a varialbe called "address4" by taking the value of address2 unless address2 is null, in which case, address4 is blank</span>
+        <span class="kd">var</span> <span class="nx">address4</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">address2</span> <span class="o">||</span> <span class="dl">''</span><span class="p">;</span> 
+
+        <span class="c1">//Creates a variable called "physical address" which = address4 (i.e. address2 or a blank space) unless address4 is blank, in which case it equals address1</span>
+        <span class="c1">//This has the effect of making the physical address = the library's mailing address in cases where the library doesn't have a PO Box</span>
+        <span class="c1">//For those who don't live in  a rural area - many people and libraries in rural areas don't get mail delivery to their homes or offices</span>
+        <span class="c1">//in many rural parts of the USA you still have to go to the post office to pick up your mail</span>
+        <span class="kd">var</span> <span class="nx">physical_address</span> <span class="o">=</span> <span class="nx">address4</span> <span class="o">||</span> <span class="nx">value</span><span class="p">.</span><span class="nx">address1</span><span class="p">;</span> 
+
+        <span class="c1">//Creates a varialbe called "fax_machine" which is blank if the library doesn't have a separate fax number</span>
+        <span class="kd">var</span> <span class="nx">fax_machine</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">fax</span> <span class="o">||</span> <span class="dl">''</span><span class="p">;</span> 
+
+        <span class="c1">//Creates a varialbe called "zipcode" that strips the extra 4 digits from the library's zip code if it was entered as a 9 digit number</span>
+        <span class="kd">var</span> <span class="nx">zipcode</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">postal_code</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span> 
+
+        <span class="c1">//Creates a variable called "director" that replaces the pipes (described above) with line breaks to make the data easier to read in the table </span>
+        <span class="kd">var</span> <span class="nx">director</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">address3</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="dl">"</span><span class="s2"> | </span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span&gt;</span><span class="dl">"</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="dl">"</span><span class="s2"> | </span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span&gt;</span><span class="dl">"</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="dl">"</span><span class="s2"> | </span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">&lt;/span&gt;&lt;/p&gt;</span><span class="dl">"</span><span class="p">);</span> 
+
+        <span class="c1">//Craetes a varialbe called "report_branch" which allows the the branchcodes of some of our libraries to be pushed into a report </span>
+        <span class="c1">//(which I'll talk about later) so that the report will run for all branches of those libraries instead of one branch at a time</span>
+        <span class="kd">var</span> <span class="nx">report_branch</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">library_id</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">(</span><span class="sr">DONI</span><span class="se">)\w</span><span class="sr">+/</span><span class="p">,</span> <span class="dl">'</span><span class="s1">DONI%</span><span class="dl">'</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">(</span><span class="sr">PH</span><span class="se">)\w</span><span class="sr">+/</span><span class="p">,</span> <span class="dl">'</span><span class="s1">PH%</span><span class="dl">'</span><span class="p">);</span> 
+        
+        <span class="cm">/* END New section for step 5 */</span>
+
+      <span class="p">});</span> 
+
+    <span class="p">});</span> 
+    
+  <span class="p">}</span>
+
+<span class="p">});</span> 
+
+<span class="cm">/* ========== END Contact sheet for circulation page ========== */</span> 
+
+</code></pre></div></div>
+
+<p>This section takes the values that have been indexed and acquired in step 4 and monkeys around with them.  The comments above each line in the code explains what the code here is doing.</p>
+
+<p>An imporant thing to remember here is to remember how jQuery and Javascript deal with null values.  If address2 is blank and you ask jQuery to show you address2, you’ll get a result that says “NaN” (i.e. Not a Number) where you may have been hoping for a simple blank space.  In order to get the blank space you’re hoping for you have to tell jQuery that if address2 is null, then you want a “” instead of a “NaN” error message.</p>
+
+<p>That’s accomplished by saying <code class="language-plaintext highlighter-rouge">var VariableName = value.fieldname || '';</code> i.e. create a variable and give it a value that equals the value of the field I want OR give me a blank space is the field I want is null.</p>
+
+<h4 id="step-6">Step 6</h4>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="cm">/* ========== Contact sheet for circulation page ========== */</span> 
+
+<span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> 
+
+  <span class="kd">var</span> <span class="nx">contact_sheet_url</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">location</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">href</span><span class="dl">'</span><span class="p">);</span> 
+
+  <span class="k">if</span> <span class="p">(</span><span class="nx">contact_sheet_url</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">circulation-home.pl</span><span class="dl">"</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="nx">$</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="dl">"</span><span class="s2">/api/v1/libraries</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span> 
+
+      <span class="kd">var</span> <span class="nx">contact_sheet</span> <span class="o">=</span> <span class="dl">''</span><span class="p">;</span> 
+
+      <span class="nx">$</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span> 
+
+        <span class="kd">var</span> <span class="nx">address4</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">address2</span> <span class="o">||</span> <span class="dl">''</span><span class="p">;</span> 
+        <span class="kd">var</span> <span class="nx">physical_address</span> <span class="o">=</span> <span class="nx">address4</span> <span class="o">||</span> <span class="nx">value</span><span class="p">.</span><span class="nx">address1</span><span class="p">;</span> 
+        <span class="kd">var</span> <span class="nx">fax_machine</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">fax</span> <span class="o">||</span> <span class="dl">''</span><span class="p">;</span> 
+        <span class="kd">var</span> <span class="nx">zipcode</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">postal_code</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span> 
+        <span class="kd">var</span> <span class="nx">director</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">address3</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="dl">"</span><span class="s2"> | </span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span&gt;</span><span class="dl">"</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="dl">"</span><span class="s2"> | </span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span&gt;</span><span class="dl">"</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="dl">"</span><span class="s2"> | </span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">&lt;/span&gt;&lt;/p&gt;</span><span class="dl">"</span><span class="p">);</span> 
+        <span class="kd">var</span> <span class="nx">report_branch</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">library_id</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">(</span><span class="sr">DONI</span><span class="se">)\w</span><span class="sr">+/</span><span class="p">,</span> <span class="dl">'</span><span class="s1">DONI%</span><span class="dl">'</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">(</span><span class="sr">PH</span><span class="se">)\w</span><span class="sr">+/</span><span class="p">,</span> <span class="dl">'</span><span class="s1">PH%</span><span class="dl">'</span><span class="p">);</span> 
+        
+        <span class="cm">/* New section for step 6 */</span>
+        <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;tr class="filterme"&gt;</span><span class="dl">'</span><span class="p">;</span> 
+
+          <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;td scope="row"&gt;&lt;p style="font-size: 1.5em"&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;p&gt;&lt;ins&gt;Mailing address:&lt;/ins&gt;&lt;/p&gt;&lt;p&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">address1</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;br /&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">city</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">, </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">state</span> <span class="o">+</span> <span class="dl">'</span><span class="s1"> </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">zipcode</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;p&gt;&lt;ins&gt;Physical address:&lt;/ins&gt;&lt;/p&gt;&lt;p&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">physical_address</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;br /&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">city</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">, </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">state</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;p&gt;&lt;ins&gt;Branch code: &lt;/ins&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">library_id</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;/td&gt;</span><span class="dl">'</span><span class="p">;</span> 
+
+          <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;td&gt;</span><span class="dl">'</span><span class="p">;</span> 
+
+          <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;p&gt;Phone: </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">phone</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;p&gt;Fax: </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">fax_machine</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;p&gt;e-mail: </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">email</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;p&gt;Courier route #: </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">notes</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;br /&gt;&lt;p class="noprint"&gt;&lt;a class="badge btn-sm btn-success" style="color: white;" href="</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">url</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">" target="_blank"&gt;Website&lt;/a&gt;&lt;/p&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/td&gt;</span><span class="dl">'</span><span class="p">;</span> 
+
+          <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;td&gt;&lt;p&gt;&lt;span style="font-size: 1.5em;"&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">director</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/span&gt;&lt;/p&gt;&lt;br /&gt;&lt;p&gt;&lt;a class="btn btn-lg btn-info noprint" style="color: white;" href="/cgi-bin/koha/reports/guided_reports.pl?reports=3716&amp;phase=Run+this+report&amp;param_name=Choose+your+library|ZBRAN&amp;sql_params=</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">report_branch</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">" target="_blank"&gt;Current statistics report for this library&lt;/a&gt;&lt;/p&gt;&lt;/td&gt;</span><span class="dl">'</span><span class="p">;</span> 
+
+          <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;td class="noprint"&gt;&lt;p&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">opac_info</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;</span><span class="dl">'</span><span class="p">;</span> 
+
+          <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;/tr&gt;</span><span class="dl">'</span><span class="p">;</span> 
+        <span class="cm">/* END New section for step 6 */</span>
+
+
+      <span class="p">});</span> 
+
+    <span class="p">});</span> 
+    
+  <span class="p">}</span>
+
+<span class="p">});</span> 
+
+<span class="cm">/* ========== END Contact sheet for circulation page ========== */</span> 
+
+</code></pre></div></div>
+
+<p>This section does the bulk of the work of creating the table.  Each time you see “contact_sheet +=” the code is adding the variables from the API and the html in single quotes into the table.</p>
+
+<p>“contact_sheet” is the variable created in step 4.  So the first step is to add “&lt;tr class="filterme"&gt;” to that varialbe.  Then the next line adds the html to build the table along with the data from the api to that variable, and so on, and so on.  Each “+=” appends the HTML (i.e. the stuff in single quotes) and the variables (i.e. the stuff between the + signs) to the “contact_sheet” variable.</p>
+
+<h4 id="step-7">Step 7</h4>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="cm">/* ========== Contact sheet for circulation page ========== */</span> 
+
+<span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> 
+
+  <span class="kd">var</span> <span class="nx">contact_sheet_url</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">location</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">href</span><span class="dl">'</span><span class="p">);</span> 
+
+  <span class="k">if</span> <span class="p">(</span><span class="nx">contact_sheet_url</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">circulation-home.pl</span><span class="dl">"</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="nx">$</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="dl">"</span><span class="s2">/api/v1/libraries</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span> 
+
+      <span class="kd">var</span> <span class="nx">contact_sheet</span> <span class="o">=</span> <span class="dl">''</span><span class="p">;</span> 
+
+      <span class="nx">$</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span> 
+
+        <span class="kd">var</span> <span class="nx">address4</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">address2</span> <span class="o">||</span> <span class="dl">''</span><span class="p">;</span> 
+        <span class="kd">var</span> <span class="nx">physical_address</span> <span class="o">=</span> <span class="nx">address4</span> <span class="o">||</span> <span class="nx">value</span><span class="p">.</span><span class="nx">address1</span><span class="p">;</span> 
+        <span class="kd">var</span> <span class="nx">fax_machine</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">fax</span> <span class="o">||</span> <span class="dl">''</span><span class="p">;</span> 
+        <span class="kd">var</span> <span class="nx">zipcode</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">postal_code</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span> 
+        <span class="kd">var</span> <span class="nx">director</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">address3</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="dl">"</span><span class="s2"> | </span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span&gt;</span><span class="dl">"</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="dl">"</span><span class="s2"> | </span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span&gt;</span><span class="dl">"</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="dl">"</span><span class="s2"> | </span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">&lt;/span&gt;&lt;/p&gt;</span><span class="dl">"</span><span class="p">);</span> 
+        <span class="kd">var</span> <span class="nx">report_branch</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">library_id</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">(</span><span class="sr">DONI</span><span class="se">)\w</span><span class="sr">+/</span><span class="p">,</span> <span class="dl">'</span><span class="s1">DONI%</span><span class="dl">'</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">(</span><span class="sr">PH</span><span class="se">)\w</span><span class="sr">+/</span><span class="p">,</span> <span class="dl">'</span><span class="s1">PH%</span><span class="dl">'</span><span class="p">);</span> 
+        
+
+        <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;tr class="filterme"&gt;</span><span class="dl">'</span><span class="p">;</span> 
+
+          <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;td scope="row"&gt;&lt;p style="font-size: 1.5em"&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;p&gt;&lt;ins&gt;Mailing address:&lt;/ins&gt;&lt;/p&gt;&lt;p&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">address1</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;br /&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">city</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">, </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">state</span> <span class="o">+</span> <span class="dl">'</span><span class="s1"> </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">zipcode</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;p&gt;&lt;ins&gt;Physical address:&lt;/ins&gt;&lt;/p&gt;&lt;p&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">physical_address</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;br /&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">city</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">, </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">state</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;p&gt;&lt;ins&gt;Branch code: &lt;/ins&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">library_id</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;/td&gt;</span><span class="dl">'</span><span class="p">;</span> 
+
+          <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;td&gt;</span><span class="dl">'</span><span class="p">;</span> 
+
+          <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;p&gt;Phone: </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">phone</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;p&gt;Fax: </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">fax_machine</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;p&gt;e-mail: </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">email</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;p&gt;Courier route #: </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">notes</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;br /&gt;&lt;p class="noprint"&gt;&lt;a class="badge btn-sm btn-success" style="color: white;" href="</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">url</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">" target="_blank"&gt;Website&lt;/a&gt;&lt;/p&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/td&gt;</span><span class="dl">'</span><span class="p">;</span> 
+
+          <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;td&gt;&lt;p&gt;&lt;span style="font-size: 1.5em;"&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">director</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/span&gt;&lt;/p&gt;&lt;br /&gt;&lt;p&gt;&lt;a class="btn btn-lg btn-info noprint" style="color: white;" href="/cgi-bin/koha/reports/guided_reports.pl?reports=3716&amp;phase=Run+this+report&amp;param_name=Choose+your+library|ZBRAN&amp;sql_params=</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">report_branch</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">" target="_blank"&gt;Current statistics report for this library&lt;/a&gt;&lt;/p&gt;&lt;/td&gt;</span><span class="dl">'</span><span class="p">;</span> 
+
+          <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;td class="noprint"&gt;&lt;p&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">opac_info</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;</span><span class="dl">'</span><span class="p">;</span> 
+
+          <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;/tr&gt;</span><span class="dl">'</span><span class="p">;</span> 
+
+        <span class="cm">/* New section for step 7 */</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#library_table th</span><span class="dl">'</span><span class="p">).</span><span class="nx">parent</span><span class="p">().</span><span class="nx">after</span><span class="p">(</span><span class="nx">contact_sheet</span><span class="p">);</span> 
+
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">contact_sheet</span><span class="p">);</span>
+        <span class="cm">/* END New section for step 7 */</span>
+
+
+      <span class="p">});</span> 
+
+    <span class="p">});</span> 
+    
+  <span class="p">}</span>
+
+<span class="p">});</span> 
+
+<span class="cm">/* ========== END Contact sheet for circulation page ========== */</span> 
+
+</code></pre></div></div>
+
+<p>All the steps up to this point built the variable that contains the table data.  This step does two things.</p>
+
+<p>First it pushes all of the data from the “contact_sheet” varialbe into the table.</p>
+
+<p>Second it puts all of that data into the console.  This step is not necessary for the final version of this code.  The reason I’ve logged it into the console in this code is that it gives you a good way of looking at what the code is doing, which makes it easier to troubleshoot the code while you’re writing it.</p>
+
+<h4 id="step-8">Step 8</h4>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="cm">/* ========== Contact sheet for circulation page ========== */</span> 
+
+<span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> 
+
+<span class="c1">//Home &gt; Circulation </span>
+  <span class="c1">//BEGIN - adds contact sheet to "Library contact information" tab in tabbed section of IntranetCirculationHomeHTML system preference </span>
+    <span class="kd">var</span> <span class="nx">contact_sheet_url</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">location</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">href</span><span class="dl">'</span><span class="p">);</span> 
+    <span class="k">if</span> <span class="p">(</span><span class="nx">contact_sheet_url</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">circulation-home.pl</span><span class="dl">"</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span> 
+
+      <span class="nx">$</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="dl">"</span><span class="s2">/api/v1/libraries</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span> 
+
+        <span class="kd">var</span> <span class="nx">contact_sheet</span> <span class="o">=</span> <span class="dl">''</span><span class="p">;</span> 
+
+        <span class="nx">$</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span> 
+
+          <span class="kd">var</span> <span class="nx">address4</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">address2</span> <span class="o">||</span> <span class="dl">''</span><span class="p">;</span> 
+          <span class="kd">var</span> <span class="nx">physical_address</span> <span class="o">=</span> <span class="nx">address4</span> <span class="o">||</span> <span class="nx">value</span><span class="p">.</span><span class="nx">address1</span><span class="p">;</span> 
+          <span class="kd">var</span> <span class="nx">fax_machine</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">fax</span> <span class="o">||</span> <span class="dl">''</span><span class="p">;</span> 
+          <span class="kd">var</span> <span class="nx">zipcode</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">postal_code</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span> 
+          <span class="kd">var</span> <span class="nx">director</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">address3</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="dl">"</span><span class="s2"> | </span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span&gt;</span><span class="dl">"</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="dl">"</span><span class="s2"> | </span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span&gt;</span><span class="dl">"</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="dl">"</span><span class="s2"> | </span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">&lt;/span&gt;&lt;/p&gt;</span><span class="dl">"</span><span class="p">);</span> 
+          <span class="kd">var</span> <span class="nx">report_branch</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">library_id</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">(</span><span class="sr">DONI</span><span class="se">)\w</span><span class="sr">+/</span><span class="p">,</span> <span class="dl">'</span><span class="s1">DONI%</span><span class="dl">'</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">(</span><span class="sr">PH</span><span class="se">)\w</span><span class="sr">+/</span><span class="p">,</span> <span class="dl">'</span><span class="s1">PH%</span><span class="dl">'</span><span class="p">);</span> 
+
+          <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;tr class="filterme"&gt;</span><span class="dl">'</span><span class="p">;</span> 
+
+          <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;td scope="row"&gt;&lt;p style="font-size: 1.5em"&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;p&gt;&lt;ins&gt;Mailing address:&lt;/ins&gt;&lt;/p&gt;&lt;p&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">address1</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;br /&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">city</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">, </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">state</span> <span class="o">+</span> <span class="dl">'</span><span class="s1"> </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">zipcode</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;p&gt;&lt;ins&gt;Physical address:&lt;/ins&gt;&lt;/p&gt;&lt;p&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">physical_address</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;br /&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">city</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">, </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">state</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;p&gt;&lt;ins&gt;Branch code: &lt;/ins&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">library_id</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;/td&gt;</span><span class="dl">'</span><span class="p">;</span> 
+
+          <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;td&gt;</span><span class="dl">'</span><span class="p">;</span> 
+
+          <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;p&gt;Phone: </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">phone</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;p&gt;Fax: </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">fax_machine</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;p&gt;e-mail: </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">email</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;p&gt;Courier route #: </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">notes</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/p&gt;&lt;br /&gt;&lt;p class="noprint"&gt;&lt;a class="badge btn-sm btn-success" style="color: white;" href="</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">url</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">" target="_blank"&gt;Website&lt;/a&gt;&lt;/p&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/td&gt;</span><span class="dl">'</span><span class="p">;</span> 
+
+          <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;td&gt;&lt;p&gt;&lt;span style="font-size: 1.5em;"&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">director</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/span&gt;&lt;/p&gt;&lt;br /&gt;&lt;p&gt;&lt;a class="btn btn-lg btn-info noprint" style="color: white;" href="/cgi-bin/koha/reports/guided_reports.pl?reports=3716&amp;phase=Run+this+report&amp;param_name=Choose+your+library|ZBRAN&amp;sql_params=</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">report_branch</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">" target="_blank"&gt;Current statistics report for this library&lt;/a&gt;&lt;/p&gt;&lt;/td&gt;</span><span class="dl">'</span><span class="p">;</span> 
+
+          <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;td class="noprint"&gt;&lt;p&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">.</span><span class="nx">opac_info</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;</span><span class="dl">'</span><span class="p">;</span> 
+
+          <span class="nx">contact_sheet</span> <span class="o">+=</span> <span class="dl">'</span><span class="s1">&lt;/tr&gt;</span><span class="dl">'</span><span class="p">;</span> 
+
+        <span class="p">});</span> 
+
+        <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#library_table th</span><span class="dl">'</span><span class="p">).</span><span class="nx">parent</span><span class="p">().</span><span class="nx">after</span><span class="p">(</span><span class="nx">contact_sheet</span><span class="p">);</span> 
+
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">contact_sheet</span><span class="p">);</span> 
+
+      <span class="p">});</span> 
+    <span class="p">}</span> 
+
+    <span class="cm">/* New section for step 8 */</span>
+    <span class="c1">//add filter function to search the table </span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#myInput</span><span class="dl">"</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">keyup</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> 
+      <span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">val</span><span class="p">().</span><span class="nx">toLowerCase</span><span class="p">();</span> 
+      <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">.filtertable .filterme</span><span class="dl">"</span><span class="p">).</span><span class="nx">filter</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> 
+        <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">toggle</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">text</span><span class="p">().</span><span class="nx">toLowerCase</span><span class="p">().</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span> 
+      <span class="p">});</span> 
+    <span class="p">});</span> 
+
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">.clear</span><span class="dl">"</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span> 
+      <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#myInput</span><span class="dl">"</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="dl">""</span><span class="p">).</span><span class="nx">keyup</span><span class="p">();</span> 
+      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> 
+    <span class="p">});</span> 
+    <span class="cm">/* New section for step 8 */</span>
+
+<span class="p">});</span> 
+
+<span class="cm">/* ========== END Contact sheet for circulation page ========== */</span> 
+
+</code></pre></div></div>
+
+<p>I’ll explain this part of the code at the end.  This has to do with adding a search function to the table.</p>
+
+<h2 id="adding-a-link-to-a-report">Adding a link to a report</h2>
+
+<p>Something you may have noticed in the code is that there is link to a report.  Specifically that code is <code class="language-plaintext highlighter-rouge">"/cgi-bin/koha/reports/guided_reports.pl?reports=3716&amp;phase=Run+this+report&amp;param_name=Choose+your+library|ZBRAN&amp;sql_params=' + report_branch + '"</code></p>
+
+<p>When I had this table building from a report, I was able to fill the report with some data directly from Koha and that’s part of why the report broke (trying to get too much data).  Since I can’t pump that report data into the table from the API, I wrote a report and then I use the API to create a link to that report here on the table, so that if someone is looking at the table, they can click on a link to run the report for their library.</p>
+
+<p>In my system that report is number 3716.  The SQL for this report is:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">SELECT</span>
+  <span class="n">branches</span><span class="p">.</span><span class="n">branchname</span><span class="p">,</span>
+  <span class="s1">'Current borrowers'</span> <span class="k">AS</span> <span class="n">STATISTIC</span><span class="p">,</span>
+  <span class="n">coalesce</span><span class="p">(</span><span class="k">Count</span><span class="p">(</span><span class="k">DISTINCT</span> <span class="n">borrowers</span><span class="p">.</span><span class="n">borrowernumber</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span> <span class="k">AS</span> <span class="k">Count</span>
+<span class="k">FROM</span>
+  <span class="n">branches</span> <span class="k">LEFT</span> <span class="k">JOIN</span>
+  <span class="n">borrowers</span> <span class="k">ON</span> <span class="n">borrowers</span><span class="p">.</span><span class="n">branchcode</span> <span class="o">=</span> <span class="n">branches</span><span class="p">.</span><span class="n">branchcode</span>
+<span class="k">WHERE</span>
+  <span class="n">branches</span><span class="p">.</span><span class="n">branchcode</span> <span class="k">LIKE</span> <span class="o">&lt;&lt;</span><span class="n">Choose</span> <span class="n">your</span> <span class="n">library</span><span class="o">|</span><span class="n">branches</span><span class="o">&gt;&gt;</span>
+<span class="k">GROUP</span> <span class="k">BY</span>
+  <span class="n">branches</span><span class="p">.</span><span class="n">branchname</span>
+<span class="k">UNION</span>
+<span class="k">SELECT</span>
+  <span class="n">branches</span><span class="p">.</span><span class="n">branchname</span><span class="p">,</span>
+  <span class="s1">'Current titles'</span> <span class="k">AS</span> <span class="n">STATISTIC</span><span class="p">,</span>
+  <span class="n">coalesce</span><span class="p">(</span><span class="k">Count</span><span class="p">(</span><span class="k">DISTINCT</span> <span class="n">items</span><span class="p">.</span><span class="n">biblionumber</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span> <span class="k">AS</span> <span class="n">Count_biblionumber</span>
+<span class="k">FROM</span>
+  <span class="n">branches</span> <span class="k">LEFT</span> <span class="k">JOIN</span>
+  <span class="n">items</span> <span class="k">ON</span> <span class="n">items</span><span class="p">.</span><span class="n">homebranch</span> <span class="o">=</span> <span class="n">branches</span><span class="p">.</span><span class="n">branchcode</span>
+<span class="k">WHERE</span>
+  <span class="n">branches</span><span class="p">.</span><span class="n">branchcode</span> <span class="k">LIKE</span> <span class="o">&lt;&lt;</span><span class="n">Choose</span> <span class="n">your</span> <span class="n">library</span><span class="o">|</span><span class="n">branches</span><span class="o">&gt;&gt;</span>
+<span class="k">GROUP</span> <span class="k">BY</span>
+  <span class="n">branches</span><span class="p">.</span><span class="n">branchname</span>
+<span class="k">UNION</span>
+<span class="k">SELECT</span>
+  <span class="n">branches</span><span class="p">.</span><span class="n">branchname</span><span class="p">,</span>
+  <span class="s1">'Current items'</span> <span class="k">AS</span> <span class="n">STATISTIC</span><span class="p">,</span>
+  <span class="n">coalesce</span><span class="p">(</span><span class="k">Count</span><span class="p">(</span><span class="k">DISTINCT</span> <span class="n">items</span><span class="p">.</span><span class="n">itemnumber</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span> <span class="k">AS</span> <span class="n">Count_itemnumber</span>
+<span class="k">FROM</span>
+  <span class="n">branches</span> <span class="k">LEFT</span> <span class="k">JOIN</span>
+  <span class="n">items</span> <span class="k">ON</span> <span class="n">items</span><span class="p">.</span><span class="n">homebranch</span> <span class="o">=</span> <span class="n">branches</span><span class="p">.</span><span class="n">branchcode</span>
+<span class="k">WHERE</span>
+  <span class="n">branches</span><span class="p">.</span><span class="n">branchcode</span> <span class="k">LIKE</span> <span class="o">&lt;&lt;</span><span class="n">Choose</span> <span class="n">your</span> <span class="n">library</span><span class="o">|</span><span class="n">branches</span><span class="o">&gt;&gt;</span>
+<span class="k">GROUP</span> <span class="k">BY</span>
+  <span class="n">branches</span><span class="p">.</span><span class="n">branchname</span>
+<span class="k">UNION</span>
+<span class="k">SELECT</span>
+  <span class="n">branches</span><span class="p">.</span><span class="n">branchname</span><span class="p">,</span>
+  <span class="s1">'Checkouts + renewals - previous 365 days'</span> <span class="k">AS</span> <span class="n">STATISTIC</span><span class="p">,</span>
+  <span class="n">coalesce</span><span class="p">(</span><span class="k">Count</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+<span class="k">FROM</span>
+  <span class="n">branches</span> <span class="k">LEFT</span> <span class="k">JOIN</span>
+  <span class="k">statistics</span> <span class="k">ON</span> <span class="k">statistics</span><span class="p">.</span><span class="n">branch</span> <span class="o">=</span> <span class="n">branches</span><span class="p">.</span><span class="n">branchcode</span>
+<span class="k">WHERE</span>
+  <span class="n">branches</span><span class="p">.</span><span class="n">branchcode</span> <span class="k">LIKE</span> <span class="o">&lt;&lt;</span><span class="n">Choose</span> <span class="n">your</span> <span class="n">library</span><span class="o">|</span><span class="n">branches</span><span class="o">&gt;&gt;</span> <span class="k">AND</span>
+  <span class="p">(</span><span class="k">statistics</span><span class="p">.</span><span class="k">type</span> <span class="o">=</span> <span class="s1">'issue'</span> <span class="k">OR</span>
+    <span class="k">statistics</span><span class="p">.</span><span class="k">type</span> <span class="o">=</span> <span class="s1">'renew'</span><span class="p">)</span> <span class="k">AND</span>
+  <span class="k">statistics</span><span class="p">.</span><span class="nb">datetime</span> <span class="k">BETWEEN</span> <span class="n">CurDate</span><span class="p">()</span> <span class="o">-</span> <span class="n">INTERVAL</span> <span class="mi">1</span> <span class="nb">YEAR</span> <span class="k">AND</span> <span class="n">CurDate</span><span class="p">()</span>
+<span class="k">GROUP</span> <span class="k">BY</span>
+  <span class="n">branches</span><span class="p">.</span><span class="n">branchname</span>
+<span class="k">UNION</span>
+<span class="k">SELECT</span>
+  <span class="n">branches</span><span class="p">.</span><span class="n">branchname</span><span class="p">,</span>
+  <span class="s1">'Unique borrowers - previous 365 days'</span> <span class="k">AS</span> <span class="n">STATISTIC</span><span class="p">,</span>
+  <span class="n">coalesce</span><span class="p">(</span><span class="k">Count</span><span class="p">(</span><span class="k">DISTINCT</span> <span class="k">statistics</span><span class="p">.</span><span class="n">borrowernumber</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span> <span class="k">AS</span> <span class="n">Count_borrowernumber</span>
+<span class="k">FROM</span>
+  <span class="n">branches</span> <span class="k">LEFT</span> <span class="k">JOIN</span>
+  <span class="k">statistics</span> <span class="k">ON</span> <span class="k">statistics</span><span class="p">.</span><span class="n">branch</span> <span class="o">=</span> <span class="n">branches</span><span class="p">.</span><span class="n">branchcode</span>
+<span class="k">WHERE</span>
+  <span class="n">branches</span><span class="p">.</span><span class="n">branchcode</span> <span class="k">LIKE</span> <span class="o">&lt;&lt;</span><span class="n">Choose</span> <span class="n">your</span> <span class="n">library</span><span class="o">|</span><span class="n">branches</span><span class="o">&gt;&gt;</span> <span class="k">AND</span>
+  <span class="p">(</span><span class="k">statistics</span><span class="p">.</span><span class="k">type</span> <span class="o">=</span> <span class="s1">'issue'</span> <span class="k">OR</span>
+    <span class="k">statistics</span><span class="p">.</span><span class="k">type</span> <span class="o">=</span> <span class="s1">'renew'</span><span class="p">)</span> <span class="k">AND</span>
+  <span class="k">statistics</span><span class="p">.</span><span class="nb">datetime</span> <span class="k">BETWEEN</span> <span class="n">CurDate</span><span class="p">()</span> <span class="o">-</span> <span class="n">INTERVAL</span> <span class="mi">1</span> <span class="nb">YEAR</span> <span class="k">AND</span> <span class="n">CurDate</span><span class="p">()</span>
+<span class="k">GROUP</span> <span class="k">BY</span>
+  <span class="n">branches</span><span class="p">.</span><span class="n">branchname</span>
+<span class="k">ORDER</span> <span class="k">BY</span>
+  <span class="n">branchname</span>
+
+</code></pre></div></div>
+
+<p>To add this report to your contact sheet you would need to add the report to Koha and then get the report ID number that Koha assigns to that report in your system and replace that number in the URL that is being built by this jQuery (i.e. <code class="language-plaintext highlighter-rouge">"/cgi-bin/koha/reports/guided_reports.pl?reports=_yourReportNumberHere_&amp;phase=Run+this+report&amp;param_name=Choose+your+library|branches&amp;sql_params=' + report_branch + '"</code>)</p>
+
+<p>It’s also at this point where the “report_branch” variable created in Step 5 of the jQuery section of this document comes into play.  I have 4 libraries that are all part of a library district and 5 libraries that are all part of a school district:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>branchcode</th>
+      <th>branchname</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>DONIELWD</td>
+      <td>Doniphan County Library - Elwood</td>
+    </tr>
+    <tr>
+      <td>DONIHIGH</td>
+      <td>Doniphan County Library - Highland</td>
+    </tr>
+    <tr>
+      <td>DONITROY</td>
+      <td>Doniphan County Library - Troy</td>
+    </tr>
+    <tr>
+      <td>DONIWATH</td>
+      <td>Doniphan County Library - Wathena</td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td>PHAXTELL</td>
+      <td>Prairie Hills Schools - Axtell Public School</td>
+    </tr>
+    <tr>
+      <td>PHSES</td>
+      <td>Prairie Hills Schools - Sabetha Elementary School</td>
+    </tr>
+    <tr>
+      <td>PHSHS</td>
+      <td>Prairie Hills Schools - Sabetha High School</td>
+    </tr>
+    <tr>
+      <td>PHSMS</td>
+      <td>Prairie Hills Schools - Sabetha Middle School</td>
+    </tr>
+    <tr>
+      <td>PHWAC</td>
+      <td>Prairie Hills Schools - Wetmore Academic Center</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>By having the “report_branch” variable take any branchcode that starts with “DONI” and change it to “DONI%” then take any branchcode that starts with “PH” and change it to “PH%,” I can have the link to the report run the report for all 4 Doniphan County branches or all 5 Prarie Hills schools when anyone clicks the link to run the report for any of those associated libraries.  Thus, when you click on the link to run the report for “Doniphan County Library - Wathena” you get the results for all 4 Doniphan county libraries because they are one library with 4 locations.</p>
+
+<h2 id="adding-a-search-box-to-the-table">Adding a search box to the table</h2>
+
+<p>The last piece of this I mentioned briefly twice before includes the following pieces of HTML and jQuery:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"libtable"</span> <span class="na">class=</span><span class="s">"dataTables_wrapper"</span><span class="nt">&gt;</span>
+
+  <span class="nt">&lt;span</span> <span class="na">style=</span><span class="s">"padding: 10px"</span><span class="nt">&gt;&lt;input</span> <span class="na">id=</span><span class="s">"myInput"</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">placeholder=</span><span class="s">"Search.."</span> <span class="na">style=</span><span class="s">"padding: 10px"</span><span class="nt">&gt;&lt;a</span> <span class="na">href=</span><span class="s">"#"</span> <span class="na">class=</span><span class="s">"clear"</span> <span class="na">rel=</span><span class="s">"nofollow"</span><span class="nt">&gt;&lt;span</span> <span class="na">style=</span><span class="s">"padding: 10px"</span><span class="nt">&gt;</span>Clear<span class="nt">&lt;/span&gt;&lt;/a&gt;&lt;/span&gt;</span>
+
+<span class="nt">&lt;/div&gt;</span>
+
+
+</code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="c1">//add filter function to search the table </span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#myInput</span><span class="dl">"</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">keyup</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> 
+      <span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">val</span><span class="p">().</span><span class="nx">toLowerCase</span><span class="p">();</span> 
+      <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">.filtertable .filterme</span><span class="dl">"</span><span class="p">).</span><span class="nx">filter</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> 
+        <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">toggle</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">text</span><span class="p">().</span><span class="nx">toLowerCase</span><span class="p">().</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span> 
+      <span class="p">});</span> 
+    <span class="p">});</span> 
+
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">.clear</span><span class="dl">"</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span> 
+      <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#myInput</span><span class="dl">"</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="dl">""</span><span class="p">).</span><span class="nx">keyup</span><span class="p">();</span> 
+      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> 
+    <span class="p">});</span> 
+
+
+</code></pre></div></div>
+
+<p>The HTML gets wrapped around the &lt;table&gt; element and it adds a search box and a “Clear” element right at the top of the table.</p>
+
+<p>The jQuery element adds a search function to the search box so that, when you type a string into the search box, the rows in the table that do not contain that string will be hidden from the table.</p>
+
+<p>On my Koha this means that if I want the contact information for “Winchester Public Library,” instead of scrolling all the way to the bottom of the table, I can just type “Winchester” into the search box and the only rows of the table I’ll see are the rows that include the word “Winchester.”  Clicking on the “Clear” button resets the table back to its full length.</p>
+
+<p>This search/filter function is based on code by Christopher Brannon available at <a href="https://wiki.koha-community.org/wiki/JQuery_Library#Add_a_filter_to_the_patron_various_tables_in_staff_interface" target="_blank">https://wiki.koha-community.org/wiki/JQuery_Library#Add_a_filter_to_the_patron_various_tables_in_staff_interface</a></p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>As always, the content of this page is freely available for you to use in your Koha and I hope you are able to use it and change it to work for your library.</p>
+
+
+      </section>
+
+    </div>
+
+    
+  </body>
+</html>

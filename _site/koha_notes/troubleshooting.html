@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Getting troubleshooting data from Koha | Untitled self-indulgent website</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Getting troubleshooting data from Koha" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Website for George H. Williams" />
+<meta property="og:description" content="Website for George H. Williams" />
+<link rel="canonical" href="http://localhost:4000/koha_notes/troubleshooting.html" />
+<meta property="og:url" content="http://localhost:4000/koha_notes/troubleshooting.html" />
+<meta property="og:site_name" content="Untitled self-indulgent website" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Getting troubleshooting data from Koha" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Website for George H. Williams","headline":"Getting troubleshooting data from Koha","url":"http://localhost:4000/koha_notes/troubleshooting.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="/assets/js/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="/assets/css/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <!--<li class="fork"><a href="">View On GitHub</a></li>-->
+          
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Untitled self-indulgent website</h1>
+          <p>Website for George H. Williams</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href=""></a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/mattgraham">mattgraham</a></span>
+        </div>
+
+        <h2 id="getting-troubleshooting-data-from-koha">Getting troubleshooting data from Koha</h2>
+
+<p>NEKLS uses an open source ticketing system called OS Ticket <a href="https://osticket.com/" target="_blank">OS Ticket</a> to manage support issues for Next Search Catalog and other support related areas.</p>
+
+<p>When someone at one of our libraries has a support issue, they can e-mail the ticketing system and it creates a ticket and notifies the appropriate people and then we can track what’s going on as we work to resolve the issue.  An issue that often arises, though, is people will send in e-mail that simply say “Koha doesn’t work” or “Why am I seeing an error message?”  My response to about 40% of all tickets that get created is “Which page?” or “Is this in Koha or Aspen Discovery?” or “Could you walk-through the steps of how you got to that error message?” or “Which account is logged in?”  And one of my favorites is “This happened on Monday?  But today’s Thursday – is it still doing it today?”</p>
+
+<p>So I asked myself, wouldn’t it be great if there was a button or a link that a staff member could click on in Koha that would copy much of the data I need for troubleshooting and put that on the clipboard so users could just paste that data into an e-mail they send?”</p>
+
+<p>Something that looks like this:</p>
+
+<p><img src="/koha_notes/images/troubleshooting/0010.png" alt="Location of link on Koha home page" /></p>
+
+<p>This steps below are how I added a “Copy troubleshooting data” link to the logged-in dropdown menu that’s on almost every page in Koha.</p>
+
+<ol>
+  <li>The first step is to create the link and add it to the drop-down:</li>
+</ol>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+
+  <span class="c1">//This creates the link in the drop-down</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#logged-in-dropdown ul</span><span class="dl">'</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="dl">'</span><span class="s1">&lt;li class="nav-item"&gt;&lt;a id="next_troubleshooting_data" class="toplinks dropdown-item"&gt;Copy troubleshooting data&lt;/a&gt;&lt;/li&gt;</span><span class="dl">'</span><span class="p">);</span>
+
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>The nav-item, toplinks, and dropdown-item classes are there to make the link conform the look of the other links in this drop-down.</p>
+
+<ol>
+  <li>Now that we have a link in the drop-down menu, we need to make something happen when someone clicks the link:</li>
+</ol>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+
+  <span class="c1">//This creates the link in the drop-down</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#logged-in-dropdown ul</span><span class="dl">'</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="dl">'</span><span class="s1">&lt;li class="nav-item"&gt;&lt;a id="next_troubleshooting_data" class="toplinks dropdown-item"&gt;Copy troubleshooting data&lt;/a&gt;&lt;/li&gt;</span><span class="dl">'</span><span class="p">);</span>
+
+  <span class="c1">//Adds function to the #next_troubleshooting_data link</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#next_troubleshooting_data</span><span class="dl">'</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+
+      <span class="cm">/*  The code you put in this area will happen when you click on the link you created */</span>
+
+    <span class="p">});</span>
+
+<span class="p">});</span>
+</code></pre></div></div>
+
+<ol>
+  <li>Next we need to create some variables to grab the data we want from the browser and the web page:</li>
+</ol>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+
+  <span class="c1">//This creates the link in the drop-down</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#logged-in-dropdown ul</span><span class="dl">'</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="dl">'</span><span class="s1">&lt;li class="nav-item"&gt;&lt;a id="next_troubleshooting_data" class="toplinks dropdown-item"&gt;Copy troubleshooting data&lt;/a&gt;&lt;/li&gt;</span><span class="dl">'</span><span class="p">);</span>
+
+  <span class="c1">//Adds function to the #next_troubleshooting_data link</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#next_troubleshooting_data</span><span class="dl">'</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+
+      <span class="c1">//Creates variables to be copied to the clipboard</span>
+        <span class="kd">var</span> <span class="nx">ts_timestamp</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_koha_version</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">head meta[name="generator"]</span><span class="dl">'</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">content</span><span class="dl">'</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">ts_username</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">.loggedinusername</span><span class="dl">"</span><span class="p">).</span><span class="nx">html</span><span class="p">().</span><span class="nx">trim</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_branchcode</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">.logged-in-branch-code</span><span class="dl">'</span><span class="p">).</span><span class="nx">first</span><span class="p">().</span><span class="nx">text</span><span class="p">().</span><span class="nx">trim</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_branchname</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">.logged-in-branch-name</span><span class="dl">'</span><span class="p">).</span><span class="nx">first</span><span class="p">().</span><span class="nx">text</span><span class="p">().</span><span class="nx">trim</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_url</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">location</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">href</span><span class="dl">'</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">ts_breadcrumbs</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#breadcrumbs ol li</span><span class="dl">'</span><span class="p">).</span><span class="nx">text</span><span class="p">().</span><span class="nx">trim</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">\n</span><span class="sr">/g</span><span class="p">,</span> <span class="dl">'</span><span class="s1">&gt;</span><span class="dl">'</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">\s</span><span class="sr">+/g</span><span class="p">,</span> <span class="dl">'</span><span class="s1"> </span><span class="dl">'</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&gt; /g</span><span class="p">,</span> <span class="dl">'</span><span class="s1">&gt;</span><span class="dl">'</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&gt;+/g</span><span class="p">,</span> <span class="dl">'</span><span class="s1"> &gt; </span><span class="dl">'</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">browserName</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">userAgent</span> <span class="o">=</span> <span class="nb">navigator</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">ts_width</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">width</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_height</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">height</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_zoom</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">devicePixelRatio</span> <span class="o">*</span> <span class="mi">100</span><span class="p">);</span>
+
+    <span class="p">});</span>
+
+<span class="p">});</span>
+</code></pre></div></div>
+
+<ol>
+  <li>Now that we have the data, I want to manipulate parts of the breadcrumbs for two reasons.  First, the breadcrumbs can be really long.  Part of this is to shorten that big piece of text.  Second, breadcrumb data can contain patron names.  Since I’ll be getting the URL, which will have the borrowernumber in the URL if it’s for a patron page, I don’t need the card number or patron name to be sent insecurely by e-mail, so this will remove that confidential information:</li>
+</ol>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+
+  <span class="c1">//This creates the link in the drop-down</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#logged-in-dropdown ul</span><span class="dl">'</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="dl">'</span><span class="s1">&lt;li class="nav-item"&gt;&lt;a id="next_troubleshooting_data" class="toplinks dropdown-item"&gt;Copy troubleshooting data&lt;/a&gt;&lt;/li&gt;</span><span class="dl">'</span><span class="p">);</span>
+
+  <span class="c1">//Adds function to the #next_troubleshooting_data link</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#next_troubleshooting_data</span><span class="dl">'</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+
+      <span class="c1">//Creates variables to be copied to the clipboard</span>
+        <span class="kd">var</span> <span class="nx">ts_timestamp</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_koha_version</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">head meta[name="generator"]</span><span class="dl">'</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">content</span><span class="dl">'</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">ts_username</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">.loggedinusername</span><span class="dl">"</span><span class="p">).</span><span class="nx">html</span><span class="p">().</span><span class="nx">trim</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_branchcode</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">.logged-in-branch-code</span><span class="dl">'</span><span class="p">).</span><span class="nx">first</span><span class="p">().</span><span class="nx">text</span><span class="p">().</span><span class="nx">trim</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_branchname</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">.logged-in-branch-name</span><span class="dl">'</span><span class="p">).</span><span class="nx">first</span><span class="p">().</span><span class="nx">text</span><span class="p">().</span><span class="nx">trim</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_url</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">location</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">href</span><span class="dl">'</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">ts_breadcrumbs</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#breadcrumbs ol li</span><span class="dl">'</span><span class="p">).</span><span class="nx">text</span><span class="p">().</span><span class="nx">trim</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">\n</span><span class="sr">/g</span><span class="p">,</span> <span class="dl">'</span><span class="s1">&gt;</span><span class="dl">'</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">\s</span><span class="sr">+/g</span><span class="p">,</span> <span class="dl">'</span><span class="s1"> </span><span class="dl">'</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&gt; /g</span><span class="p">,</span> <span class="dl">'</span><span class="s1">&gt;</span><span class="dl">'</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&gt;+/g</span><span class="p">,</span> <span class="dl">'</span><span class="s1"> &gt; </span><span class="dl">'</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">browserName</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">userAgent</span> <span class="o">=</span> <span class="nb">navigator</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">ts_width</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">width</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_height</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">height</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_zoom</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">devicePixelRatio</span> <span class="o">*</span> <span class="mi">100</span><span class="p">);</span>
+
+      <span class="c1">//Creates replacement parts for some Breadcrumbs information</span>
+        <span class="kd">const</span> <span class="nx">ts_catalog_details</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Catalog &gt;</span><span class="se">)</span><span class="sr">.+</span><span class="se">\&gt;</span><span class="sr">/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_cataloging</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Cataloging &gt; Edit</span><span class="se">)</span><span class="sr">.+</span><span class="se">\&gt;</span><span class="sr">/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_cataloging_edit_record</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Cataloging &gt; Editing</span><span class="se">)</span><span class="sr">.+/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_borrower_checkouts</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Checkouts &gt;</span><span class="se">)</span><span class="sr">.+/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_borrower_batch</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Check out to</span><span class="se">)</span><span class="sr">.+&gt;/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_borrower_details</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Patrons &gt;</span><span class="se">)</span><span class="sr">.*</span><span class="se">?</span><span class="sr">&gt;/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_borrower_debit_details</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Details of debit</span><span class="se">)</span><span class="sr">.+/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_borrower_credit_details</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Details of credit</span><span class="se">)</span><span class="sr">.+/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_catalog_search_results</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Catalog &gt; Search for </span><span class="se">)</span><span class="sr">.+/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_modify_patron</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Modify patron </span><span class="se">)</span><span class="sr">.+/</span><span class="p">;</span>
+
+      <span class="c1">//replaces values from breadcrumbs with replacement parts</span>
+        <span class="kd">let</span> <span class="nx">breadcrumbs</span> <span class="o">=</span> <span class="nx">ts_breadcrumbs</span><span class="p">;</span>
+        <span class="kd">let</span> <span class="nx">ts_breadcrumbs_simplified</span> <span class="o">=</span> <span class="nx">breadcrumbs</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_catalog_details</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> [TITLE] &gt;</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_cataloging</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> [TITLE] (Record # [BIBLIONUMBER]) &gt;</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_cataloging_edit_record</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> [TITLE] (Record # [BIBLIONUMBER])</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_borrower_checkouts</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> [BORROWERNAME] ([CARDNUMBER])</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_borrower_batch</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> [BORROWERNAME] ([CARDNUMBER]) &gt;</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_borrower_details</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> [BORROWERNAME] ([CARDNUMBER]) &gt;</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_borrower_debit_details</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> ([ACCOUNTLINES_ID])</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_borrower_credit_details</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> ([ACCOUNTLINES_ID])</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_catalog_search_results</span><span class="p">,</span> <span class="dl">"</span><span class="s2">'[SEARCH_TERMS]'</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_modify_patron</span><span class="p">,</span> <span class="dl">"</span><span class="s2">'([CATEGORY])'</span><span class="dl">"</span><span class="p">);</span>
+
+    <span class="p">});</span>
+
+<span class="p">});</span>
+</code></pre></div></div>
+
+<ol>
+  <li>Then it’s really helpful to know which browser the staff member is using.  We encourage our libraries to use Firefox, but some use Chrome, some use Safari, etc.  This code will help identify which browser the staff member is using:</li>
+</ol>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+
+  <span class="c1">//This creates the link in the drop-down</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#logged-in-dropdown ul</span><span class="dl">'</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="dl">'</span><span class="s1">&lt;li class="nav-item"&gt;&lt;a id="next_troubleshooting_data" class="toplinks dropdown-item"&gt;Copy troubleshooting data&lt;/a&gt;&lt;/li&gt;</span><span class="dl">'</span><span class="p">);</span>
+
+  <span class="c1">//Adds function to the #next_troubleshooting_data link</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#next_troubleshooting_data</span><span class="dl">'</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+
+      <span class="c1">//Creates variables to be copied to the clipboard</span>
+        <span class="kd">var</span> <span class="nx">ts_timestamp</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_koha_version</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">head meta[name="generator"]</span><span class="dl">'</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">content</span><span class="dl">'</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">ts_username</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">.loggedinusername</span><span class="dl">"</span><span class="p">).</span><span class="nx">html</span><span class="p">().</span><span class="nx">trim</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_branchcode</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">.logged-in-branch-code</span><span class="dl">'</span><span class="p">).</span><span class="nx">first</span><span class="p">().</span><span class="nx">text</span><span class="p">().</span><span class="nx">trim</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_branchname</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">.logged-in-branch-name</span><span class="dl">'</span><span class="p">).</span><span class="nx">first</span><span class="p">().</span><span class="nx">text</span><span class="p">().</span><span class="nx">trim</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_url</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">location</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">href</span><span class="dl">'</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">ts_breadcrumbs</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#breadcrumbs ol li</span><span class="dl">'</span><span class="p">).</span><span class="nx">text</span><span class="p">().</span><span class="nx">trim</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">\n</span><span class="sr">/g</span><span class="p">,</span> <span class="dl">'</span><span class="s1">&gt;</span><span class="dl">'</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">\s</span><span class="sr">+/g</span><span class="p">,</span> <span class="dl">'</span><span class="s1"> </span><span class="dl">'</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&gt; /g</span><span class="p">,</span> <span class="dl">'</span><span class="s1">&gt;</span><span class="dl">'</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&gt;+/g</span><span class="p">,</span> <span class="dl">'</span><span class="s1"> &gt; </span><span class="dl">'</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">browserName</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">userAgent</span> <span class="o">=</span> <span class="nb">navigator</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">ts_width</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">width</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_height</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">height</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_zoom</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">devicePixelRatio</span> <span class="o">*</span> <span class="mi">100</span><span class="p">);</span>
+
+      <span class="c1">//Creates replacement parts for some Breadcrumbs information</span>
+        <span class="kd">const</span> <span class="nx">ts_catalog_details</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Catalog &gt;</span><span class="se">)</span><span class="sr">.+</span><span class="se">\&gt;</span><span class="sr">/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_cataloging</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Cataloging &gt; Edit</span><span class="se">)</span><span class="sr">.+</span><span class="se">\&gt;</span><span class="sr">/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_cataloging_edit_record</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Cataloging &gt; Editing</span><span class="se">)</span><span class="sr">.+/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_borrower_checkouts</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Checkouts &gt;</span><span class="se">)</span><span class="sr">.+/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_borrower_batch</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Check out to</span><span class="se">)</span><span class="sr">.+&gt;/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_borrower_details</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Patrons &gt;</span><span class="se">)</span><span class="sr">.*</span><span class="se">?</span><span class="sr">&gt;/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_borrower_debit_details</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Details of debit</span><span class="se">)</span><span class="sr">.+/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_borrower_credit_details</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Details of credit</span><span class="se">)</span><span class="sr">.+/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_catalog_search_results</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Catalog &gt; Search for </span><span class="se">)</span><span class="sr">.+/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_modify_patron</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Modify patron </span><span class="se">)</span><span class="sr">.+/</span><span class="p">;</span>
+
+      <span class="c1">//replaces values from breadcrumbs with replacement parts</span>
+        <span class="kd">let</span> <span class="nx">breadcrumbs</span> <span class="o">=</span> <span class="nx">ts_breadcrumbs</span><span class="p">;</span>
+        <span class="kd">let</span> <span class="nx">ts_breadcrumbs_simplified</span> <span class="o">=</span> <span class="nx">breadcrumbs</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_catalog_details</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> [TITLE] &gt;</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_cataloging</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> [TITLE] (Record # [BIBLIONUMBER]) &gt;</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_cataloging_edit_record</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> [TITLE] (Record # [BIBLIONUMBER])</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_borrower_checkouts</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> [BORROWERNAME] ([CARDNUMBER])</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_borrower_batch</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> [BORROWERNAME] ([CARDNUMBER]) &gt;</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_borrower_details</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> [BORROWERNAME] ([CARDNUMBER]) &gt;</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_borrower_debit_details</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> ([ACCOUNTLINES_ID])</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_borrower_credit_details</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> ([ACCOUNTLINES_ID])</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_catalog_search_results</span><span class="p">,</span> <span class="dl">"</span><span class="s2">'[SEARCH_TERMS]'</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_modify_patron</span><span class="p">,</span> <span class="dl">"</span><span class="s2">'([CATEGORY])'</span><span class="dl">"</span><span class="p">);</span>
+
+      <span class="c1">//Simplifies browsername</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">Chrome</span><span class="dl">"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">Edg</span><span class="dl">"</span><span class="p">)</span> <span class="o">===</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">browserName</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Chrome</span><span class="dl">"</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">Firefox</span><span class="dl">"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">browserName</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Firefox</span><span class="dl">"</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">Safari</span><span class="dl">"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">Chrome</span><span class="dl">"</span><span class="p">)</span> <span class="o">===</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">browserName</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Safari</span><span class="dl">"</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">Edg</span><span class="dl">"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">browserName</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Edge</span><span class="dl">"</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">MSIE</span><span class="dl">"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">Trident</span><span class="dl">"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">browserName</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Internet Explorer</span><span class="dl">"</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">Opera</span><span class="dl">"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">OPR</span><span class="dl">"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">browserName</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Opera</span><span class="dl">"</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">browserName</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Unknown</span><span class="dl">"</span><span class="p">;</span>
+        <span class="p">}</span>
+
+    <span class="p">});</span>
+
+<span class="p">});</span>
+</code></pre></div></div>
+
+<ol>
+  <li>Now that we have all of the data we want in variables, this copies the data to the clipboard:</li>
+</ol>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+
+  <span class="c1">//This creates the link in the drop-down</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#logged-in-dropdown ul</span><span class="dl">'</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="dl">'</span><span class="s1">&lt;li class="nav-item"&gt;&lt;a id="next_troubleshooting_data" class="toplinks dropdown-item"&gt;Copy troubleshooting data&lt;/a&gt;&lt;/li&gt;</span><span class="dl">'</span><span class="p">);</span>
+
+  <span class="c1">//Adds function to the #next_troubleshooting_data link</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#next_troubleshooting_data</span><span class="dl">'</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+
+      <span class="c1">//Creates variables to be copied to the clipboard</span>
+        <span class="kd">var</span> <span class="nx">ts_timestamp</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_koha_version</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">head meta[name="generator"]</span><span class="dl">'</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">content</span><span class="dl">'</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">ts_username</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">.loggedinusername</span><span class="dl">"</span><span class="p">).</span><span class="nx">html</span><span class="p">().</span><span class="nx">trim</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_branchcode</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">.logged-in-branch-code</span><span class="dl">'</span><span class="p">).</span><span class="nx">first</span><span class="p">().</span><span class="nx">text</span><span class="p">().</span><span class="nx">trim</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_branchname</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">.logged-in-branch-name</span><span class="dl">'</span><span class="p">).</span><span class="nx">first</span><span class="p">().</span><span class="nx">text</span><span class="p">().</span><span class="nx">trim</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_url</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">location</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">href</span><span class="dl">'</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">ts_breadcrumbs</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#breadcrumbs ol li</span><span class="dl">'</span><span class="p">).</span><span class="nx">text</span><span class="p">().</span><span class="nx">trim</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">\n</span><span class="sr">/g</span><span class="p">,</span> <span class="dl">'</span><span class="s1">&gt;</span><span class="dl">'</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">\s</span><span class="sr">+/g</span><span class="p">,</span> <span class="dl">'</span><span class="s1"> </span><span class="dl">'</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&gt; /g</span><span class="p">,</span> <span class="dl">'</span><span class="s1">&gt;</span><span class="dl">'</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&gt;+/g</span><span class="p">,</span> <span class="dl">'</span><span class="s1"> &gt; </span><span class="dl">'</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">browserName</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">userAgent</span> <span class="o">=</span> <span class="nb">navigator</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">ts_width</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">width</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_height</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">height</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_zoom</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">devicePixelRatio</span> <span class="o">*</span> <span class="mi">100</span><span class="p">);</span>
+
+      <span class="c1">//Creates replacement parts for some Breadcrumbs information</span>
+        <span class="kd">const</span> <span class="nx">ts_catalog_details</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Catalog &gt;</span><span class="se">)</span><span class="sr">.+</span><span class="se">\&gt;</span><span class="sr">/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_cataloging</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Cataloging &gt; Edit</span><span class="se">)</span><span class="sr">.+</span><span class="se">\&gt;</span><span class="sr">/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_cataloging_edit_record</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Cataloging &gt; Editing</span><span class="se">)</span><span class="sr">.+/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_borrower_checkouts</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Checkouts &gt;</span><span class="se">)</span><span class="sr">.+/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_borrower_batch</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Check out to</span><span class="se">)</span><span class="sr">.+&gt;/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_borrower_details</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Patrons &gt;</span><span class="se">)</span><span class="sr">.*</span><span class="se">?</span><span class="sr">&gt;/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_borrower_debit_details</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Details of debit</span><span class="se">)</span><span class="sr">.+/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_borrower_credit_details</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Details of credit</span><span class="se">)</span><span class="sr">.+/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_catalog_search_results</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Catalog &gt; Search for </span><span class="se">)</span><span class="sr">.+/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_modify_patron</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Modify patron </span><span class="se">)</span><span class="sr">.+/</span><span class="p">;</span>
+
+      <span class="c1">//replaces values from breadcrumbs with replacement parts</span>
+        <span class="kd">let</span> <span class="nx">breadcrumbs</span> <span class="o">=</span> <span class="nx">ts_breadcrumbs</span><span class="p">;</span>
+        <span class="kd">let</span> <span class="nx">ts_breadcrumbs_simplified</span> <span class="o">=</span> <span class="nx">breadcrumbs</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_catalog_details</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> [TITLE] &gt;</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_cataloging</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> [TITLE] (Record # [BIBLIONUMBER]) &gt;</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_cataloging_edit_record</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> [TITLE] (Record # [BIBLIONUMBER])</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_borrower_checkouts</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> [BORROWERNAME] ([CARDNUMBER])</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_borrower_batch</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> [BORROWERNAME] ([CARDNUMBER]) &gt;</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_borrower_details</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> [BORROWERNAME] ([CARDNUMBER]) &gt;</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_borrower_debit_details</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> ([ACCOUNTLINES_ID])</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_borrower_credit_details</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> ([ACCOUNTLINES_ID])</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_catalog_search_results</span><span class="p">,</span> <span class="dl">"</span><span class="s2">'[SEARCH_TERMS]'</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_modify_patron</span><span class="p">,</span> <span class="dl">"</span><span class="s2">'([CATEGORY])'</span><span class="dl">"</span><span class="p">);</span>
+
+      <span class="c1">//Simplifies browsername</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">Chrome</span><span class="dl">"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">Edg</span><span class="dl">"</span><span class="p">)</span> <span class="o">===</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">browserName</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Chrome</span><span class="dl">"</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">Firefox</span><span class="dl">"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">browserName</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Firefox</span><span class="dl">"</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">Safari</span><span class="dl">"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">Chrome</span><span class="dl">"</span><span class="p">)</span> <span class="o">===</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">browserName</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Safari</span><span class="dl">"</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">Edg</span><span class="dl">"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">browserName</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Edge</span><span class="dl">"</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">MSIE</span><span class="dl">"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">Trident</span><span class="dl">"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">browserName</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Internet Explorer</span><span class="dl">"</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">Opera</span><span class="dl">"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">OPR</span><span class="dl">"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">browserName</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Opera</span><span class="dl">"</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">browserName</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Unknown</span><span class="dl">"</span><span class="p">;</span>
+        <span class="p">}</span>
+
+      <span class="c1">//Copies all of the data to the clipboard</span>
+        <span class="nb">navigator</span><span class="p">.</span><span class="nx">clipboard</span><span class="p">.</span><span class="nx">writeText</span><span class="p">(</span>
+          <span class="dl">"</span><span class="s2">Troubleshooting information</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\r\n</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\r\n</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\t</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="s2">Date: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">ts_timestamp</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\r\n</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\t</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="s2">Koha version: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">ts_koha_version</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\r\n</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\r\n</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\t</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="s2">URL: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">ts_url</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\r\n</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\t</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="s2">Breadcrumbs: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">ts_breadcrumbs_simplified</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\r\n</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\r\n</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\t</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="s2">Logged in user: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">ts_username</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\r\n</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\t</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="s2">Logged in branchcode: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">ts_branchcode</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\r\n</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\t</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="s2">Logged in branch name: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">ts_branchname</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\r\n</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\r\n</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\t</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="s2">Browser: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">browserName</span> <span class="o">+</span> <span class="dl">"</span><span class="s2"> {</span><span class="dl">"</span> <span class="o">+</span> <span class="nx">userAgent</span> <span class="o">+</span> <span class="dl">"</span><span class="s2">}</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\r\n</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\t</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="s2">Browser size: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">ts_width</span> <span class="o">+</span> <span class="dl">"</span><span class="s2"> x </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">ts_height</span> <span class="o">+</span> <span class="dl">"</span><span class="s2"> Zoom: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">ts_zoom</span> <span class="o">+</span> <span class="dl">"</span><span class="s2">%</span><span class="dl">"</span>
+        <span class="p">);</span>
+
+    <span class="p">});</span>
+
+<span class="p">});</span>
+</code></pre></div></div>
+
+<ol>
+  <li>This final piece of code makes an alert pop-up on the page when you click the link.  This lets the user know the data has been copied to the clipboard.</li>
+</ol>
+
+<p>The final code for this full package is:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+
+  <span class="c1">//This creates the link in the drop-down</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#logged-in-dropdown ul</span><span class="dl">'</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="dl">'</span><span class="s1">&lt;li class="nav-item"&gt;&lt;a id="next_troubleshooting_data" class="toplinks dropdown-item"&gt;Copy troubleshooting data&lt;/a&gt;&lt;/li&gt;</span><span class="dl">'</span><span class="p">);</span>
+
+  <span class="c1">//Adds function to the #next_troubleshooting_data link</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#next_troubleshooting_data</span><span class="dl">'</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+
+      <span class="c1">//Creates variables to be copied to the clipboard</span>
+        <span class="kd">var</span> <span class="nx">ts_timestamp</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_koha_version</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">head meta[name="generator"]</span><span class="dl">'</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">content</span><span class="dl">'</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">ts_username</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">.loggedinusername</span><span class="dl">"</span><span class="p">).</span><span class="nx">html</span><span class="p">().</span><span class="nx">trim</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_branchcode</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">.logged-in-branch-code</span><span class="dl">'</span><span class="p">).</span><span class="nx">first</span><span class="p">().</span><span class="nx">text</span><span class="p">().</span><span class="nx">trim</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_branchname</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">.logged-in-branch-name</span><span class="dl">'</span><span class="p">).</span><span class="nx">first</span><span class="p">().</span><span class="nx">text</span><span class="p">().</span><span class="nx">trim</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_url</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">location</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">href</span><span class="dl">'</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">ts_breadcrumbs</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#breadcrumbs ol li</span><span class="dl">'</span><span class="p">).</span><span class="nx">text</span><span class="p">().</span><span class="nx">trim</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">\n</span><span class="sr">/g</span><span class="p">,</span> <span class="dl">'</span><span class="s1">&gt;</span><span class="dl">'</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">\s</span><span class="sr">+/g</span><span class="p">,</span> <span class="dl">'</span><span class="s1"> </span><span class="dl">'</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&gt; /g</span><span class="p">,</span> <span class="dl">'</span><span class="s1">&gt;</span><span class="dl">'</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/&gt;+/g</span><span class="p">,</span> <span class="dl">'</span><span class="s1"> &gt; </span><span class="dl">'</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">browserName</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">userAgent</span> <span class="o">=</span> <span class="nb">navigator</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">ts_width</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">width</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_height</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">height</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">ts_zoom</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">devicePixelRatio</span> <span class="o">*</span> <span class="mi">100</span><span class="p">);</span>
+
+      <span class="c1">//Creates replacement parts for some Breadcrumbs information</span>
+        <span class="kd">const</span> <span class="nx">ts_catalog_details</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Catalog &gt;</span><span class="se">)</span><span class="sr">.+</span><span class="se">\&gt;</span><span class="sr">/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_cataloging</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Cataloging &gt; Edit</span><span class="se">)</span><span class="sr">.+</span><span class="se">\&gt;</span><span class="sr">/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_cataloging_edit_record</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Cataloging &gt; Editing</span><span class="se">)</span><span class="sr">.+/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_borrower_checkouts</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Checkouts &gt;</span><span class="se">)</span><span class="sr">.+/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_borrower_batch</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Check out to</span><span class="se">)</span><span class="sr">.+&gt;/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_borrower_details</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Patrons &gt;</span><span class="se">)</span><span class="sr">.*</span><span class="se">?</span><span class="sr">&gt;/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_borrower_debit_details</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Details of debit</span><span class="se">)</span><span class="sr">.+/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_borrower_credit_details</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Details of credit</span><span class="se">)</span><span class="sr">.+/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_catalog_search_results</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Catalog &gt; Search for </span><span class="se">)</span><span class="sr">.+/</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">ts_modify_patron</span> <span class="o">=</span> <span class="sr">/</span><span class="se">(?&lt;</span><span class="sr">=Modify patron </span><span class="se">)</span><span class="sr">.+/</span><span class="p">;</span>
+
+      <span class="c1">//replaces values from breadcrumbs with replacement parts</span>
+        <span class="kd">let</span> <span class="nx">breadcrumbs</span> <span class="o">=</span> <span class="nx">ts_breadcrumbs</span><span class="p">;</span>
+        <span class="kd">let</span> <span class="nx">ts_breadcrumbs_simplified</span> <span class="o">=</span> <span class="nx">breadcrumbs</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_catalog_details</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> [TITLE] &gt;</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_cataloging</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> [TITLE] (Record # [BIBLIONUMBER]) &gt;</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_cataloging_edit_record</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> [TITLE] (Record # [BIBLIONUMBER])</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_borrower_checkouts</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> [BORROWERNAME] ([CARDNUMBER])</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_borrower_batch</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> [BORROWERNAME] ([CARDNUMBER]) &gt;</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_borrower_details</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> [BORROWERNAME] ([CARDNUMBER]) &gt;</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_borrower_debit_details</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> ([ACCOUNTLINES_ID])</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_borrower_credit_details</span><span class="p">,</span> <span class="dl">"</span><span class="s2"> ([ACCOUNTLINES_ID])</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_catalog_search_results</span><span class="p">,</span> <span class="dl">"</span><span class="s2">'[SEARCH_TERMS]'</span><span class="dl">"</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">ts_modify_patron</span><span class="p">,</span> <span class="dl">"</span><span class="s2">'([CATEGORY])'</span><span class="dl">"</span><span class="p">);</span>
+
+      <span class="c1">//Simplifies browsername</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">Chrome</span><span class="dl">"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">Edg</span><span class="dl">"</span><span class="p">)</span> <span class="o">===</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">browserName</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Chrome</span><span class="dl">"</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">Firefox</span><span class="dl">"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">browserName</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Firefox</span><span class="dl">"</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">Safari</span><span class="dl">"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">Chrome</span><span class="dl">"</span><span class="p">)</span> <span class="o">===</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">browserName</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Safari</span><span class="dl">"</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">Edg</span><span class="dl">"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">browserName</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Edge</span><span class="dl">"</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">MSIE</span><span class="dl">"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">Trident</span><span class="dl">"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">browserName</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Internet Explorer</span><span class="dl">"</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">Opera</span><span class="dl">"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">"</span><span class="s2">OPR</span><span class="dl">"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">browserName</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Opera</span><span class="dl">"</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">browserName</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Unknown</span><span class="dl">"</span><span class="p">;</span>
+        <span class="p">}</span>
+
+      <span class="c1">//Copies all of the data to the clipboard</span>
+        <span class="nb">navigator</span><span class="p">.</span><span class="nx">clipboard</span><span class="p">.</span><span class="nx">writeText</span><span class="p">(</span>
+          <span class="dl">"</span><span class="s2">Troubleshooting information</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\r\n</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\r\n</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\t</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="s2">Date: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">ts_timestamp</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\r\n</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\t</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="s2">Koha version: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">ts_koha_version</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\r\n</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\r\n</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\t</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="s2">URL: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">ts_url</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\r\n</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\t</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="s2">Breadcrumbs: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">ts_breadcrumbs_simplified</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\r\n</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\r\n</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\t</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="s2">Logged in user: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">ts_username</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\r\n</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\t</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="s2">Logged in branchcode: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">ts_branchcode</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\r\n</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\t</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="s2">Logged in branch name: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">ts_branchname</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\r\n</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\r\n</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\t</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="s2">Browser: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">browserName</span> <span class="o">+</span> <span class="dl">"</span><span class="s2"> {</span><span class="dl">"</span> <span class="o">+</span> <span class="nx">userAgent</span> <span class="o">+</span> <span class="dl">"</span><span class="s2">}</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\r\n</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="se">\t</span><span class="dl">"</span> <span class="o">+</span>
+          <span class="dl">"</span><span class="s2">Browser size: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">ts_width</span> <span class="o">+</span> <span class="dl">"</span><span class="s2"> x </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">ts_height</span> <span class="o">+</span> <span class="dl">"</span><span class="s2"> Zoom: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">ts_zoom</span> <span class="o">+</span> <span class="dl">"</span><span class="s2">%</span><span class="dl">"</span>
+        <span class="p">);</span>
+
+      <span class="c1">//Lets the user know the data has been copied</span>
+        <span class="nx">alert</span><span class="p">(</span><span class="dl">"</span><span class="s2">Troubleshooting data has been copied to your clipboard.</span><span class="se">\r\n\r\n</span><span class="s2">This data can be pasted into an e-mail to your support provider to make troubleshooting problems easier.</span><span class="dl">"</span><span class="p">);</span>
+
+    <span class="p">});</span>
+
+<span class="p">});</span>
+</code></pre></div></div>
+
+
+      </section>
+
+    </div>
+
+    
+  </body>
+</html>

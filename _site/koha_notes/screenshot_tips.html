@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Screenshot tips and tools | Untitled self-indulgent website</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Screenshot tips and tools" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Website for George H. Williams" />
+<meta property="og:description" content="Website for George H. Williams" />
+<link rel="canonical" href="http://localhost:4000/koha_notes/screenshot_tips.html" />
+<meta property="og:url" content="http://localhost:4000/koha_notes/screenshot_tips.html" />
+<meta property="og:site_name" content="Untitled self-indulgent website" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Screenshot tips and tools" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Website for George H. Williams","headline":"Screenshot tips and tools","url":"http://localhost:4000/koha_notes/screenshot_tips.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="/assets/js/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="/assets/css/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <!--<li class="fork"><a href="">View On GitHub</a></li>-->
+          
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Untitled self-indulgent website</h1>
+          <p>Website for George H. Williams</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href=""></a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/mattgraham">mattgraham</a></span>
+        </div>
+
+        <h2 id="screenshot-tips-and-tools">Screenshot tips and tools</h2>
+
+<p>I’ve been training a new staff person at NEKLS and it’s made me think about a few small things I do to make taking screenshots easier.</p>
+
+<h3 id="snagit">Snagit</h3>
+
+<p>Snagit is a proprietary screenshot software available at <a href="https://www.techsmith.com/snagit/">https://www.techsmith.com/snagit/</a></p>
+
+<p>There are several open source options available, but I’ve been using Snagit for a very long time so it’s the one I’m most comfortable with and it is not cost-prohibitive for our library.</p>
+
+<p>I use Snagits preset and hotkey features when I take screenshots.  With a couple of keystrokes, I can take screenshots from the same area of the screen again and again.</p>
+
+<p><img src="/koha_notes/images/screenshot_tips/snagit.png" alt="Snagit" /></p>
+
+<h3 id="window-resizer">Window Resizer</h3>
+
+<p>To go along with Snagit I use a Firefox extension called “Window Resizer” wich is available at <a href="https://mybrowseraddon.com/window-resizer.html">https://mybrowseraddon.com/window-resizer.html</a></p>
+
+<p>Window Resizer allows me to set Firefox to the same window size and position with the click of a button.  This way I can use Window Resizer to set Firefox in a specific position and then use a Snagit preset to take a picture of the window in just a couple of quick steps.</p>
+
+<p><img src="/koha_notes/images/screenshot_tips/windows_resizer.png" alt="Window Resizer" /></p>
+
+<h3 id="rapid-tables--window-size">Rapid Tables &gt; Window size</h3>
+
+<p>To help me set the browser window to the size I want with Window Resizer, I use the Window size tool from Rapid Tables at <a href="https://www.rapidtables.com/web/tools/window-size.html">https://www.rapidtables.com/web/tools/window-size.html</a>.  This web-based app will tell you the size of your browser window which can help you set the window size and position where you want it.</p>
+
+<p><img src="/koha_notes/images/screenshot_tips/rapid_tables.png" alt="What is my browser window size" /></p>
+
+<h3 id="reciept-printer-name">Reciept printer name</h3>
+
+<p>I sometimes have to help people with their receipt printer.  Most of our printers are Epson TM88V, TM88VII or other models in the Epson line, but there are a few other Epson models as well as some non-Epson printers out there in our system.  The printer on my work-computer is an Epson TM-II, so sometimes when I send someone a screenshot with instructions that include printer information people will respond saying “I can’t find the Epson TM-II printer on my computer.”</p>
+
+<p>Rather than having to follow up with a “Well, which printer on your computer is the reciept printer” I’ve renamed the printer on my work computer “YOUR RECEIPT PRINTER” so that any screenshots will clearly and unambiguously tell them to look for “YOUR RECEIPT PRINTER.”</p>
+
+<h3 id="jquery">jQuery</h3>
+
+<p>Finally I have some jQuery on my Koha that puts a little camera icon on the top-right of every page.</p>
+
+<p>When someone clicks on this icon several things happen.</p>
+
+<ul>
+  <li>Applies to any Koha installation
+    <ul>
+      <li>The camera icon disappears</li>
+      <li>The logged-in username displays as “Your username”</li>
+      <li>The logged-in library displays as “Your library”</li>
+      <li>The current Koha version is moved just above the “Help” button</li>
+    </ul>
+  </li>
+  <li>Applies to custom code on my Koha
+    <ul>
+      <li>A message section I have generated by different jQuery is removed from the page</li>
+      <li>All of the news information on the home page (with one exception) is removed from the page</li>
+      <li>The tabs I have set up on the home page switch to my library’s “Statistics” tab for the current year</li>
+    </ul>
+
+    <p>jQuery:</p>
+  </li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+
+  <span class="c1">//Adds screenshot button</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#user-menu</span><span class="dl">'</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="dl">'</span><span class="s1">&lt;button id="next_screenshot" type="button" class="btn btn-custom-info" style="display: inline; " title="Anonymize for screenshot"&gt;&lt;i class="fa fa-camera" aria-hidden="true"&gt;&lt;/i&gt;&lt;/button&gt;</span><span class="dl">'</span><span class="p">);</span>
+  
+  <span class="c1">//Adds funciton to screenshot button</span>
+      <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#next_screenshot</span><span class="dl">'</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span> 
+        <span class="c1">//Applies to Koha</span>
+          <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#next_screenshot</span><span class="dl">'</span><span class="p">).</span><span class="nx">hide</span><span class="p">();</span> 
+          <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">.loggedinusername</span><span class="dl">'</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="dl">'</span><span class="s1">Your username</span><span class="dl">'</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">style</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">padding-right: 10px</span><span class="dl">'</span><span class="p">);</span> 
+          <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">.logged-in-branch-name</span><span class="dl">'</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="dl">'</span><span class="s1">Your library</span><span class="dl">'</span><span class="p">);</span> 
+          <span class="kd">var</span> <span class="nx">koha_version</span> <span class="o">=</span> <span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">head meta[name="generator"]</span><span class="dl">'</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">content</span><span class="dl">'</span><span class="p">)</span> <span class="o">||</span> <span class="dl">''</span><span class="p">);</span>
+          <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#helper</span><span class="dl">'</span><span class="p">).</span><span class="nx">before</span><span class="p">(</span><span class="dl">'</span><span class="s1">&lt;h4&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">koha_version</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/h4&gt;</span><span class="dl">'</span><span class="p">);</span>
+          
+        <span class="c1">//Applies to custom code on my Koha</span>
+          <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">.next_top_message</span><span class="dl">'</span><span class="p">).</span><span class="nx">hide</span><span class="p">();</span>
+          <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#area-news</span><span class="dl">'</span><span class="p">).</span><span class="nx">children</span><span class="p">().</span><span class="nx">hide</span><span class="p">();</span>
+          <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#area-news #news303</span><span class="dl">'</span><span class="p">).</span><span class="nx">show</span><span class="p">();</span>
+          <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#nav-statistics-tab</span><span class="dl">'</span><span class="p">).</span><span class="nx">click</span><span class="p">();</span>
+
+      <span class="p">});</span> 
+
+<span class="p">});</span>
+
+</code></pre></div></div>
+
+
+
+      </section>
+
+    </div>
+
+    
+  </body>
+</html>

@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Steps to close a library | Untitled self-indulgent website</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Steps to close a library" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Website for George H. Williams" />
+<meta property="og:description" content="Website for George H. Williams" />
+<link rel="canonical" href="http://localhost:4000/koha_notes/closing_a_library.html" />
+<meta property="og:url" content="http://localhost:4000/koha_notes/closing_a_library.html" />
+<meta property="og:site_name" content="Untitled self-indulgent website" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Steps to close a library" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Website for George H. Williams","headline":"Steps to close a library","url":"http://localhost:4000/koha_notes/closing_a_library.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="/assets/js/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="/assets/css/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <!--<li class="fork"><a href="">View On GitHub</a></li>-->
+          
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Untitled self-indulgent website</h1>
+          <p>Website for George H. Williams</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href=""></a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/mattgraham">mattgraham</a></span>
+        </div>
+
+        <h2 id="steps-to-close-a-library">Steps to close a library</h2>
+
+<p>Every year I have five school libraries that close for two-and-a-half to three months.  Additionally, throughout the year we often have libraries that need to close temporarily for emergencies.  One example is Winchester Community Library that closed temporarily because they needed to replace carpet and part of a wall that was damaged when a pipe froze over the holidays late last year.</p>
+
+<p>Essentially, when a library closes I need to make sure that their items are no longer available to fill requests from our other member libraries and I need to make sure that nothing will be shipped to those libraries during their closure.  And if the closure is an unplanned or ememergency closure, I need to take some additional steps to make sure that their patrons don’t end up with unexpected overdues.</p>
+
+<p>Parts of what I do are built into Koha with system preferences and circulation rules, but there are some things I do with custom code.</p>
+
+<h3 id="step-1---setting-hard-due-dates-for-a-pre-planned-closure">Step 1 - setting hard due dates for a pre-planned closure</h3>
+
+<ul>
+  <li>This step is accomplished at Home &gt; Administration &gt; Circulation and fine rules (smart-rules.pl)</li>
+</ul>
+
+<p>For school closures I set the circulation rules for the schools so that items checked out at the school are due before the school year ends.  This ensures that, if the school has borrowed any materials from other member libraries, those items will be shipped back to the libraries that own those items before their school year ends.  Usually the date we set as their hard due date is about seven days before their last day of school.</p>
+
+<p><img src="/koha_notes/images/closing_a_library_0010.png" alt="Setting hard due dates" class="img-responsive" /></p>
+
+<h3 id="step-2-option-a---shutting-down-the-closed-librarys-holds-queue">Step 2: option A - shutting down the closed library’s holds queue</h3>
+
+<ul>
+  <li>This step is accomplished at Home &gt; Administration &gt; System preferences : StaticHoldsQueueWeight (preferences.pl)</li>
+</ul>
+
+<p>Once a library is closed, I remove that library’s branchcode from the StaticHoldsQueueWeight system preference.  This prevents the items owned by the closed library from being added to the holds queue.</p>
+
+<p><img src="/koha_notes/images/closing_a_library_0020.png" alt="Remove library from StaticHoldsQueueWeight" class="img-responsive" /></p>
+
+<h3 id="step-2-option-b---shutting-down-the-closed-librarys-holds-queue">Step 2: option B - shutting down the closed library’s holds queue</h3>
+
+<ul>
+  <li>This step is accomplished at Home &gt; Tools &gt; BRANCHNAME calendar (holidays.pl)</li>
+</ul>
+
+<p>If the sytem preference HoldsQueueSkipClosed is set to “open” then you can use the calendar tool to prevent items from appearing on the holds queue at a closed library.  All you have to do is mark the closed dates on the calendar.</p>
+
+<p>But this method will only work if HoldsQueueSkipClosed is set to “open.”</p>
+
+<p><img src="/koha_notes/images/closing_a_library_0030.png" alt="Use the calendar to close the library" class="img-responsive" /></p>
+
+<h3 id="step-3-option-a---preventing-new-requests-from-being-placed-for-pickup-at-the-closed-library">Step 3: option A - Preventing new requests from being placed for pickup at the closed library</h3>
+
+<ul>
+  <li>This step is accomplished at Home &gt; Administration &gt; Libraries (branches.pl)</li>
+</ul>
+
+<p>From the “Libraries” page, you can indicate whether or not a library is a “Pickup location.”  During a closure you can change their “Pickup location” setting from “Yes” to “No.”  This will remove the closed library from the list of pickup location options.</p>
+
+<p><img src="/koha_notes/images/closing_a_library_0040.png" alt="Pickup location = No" class="img-responsive" /></p>
+
+<h3 id="step-3-option-b---preventing-new-requests-from-being-placed-for-pickup-at-the-closed-library">Step 3: option B - Preventing new requests from being placed for pickup at the closed library</h3>
+
+<ul>
+  <li>
+    <p>This step is accomplished at Home &gt; Administration &gt; System preferences &gt; IntranetUserJS (preferences.pl)</p>
+
+    <p><em>AND</em></p>
+  </li>
+  <li>
+    <p>This step is accomplished at Home &gt; Administration &gt; System preferences &gt; OPACUserJS (preferences.pl)</p>
+  </li>
+</ul>
+
+<p>I don’t use Step 3: option A.  If a borrower has the closed library set as their home library, when you change a library from “Pickup location: Yes” to “Pickup location: No” it will default that borrower’s pickup location to whichever library is alphabetically at the top of the pickup locations list.  In our case this means that if a borrower whose home library is “Sabetha Middle School” places a request while “Sabetha Middle School” is closed for the summer and that borrower isn’t paying attention, their request will be shipped to Atchison Public Library (which is about 45 miles east of Sabetha).  Then I have the Atchison Public Library director calling me asking “Why are these things coming to my library?  This (teacher/student/staff member) doesn’t even live here.  What’s going on?”</p>
+
+<p>Instead of using the “Pickup location: (Yes/No)” feature on branches.pl, I use custom jQuery so that if a closed location is selected when the library is closed, Koha will automatically re-route the item to a nearby library that is open.</p>
+
+<ul>
+  <li>IntranetUserJS</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#pickup option[value='CLOSED_BRANCHCODE']</span><span class="dl">"</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">"</span><span class="s2">value</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">ALTERNATE_BRANCHCODE</span><span class="dl">"</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="dl">'</span><span class="s1">CLOSED_BRANCHNAME is closed for the summer - requested items will route to ALTERNATE_BRANCHNAME</span><span class="dl">'</span><span class="p">);</span> 
+
+</code></pre></div></div>
+
+<ul>
+  <li>OPACUserJS</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">option[value='CLOSED_BRANCHCODE']</span><span class="dl">"</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">"</span><span class="s2">value</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">ALTERNATE_BRANCHCODE</span><span class="dl">"</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="dl">'</span><span class="s1">CLOSED_BRANCHNAME is closed for the summer - requested items will route to ALTERNATE_BRANCHNAME</span><span class="dl">'</span><span class="p">);</span> 
+
+</code></pre></div></div>
+<h3 id="step-3-option-c---automatically-place-new-requests-for-future-fulfillment">Step 3: option C - Automatically place new requests for future fulfillment</h3>
+
+<p>The third option to prevent new requests from being placed for pickup at the closed library is to automatically set the “Hold starts on” date to a date a day or two before the library is scheduled to re-open.  There is a video on this jQuery at https://youtu.be/GKrHrtLM5PM</p>
+
+<p>Essentially, if a library staff member tries to select a closed library as a pick-up location while that library is closed, this code forces the “Hold starts on date” to the date you set in the code.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="c1">//BEGIN Set "Hold starts on date" to a specific future date for a branch - makes past dates unavailable as hold starts on dates </span>
+ 
+  <span class="c1">//Set #reserve_date variable by inserting future date here </span>
+    <span class="kd">var</span> <span class="nx">reserve_date</span> <span class="o">=</span> <span class="p">(</span><span class="dl">"</span><span class="s2">mm/dd/yyyy</span><span class="dl">"</span><span class="p">);</span> 
+  <span class="c1">//Set closed_branch_code variable by inserting branchcode here </span>
+    <span class="kd">var</span> <span class="nx">closed_branchcode</span> <span class="o">=</span> <span class="p">(</span><span class="dl">"</span><span class="s2">BRANCHCODE</span><span class="dl">"</span><span class="p">);</span> 
+  <span class="c1">//Set closed branch name value </span>
+    <span class="kd">var</span> <span class="nx">closed_branch_name</span> <span class="o">=</span>  <span class="p">(</span><span class="dl">"</span><span class="s2">Branch name</span><span class="dl">"</span><span class="p">);</span> 
+  <span class="c1">//Set today's date as a variable </span>
+    <span class="kd">var</span> <span class="nx">tsnow</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">now</span><span class="p">());</span> 
+    <span class="kd">var</span> <span class="nx">tsday</span> <span class="o">=</span> <span class="p">(</span><span class="dl">"</span><span class="s2">0</span><span class="dl">"</span> <span class="o">+</span> <span class="nx">tsnow</span><span class="p">.</span><span class="nx">getDate</span><span class="p">()).</span><span class="nx">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">);</span> 
+    <span class="kd">var</span> <span class="nx">tsmonth</span> <span class="o">=</span> <span class="p">(</span><span class="dl">"</span><span class="s2">0</span><span class="dl">"</span> <span class="o">+</span> <span class="p">(</span><span class="nx">tsnow</span><span class="p">.</span><span class="nx">getMonth</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)).</span><span class="nx">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">);</span> 
+    <span class="kd">var</span> <span class="nx">tsyear</span> <span class="o">=</span> <span class="p">(</span><span class="dl">"</span><span class="s2">0</span><span class="dl">"</span> <span class="o">+</span> <span class="p">(</span><span class="nx">tsnow</span><span class="p">.</span><span class="nx">getFullYear</span><span class="p">())).</span><span class="nx">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">);</span> 
+    <span class="kd">var</span> <span class="nx">date_now</span> <span class="o">=</span> <span class="p">(</span><span class="nx">tsmonth</span><span class="p">)</span> <span class="o">+</span> <span class="dl">"</span><span class="s2">/</span><span class="dl">"</span> <span class="o">+</span> <span class="p">(</span><span class="nx">tsday</span><span class="p">)</span> <span class="o">+</span> <span class="dl">"</span><span class="s2">/</span><span class="dl">"</span> <span class="o">+</span> <span class="p">(</span><span class="nx">tsyear</span><span class="p">);</span> 
+  <span class="c1">//Set variable to get pre-selected branchcode from select2 element </span>
+    <span class="kd">var</span> <span class="nx">win_request</span><span class="o">=</span><span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#circ_request #pickup option[selected="selected"]</span><span class="dl">'</span><span class="p">).</span><span class="nx">val</span><span class="p">();</span> 
+ 
+  <span class="c1">//Staff logged in at closed library </span>
+    <span class="c1">//If variable matches closed library, set default "Hold starts on" date to the day before reopening, hide that date, and make it required </span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">win_request</span> <span class="o">==</span> <span class="nx">closed_branchcode</span><span class="p">)</span> <span class="p">{</span> 
+        <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#reserve_date</span><span class="dl">'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">reserve_date</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">required</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">true</span><span class="dl">'</span><span class="p">).</span><span class="nx">parents</span><span class="p">(</span><span class="dl">'</span><span class="s1">li</span><span class="dl">'</span><span class="p">).</span><span class="nx">hide</span><span class="p">();</span>  <span class="c1">//inserts date, sets field to required, and hides input </span>
+      <span class="p">}</span> 
+  <span class="c1">//Staff logged in at an open library </span>
+    <span class="c1">//If someone changes the pickup dropdown to closed library, change the "Hold starts on" date to the set date, make it required, and set the flatpickr to use reserve_date as the minimum date allowed </span>
+    <span class="c1">//But reset everything when the pickup library is changed back to an open library </span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#circ_request #pickup</span><span class="dl">'</span><span class="p">).</span><span class="nx">parent</span><span class="p">().</span><span class="nx">change</span><span class="p">(</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> 
+        <span class="kd">var</span> <span class="nx">branch_name</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#select2-pickup-container</span><span class="dl">'</span><span class="p">).</span><span class="nx">text</span><span class="p">();</span> 
+        <span class="k">if</span> <span class="p">(</span><span class="nx">branch_name</span> <span class="o">==</span> <span class="nx">closed_branch_name</span><span class="p">)</span> <span class="p">{</span> 
+          <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#reserve_date</span><span class="dl">'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">reserve_date</span><span class="p">);</span> 
+          <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#reserve_date</span><span class="dl">'</span><span class="p">).</span><span class="nx">flatpickr</span><span class="p">({</span><span class="na">minDate</span><span class="p">:</span> <span class="nx">reserve_date</span><span class="p">});</span> <span class="c1">//sets the minimum date for the datepicker for reopening </span>
+          <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#reserve_date</span><span class="dl">'</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">required</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">true</span><span class="dl">'</span><span class="p">);</span> <span class="c1">//makes input required </span>
+          <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#reserve_date</span><span class="dl">'</span><span class="p">).</span><span class="nx">siblings</span><span class="p">().</span><span class="nx">hide</span><span class="p">();</span> <span class="c1">//hides extra "X" clear date icons created by messing with the flatpickr plugin </span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> 
+        <span class="c1">//Clears all settings if different library is chosen </span>
+          <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#reserve_date</span><span class="dl">'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="dl">''</span><span class="p">);</span> 
+          <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#reserve_date</span><span class="dl">'</span><span class="p">).</span><span class="nx">removeAttr</span><span class="p">(</span><span class="dl">'</span><span class="s1">required</span><span class="dl">'</span><span class="p">);</span> 
+          <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#reserve_date</span><span class="dl">'</span><span class="p">).</span><span class="nx">show</span><span class="p">().</span><span class="nx">parents</span><span class="p">().</span><span class="nx">show</span><span class="p">();</span> 
+          <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#reserve_date</span><span class="dl">'</span><span class="p">).</span><span class="nx">flatpickr</span><span class="p">({</span><span class="na">minDate</span><span class="p">:</span> <span class="nx">date_now</span><span class="p">});</span>  <span class="c1">//Sets minimum date back to today's date </span>
+          <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#reserve_date</span><span class="dl">'</span><span class="p">).</span><span class="nx">siblings</span><span class="p">().</span><span class="nx">hide</span><span class="p">();</span> <span class="c1">//hides extra "X" clear date icons created by messing with the flatpickr plugin </span>
+        <span class="p">}</span> 
+ 
+      <span class="p">});</span>
+
+</code></pre></div></div>
+
+<h3 id="step-4-part-i---re-route-items-in-transit-to-a-different-location">Step 4: part I - Re-route items in transit to a different location</h3>
+
+<ul>
+  <li>This step is accomplished at Home &gt; Administration &gt; System preferences &gt; IntranetUserJS (preferences.pl)</li>
+</ul>
+
+<p>We have a statewide courier system that moves materials between libraries.  Each library has a courier code that we store in the library record in Koha in the “Country” field.  If a library is closed for a long period of time, items that are owned by the closed library that were checked out at other locations may end up in courier limbo.  If, for example, the Winchester Community Library is closed for remodelling after a broken pipe and an item owned by Winchester is shipped from Bonner Springs Public Library to Winchester during that closure, the couriers will just let those Winchester items stack up at the warehouse that services Winchester Community Library.  This is one of the easiest ways for items in transit to end up on the “Missing in transit” list.  When items sit in a courier warehouse for more than a few days, they are more likely to disappear, so I like to have them shipped to our office to wait until the closed library reopens.  The Winchester closure we had this year is a great example of the potential pitfalls of letting things sit in the warehouse.  They are serviced by our system’s courier hub in Topeka and during the Winchester library closure, the warehouse where our Topeka courier hub is burnt to the ground.  Fortunately, about 98% of the items that were en route from other member libraries to Winchester had been re-routed to our offices at NEKLS, so only a few things owned by Winchester were lost in the fire, but this is one example of why I don’t like having library items sitting around the courier warehouse for extended periods of time.</p>
+
+<p>So, part of my solution to this is to change the on-screen message that appears in the modal when an item is being transfered using jQuery.  What this jQuery is doing is swapping the name of the closed library with the name of the library where I want the items to route to.  It is essential that the CLOSED_LIBRARY_BRANCHNAME matches the closed library’s name in the library record exactly in order for this to work properly.</p>
+
+<ul>
+  <li>IntranetUserJS</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#wrongtransferform, #item-transfer-modal</span><span class="dl">'</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span> 
+      <span class="kd">var</span> <span class="nx">html</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">html</span><span class="p">();</span> 
+      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">html</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="dl">'</span><span class="s1">CLOSED_LIBRARY_BRANCHNAME</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">DESTINATIO_LIBRARY_BRANCHNAME</span><span class="dl">'</span><span class="p">));</span> 
+    <span class="p">});</span> 
+
+</code></pre></div></div>
+
+<p>### Step 4: part II - Re-route items in transit to a different location</p>
+
+<p>The second part of this process involves libraries with receipt printers.  I addition to changing the destination on the screen, I also need to have it change in the notices and slips modlue on TRANSFERSLIP and HOLD_SLIP.</p>
+
+<p>How you deal with this situation is going to depend on whether you’re still using the bespoke Koha double angle bracket syntax for your notices and slips or if you’re using Template Toolkit.</p>
+
+<p>We use Template toolkit so I need to re-write the TRANSFERSLIP and HOLD_SLIP destination library information to:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+  [% IF branch.branchname == "CLOSED_LIBRARY_BRANCHNAME" %]
+
+  <span class="c">&lt;!-- Shipped to information --&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">classs=</span><span class="s">"grp-4"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>
+      DESTINATION_LIBRARY_COURIER_CODE
+    <span class="nt">&lt;/h1&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+
+  <span class="nt">&lt;p&gt;</span><span class="ni">&amp;nbsp;</span><span class="nt">&lt;/p&gt;</span>
+
+  <span class="nt">&lt;div</span> <span class="na">classs=</span><span class="s">"grp-2"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;p&gt;</span>Ship to:<span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;p</span> <span class="na">classs=</span><span class="s">"grp-1"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;strong&gt;</span>
+        DESTINATION_LIBRARY_BRANCHNAME<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+        DESTINATION_LIBRARY_ADDRESS<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+        DESTINATION_LIBRARY_CITY_STATE_AND_ZIPCODE
+      <span class="nt">&lt;/strong&gt;</span>
+    <span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+
+  [% ELSE %]
+
+  <span class="c">&lt;!-- Shipped to information --&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">classs=</span><span class="s">"grp-4"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>
+      [% branch.branchnotes %]
+    <span class="nt">&lt;/h1&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+
+  <span class="nt">&lt;p&gt;</span><span class="ni">&amp;nbsp;</span><span class="nt">&lt;/p&gt;</span>
+
+  <span class="nt">&lt;div</span> <span class="na">classs=</span><span class="s">"grp-2"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;p&gt;</span>Ship to:<span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;p</span> <span class="na">classs=</span><span class="s">"grp-1"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;strong&gt;</span>
+        [% branch.branchname %]<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+        [% branch.branchaddress1 %]<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+        [% branch.branchcity %], [% branch.branchstate %] [% branch.branchzip %]
+      <span class="nt">&lt;/strong&gt;</span>
+    <span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+
+  [% END %]
+
+</code></pre></div></div>
+
+<h3 id="step-5-suspend-or-change-fulfillment-date-on-any-unfilled-requests">Step 5: suspend or change fulfillment date on any unfilled requests</h3>
+
+<p>In many cases there may be requests that have been placed for pickup at the closed library that have not been filled yet.  In order to prevent those from being filled while the library is closed, I run a report that tells me if there are any current requests for pickup at that library that have not yet been filled.  Once I identify the unfilled requests I set the “Hold starts on” date to the day before the library is scheduled to reopen.  This way items wont’ be shipped to the closed library before they reopen and end up being destroyed in a warehouse fire.</p>
+
+<p>The SQL for this report is:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">SELECT</span>
+  <span class="n">Concat</span><span class="p">(</span>
+    <span class="s1">'&lt;a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber='</span><span class="p">,</span> 
+    <span class="n">reserves</span><span class="p">.</span><span class="n">borrowernumber</span><span class="p">,</span> 
+    <span class="s1">'#reserves" target="_blank"&gt;Open in new window&lt;/a&gt;'</span>
+  <span class="p">)</span> <span class="k">AS</span> <span class="n">REQUEST</span><span class="p">,</span>
+  <span class="n">Concat</span><span class="p">(</span>
+    <span class="s1">'https://staff.nextkansas.org/cgi-bin/koha/circ/circulation.pl?borrowernumber='</span><span class="p">,</span> 
+    <span class="n">reserves</span><span class="p">.</span><span class="n">borrowernumber</span><span class="p">,</span> 
+    <span class="s1">'#reserves'</span>
+  <span class="p">)</span> <span class="k">AS</span> <span class="n">BORROWER</span><span class="p">,</span>
+  <span class="n">reserves</span><span class="p">.</span><span class="n">branchcode</span><span class="p">,</span>
+  <span class="k">Count</span><span class="p">(</span><span class="n">reserves</span><span class="p">.</span><span class="n">reserve_id</span><span class="p">)</span> <span class="k">AS</span> <span class="n">Count_reserve_id</span>
+<span class="k">FROM</span>
+  <span class="n">reserves</span>
+<span class="k">WHERE</span>
+  <span class="n">reserves</span><span class="p">.</span><span class="n">branchcode</span> <span class="k">LIKE</span> <span class="o">&lt;&lt;</span><span class="n">Choose</span> <span class="n">your</span> <span class="n">library</span><span class="o">|</span><span class="n">branches</span><span class="o">&gt;</span> <span class="k">AND</span>
+  <span class="n">reserves</span><span class="p">.</span><span class="k">found</span> <span class="k">IS</span> <span class="k">NULL</span> <span class="k">AND</span>
+  <span class="n">reserves</span><span class="p">.</span><span class="n">suspend</span> <span class="o">=</span> <span class="nv">""</span> <span class="k">AND</span> 
+  <span class="n">reserves</span><span class="p">.</span><span class="n">reservedate</span> <span class="o">&lt;=</span> <span class="o">&lt;&lt;</span><span class="k">Hold</span> <span class="n">starts</span> <span class="k">before</span><span class="o">|</span><span class="nb">date</span><span class="o">&gt;&gt;</span>
+<span class="k">GROUP</span> <span class="k">BY</span>
+  <span class="n">reserves</span><span class="p">.</span><span class="n">borrowernumber</span><span class="p">,</span>
+  <span class="n">reserves</span><span class="p">.</span><span class="n">branchcode</span><span class="p">,</span>
+  <span class="n">reserves</span><span class="p">.</span><span class="k">found</span><span class="p">,</span>
+  <span class="n">reserves</span><span class="p">.</span><span class="n">suspend</span>
+<span class="k">ORDER</span> <span class="k">BY</span>
+  <span class="n">reserves</span><span class="p">.</span><span class="n">branchcode</span><span class="p">,</span>
+  <span class="n">reserves</span><span class="p">.</span><span class="n">borrowernumber</span>
+
+</code></pre></div></div>
+
+
+      </section>
+
+    </div>
+
+    
+  </body>
+</html>

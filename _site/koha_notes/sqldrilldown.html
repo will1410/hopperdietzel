@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>SQL drill downs in Koha reports | Untitled self-indulgent website</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="SQL drill downs in Koha reports" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Website for George H. Williams" />
+<meta property="og:description" content="Website for George H. Williams" />
+<link rel="canonical" href="http://localhost:4000/koha_notes/sqldrilldown.html" />
+<meta property="og:url" content="http://localhost:4000/koha_notes/sqldrilldown.html" />
+<meta property="og:site_name" content="Untitled self-indulgent website" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="SQL drill downs in Koha reports" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Website for George H. Williams","headline":"SQL drill downs in Koha reports","url":"http://localhost:4000/koha_notes/sqldrilldown.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="/assets/js/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="/assets/css/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <!--<li class="fork"><a href="">View On GitHub</a></li>-->
+          
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Untitled self-indulgent website</h1>
+          <p>Website for George H. Williams</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href=""></a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/mattgraham">mattgraham</a></span>
+        </div>
+
+        <h2 id="sql-drill-downs-in-koha-reports">SQL drill downs in Koha reports</h2>
+
+<p>Essentially, an SQL drill down is using Koha’s reports module to create one report that contains a link that runs a different Koha report.  This is an expansion of something we talked about briefly in the <a href="https://koha-us.org/learn/video-playlists/" target="_blank">Terrific Every Other Thursday videos by koha-US</a> Season 1, episode 5 and episode 12.</p>
+
+<p>So here are two reports that I have in my system and a method for linking them together.</p>
+
+<h3 id="sample-1---item-count-by-library-and-item-type">Sample 1 - item count by library and item type</h3>
+
+<p>Here’s an example of a report I created years ago that does a simple item count by library and/or item type.</p>
+
+<p>Please note that this report was written for Next Search Catalog where we use the “Shelving location” to denote “Adult,” “Childrens,” or “Young adult” items.  You could omit the columns for those locations or modify them to break down shelving locations differently than we do if you wanted to use this report on your system.</p>
+
+<p>This report counts items at a library or with an item type you specify.</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">SELECT</span>
+  <span class="n">branchtypes</span><span class="p">.</span><span class="n">branchname</span><span class="p">,</span>
+  <span class="n">branchtypes</span><span class="p">.</span><span class="n">description</span> <span class="k">AS</span> <span class="nv">"ITEM TYPE"</span><span class="p">,</span>
+  <span class="n">itemss</span><span class="p">.</span><span class="n">Count_itemnumber</span> <span class="k">AS</span> <span class="nv">"TOTAL ITEMS"</span><span class="p">,</span>
+  <span class="n">adultitems</span><span class="p">.</span><span class="n">Count_itemnumber</span> <span class="k">AS</span> <span class="nv">"ADULT ITEMS"</span><span class="p">,</span>
+  <span class="n">juvenileitems</span><span class="p">.</span><span class="n">Count_itemnumber</span> <span class="k">AS</span> <span class="nv">"JUVENILE ITEMS"</span><span class="p">,</span>
+  <span class="n">yaitems</span><span class="p">.</span><span class="n">Count_itemnumber</span> <span class="k">AS</span> <span class="nv">"YOUNG ADULT ITEMS"</span>
+<span class="k">FROM</span>
+  <span class="p">(</span><span class="k">SELECT</span>
+      <span class="n">branches</span><span class="p">.</span><span class="n">branchcode</span><span class="p">,</span>
+      <span class="n">branches</span><span class="p">.</span><span class="n">branchname</span><span class="p">,</span>
+      <span class="n">itemtypes</span><span class="p">.</span><span class="n">itemtype</span><span class="p">,</span>
+      <span class="n">itemtypes</span><span class="p">.</span><span class="n">description</span>
+    <span class="k">FROM</span>
+      <span class="n">itemtypes</span><span class="p">,</span>
+      <span class="n">branches</span><span class="p">)</span> <span class="n">branchtypes</span> <span class="k">LEFT</span> <span class="k">JOIN</span>
+  <span class="p">(</span><span class="k">SELECT</span>
+      <span class="n">items</span><span class="p">.</span><span class="n">homebranch</span><span class="p">,</span>
+      <span class="n">If</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">itype</span> <span class="k">IS</span> <span class="k">NULL</span><span class="p">,</span> <span class="nv">"XXX"</span><span class="p">,</span> <span class="n">items</span><span class="p">.</span><span class="n">itype</span><span class="p">)</span> <span class="k">AS</span> <span class="n">itype</span><span class="p">,</span>
+      <span class="k">Count</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">itemnumber</span><span class="p">)</span> <span class="k">AS</span> <span class="n">Count_itemnumber</span>
+    <span class="k">FROM</span>
+      <span class="n">items</span>
+    <span class="k">GROUP</span> <span class="k">BY</span>
+      <span class="n">items</span><span class="p">.</span><span class="n">homebranch</span><span class="p">,</span>
+      <span class="n">If</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">itype</span> <span class="k">IS</span> <span class="k">NULL</span><span class="p">,</span> <span class="nv">"XXX"</span><span class="p">,</span> <span class="n">items</span><span class="p">.</span><span class="n">itype</span><span class="p">))</span> <span class="n">itemss</span> <span class="k">ON</span> <span class="n">itemss</span><span class="p">.</span><span class="n">homebranch</span> <span class="o">=</span>
+      <span class="n">branchtypes</span><span class="p">.</span><span class="n">branchcode</span> <span class="k">AND</span>
+      <span class="n">itemss</span><span class="p">.</span><span class="n">itype</span> <span class="o">=</span> <span class="n">branchtypes</span><span class="p">.</span><span class="n">itemtype</span> <span class="k">LEFT</span> <span class="k">JOIN</span>
+  <span class="p">(</span><span class="k">SELECT</span>
+      <span class="n">items</span><span class="p">.</span><span class="n">homebranch</span><span class="p">,</span>
+      <span class="n">If</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">itype</span> <span class="k">IS</span> <span class="k">NULL</span><span class="p">,</span> <span class="nv">"XXX"</span><span class="p">,</span> <span class="n">items</span><span class="p">.</span><span class="n">itype</span><span class="p">)</span> <span class="k">AS</span> <span class="n">itype</span><span class="p">,</span>
+      <span class="k">Count</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">itemnumber</span><span class="p">)</span> <span class="k">AS</span> <span class="n">Count_itemnumber</span>
+    <span class="k">FROM</span>
+      <span class="n">items</span>
+    <span class="k">WHERE</span>
+      <span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">permanent_location</span> <span class="k">LIKE</span> <span class="s1">'%ADULT%'</span> <span class="k">OR</span>
+        <span class="n">items</span><span class="p">.</span><span class="n">permanent_location</span> <span class="o">=</span> <span class="s1">'CART'</span> <span class="k">OR</span>
+        <span class="n">items</span><span class="p">.</span><span class="n">permanent_location</span> <span class="o">=</span> <span class="s1">'CATALOGING'</span> <span class="k">OR</span>
+        <span class="n">items</span><span class="p">.</span><span class="n">permanent_location</span> <span class="o">=</span> <span class="s1">'PROC'</span> <span class="k">OR</span>
+        <span class="n">items</span><span class="p">.</span><span class="n">permanent_location</span> <span class="k">IS</span> <span class="k">NULL</span><span class="p">)</span>
+    <span class="k">GROUP</span> <span class="k">BY</span>
+      <span class="n">items</span><span class="p">.</span><span class="n">homebranch</span><span class="p">,</span>
+      <span class="n">If</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">itype</span> <span class="k">IS</span> <span class="k">NULL</span><span class="p">,</span> <span class="nv">"XXX"</span><span class="p">,</span> <span class="n">items</span><span class="p">.</span><span class="n">itype</span><span class="p">))</span> <span class="n">adultitems</span> <span class="k">ON</span>
+      <span class="n">adultitems</span><span class="p">.</span><span class="n">homebranch</span> <span class="o">=</span> <span class="n">branchtypes</span><span class="p">.</span><span class="n">branchcode</span> <span class="k">AND</span>
+      <span class="n">adultitems</span><span class="p">.</span><span class="n">itype</span> <span class="o">=</span> <span class="n">branchtypes</span><span class="p">.</span><span class="n">itemtype</span> <span class="k">LEFT</span> <span class="k">JOIN</span>
+  <span class="p">(</span><span class="k">SELECT</span>
+      <span class="n">items</span><span class="p">.</span><span class="n">homebranch</span><span class="p">,</span>
+      <span class="n">If</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">itype</span> <span class="k">IS</span> <span class="k">NULL</span><span class="p">,</span> <span class="nv">"XXX"</span><span class="p">,</span> <span class="n">items</span><span class="p">.</span><span class="n">itype</span><span class="p">)</span> <span class="k">AS</span> <span class="n">itype</span><span class="p">,</span>
+      <span class="k">Count</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">itemnumber</span><span class="p">)</span> <span class="k">AS</span> <span class="n">Count_itemnumber</span>
+    <span class="k">FROM</span>
+      <span class="n">items</span>
+    <span class="k">WHERE</span>
+      <span class="n">items</span><span class="p">.</span><span class="n">permanent_location</span> <span class="k">LIKE</span> <span class="nv">"%CHILD%"</span>
+    <span class="k">GROUP</span> <span class="k">BY</span>
+      <span class="n">items</span><span class="p">.</span><span class="n">homebranch</span><span class="p">,</span>
+      <span class="n">If</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">itype</span> <span class="k">IS</span> <span class="k">NULL</span><span class="p">,</span> <span class="nv">"XXX"</span><span class="p">,</span> <span class="n">items</span><span class="p">.</span><span class="n">itype</span><span class="p">))</span> <span class="n">juvenileitems</span> <span class="k">ON</span>
+      <span class="n">juvenileitems</span><span class="p">.</span><span class="n">homebranch</span> <span class="o">=</span> <span class="n">branchtypes</span><span class="p">.</span><span class="n">branchcode</span> <span class="k">AND</span>
+      <span class="n">juvenileitems</span><span class="p">.</span><span class="n">itype</span> <span class="o">=</span> <span class="n">branchtypes</span><span class="p">.</span><span class="n">itemtype</span> <span class="k">LEFT</span> <span class="k">JOIN</span>
+  <span class="p">(</span><span class="k">SELECT</span>
+      <span class="n">items</span><span class="p">.</span><span class="n">homebranch</span><span class="p">,</span>
+      <span class="n">If</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">itype</span> <span class="k">IS</span> <span class="k">NULL</span><span class="p">,</span> <span class="nv">"XXX"</span><span class="p">,</span> <span class="n">items</span><span class="p">.</span><span class="n">itype</span><span class="p">)</span> <span class="k">AS</span> <span class="n">itype</span><span class="p">,</span>
+      <span class="k">Count</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">itemnumber</span><span class="p">)</span> <span class="k">AS</span> <span class="n">Count_itemnumber</span>
+    <span class="k">FROM</span>
+      <span class="n">items</span>
+    <span class="k">WHERE</span>
+      <span class="n">items</span><span class="p">.</span><span class="n">permanent_location</span> <span class="k">LIKE</span> <span class="nv">"%YA%"</span>
+    <span class="k">GROUP</span> <span class="k">BY</span>
+      <span class="n">items</span><span class="p">.</span><span class="n">homebranch</span><span class="p">,</span>
+      <span class="n">If</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">itype</span> <span class="k">IS</span> <span class="k">NULL</span><span class="p">,</span> <span class="nv">"XXX"</span><span class="p">,</span> <span class="n">items</span><span class="p">.</span><span class="n">itype</span><span class="p">))</span> <span class="n">yaitems</span> <span class="k">ON</span>
+      <span class="n">yaitems</span><span class="p">.</span><span class="n">homebranch</span> <span class="o">=</span> <span class="n">branchtypes</span><span class="p">.</span><span class="n">branchcode</span> <span class="k">AND</span>
+      <span class="n">yaitems</span><span class="p">.</span><span class="n">itype</span> <span class="o">=</span> <span class="n">branchtypes</span><span class="p">.</span><span class="n">itemtype</span>
+<span class="k">WHERE</span>
+  <span class="n">branchtypes</span><span class="p">.</span><span class="n">branchcode</span> <span class="k">LIKE</span> <span class="o">&lt;&lt;</span><span class="n">Choose</span> <span class="n">your</span> <span class="n">library</span> <span class="k">and</span> <span class="n">leave</span> <span class="n">item</span> <span class="k">type</span> <span class="k">as</span> <span class="nv">"All"</span><span class="o">|</span><span class="n">branches</span><span class="p">:</span><span class="k">all</span><span class="o">&gt;&gt;</span> <span class="k">AND</span>
+  <span class="n">branchtypes</span><span class="p">.</span><span class="n">itemtype</span> <span class="k">LIKE</span> <span class="o">&lt;&lt;</span><span class="k">Or</span> <span class="n">leave</span> <span class="n">library</span> <span class="k">as</span> <span class="nv">"All"</span> <span class="k">and</span> <span class="n">choose</span> <span class="n">an</span> <span class="n">item</span> <span class="k">type</span><span class="o">|</span><span class="n">itemtypes</span><span class="p">:</span><span class="k">all</span><span class="o">&gt;&gt;</span>
+<span class="k">GROUP</span> <span class="k">BY</span>
+  <span class="n">branchtypes</span><span class="p">.</span><span class="n">branchname</span><span class="p">,</span>
+  <span class="n">branchtypes</span><span class="p">.</span><span class="n">description</span>
+<span class="k">ORDER</span> <span class="k">BY</span>
+  <span class="n">branchtypes</span><span class="p">.</span><span class="n">branchname</span><span class="p">,</span>
+  <span class="n">branchtypes</span><span class="p">.</span><span class="n">description</span>
+<span class="k">LIMIT</span> <span class="mi">500</span>
+
+</code></pre></div></div>
+
+<h3 id="sample-2---shelflist-report">Sample 2 - Shelflist report</h3>
+
+<p>If you’ve watched the <a href="https://koha-us.org/learn/video-playlists/" target="_blank">Terrific Every Other Thursday videos by koha-US</a> then you may remember Season 1, episode 24, where I spoke about using alternative authorized values in reports (and in bibliogrpahic frameworks).  One of the reports that I highlighted briefly in that video is my “Flexible shelflist report.”</p>
+
+<p>Flexible Shelflist is a report that creates a shelf list for all of the items at a library and it’s got tons of non-standard runtime parameters based on custom authorized values I’ve created in Next Search catalog. If you wanted to use this report on your system, you would need to modify the runtime parameters to match your own runtime parameters.</p>
+
+<p>You can see all of the Next Search Catalog custom authorized values at <a href="https://github.com/northeast-kansas-library-system/nextkansas.sql" target="_blank">our Github site</a> in the file titled “authorised_values.csv”</p>
+
+<p>Here is that report as it appears on my system:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">SELECT</span>
+  <span class="n">Concat</span><span class="p">(</span>
+    <span class="s1">'&lt;a class="btn btn-default" href=</span><span class="se">\"</span><span class="s1">/cgi-bin/koha/catalogue/detail.pl?biblionumber='</span><span class="p">,</span>
+    <span class="n">items</span><span class="p">.</span><span class="n">biblionumber</span><span class="p">,</span>
+    <span class="s1">'</span><span class="se">\"</span><span class="s1"> target="_blank"&gt;Go to title&lt;/a&gt;'</span>
+  <span class="p">)</span> <span class="k">AS</span> <span class="n">LINK_TO_TITLE</span><span class="p">,</span>
+  <span class="n">biblio</span><span class="p">.</span><span class="n">biblionumber</span> <span class="k">AS</span> <span class="n">BIBLIO_NUMBER</span><span class="p">,</span>
+  <span class="n">items</span><span class="p">.</span><span class="n">itemnumber</span> <span class="k">AS</span> <span class="n">ITEM_NUMBER</span><span class="p">,</span>
+  <span class="n">Concat</span><span class="p">(</span><span class="s1">'-'</span><span class="p">,</span> <span class="n">items</span><span class="p">.</span><span class="n">barcode</span><span class="p">,</span> <span class="s1">'-'</span><span class="p">)</span> <span class="k">AS</span> <span class="n">BARCODE</span><span class="p">,</span>
+  <span class="n">items</span><span class="p">.</span><span class="n">homebranch</span><span class="p">,</span>
+  <span class="n">items</span><span class="p">.</span><span class="n">holdingbranch</span><span class="p">,</span>
+  <span class="n">perm_locs</span><span class="p">.</span><span class="n">lib</span> <span class="k">AS</span> <span class="n">PERMANENT_LOCATION</span><span class="p">,</span>
+  <span class="n">current_locs</span><span class="p">.</span><span class="n">lib</span> <span class="k">AS</span> <span class="k">LOCATION</span><span class="p">,</span>
+  <span class="n">itemtypes</span><span class="p">.</span><span class="n">description</span> <span class="k">AS</span> <span class="n">ITYPE</span><span class="p">,</span>
+  <span class="n">ccodes</span><span class="p">.</span><span class="n">lib</span> <span class="k">AS</span> <span class="n">CCODE</span><span class="p">,</span>
+  <span class="n">items</span><span class="p">.</span><span class="n">itemcallnumber</span><span class="p">,</span>
+  <span class="n">biblio</span><span class="p">.</span><span class="n">author</span><span class="p">,</span>
+  <span class="n">Concat_Ws</span><span class="p">(</span><span class="nv">" "</span><span class="p">,</span>
+    <span class="n">biblio</span><span class="p">.</span><span class="n">title</span><span class="p">,</span>
+    <span class="n">ExtractValue</span><span class="p">(</span><span class="n">biblio_metadata</span><span class="p">.</span><span class="n">metadata</span><span class="p">,</span> <span class="s1">'//datafield[@tag="245"]/subfield[@code="h"]'</span><span class="p">),</span>  
+    <span class="n">ExtractValue</span><span class="p">(</span><span class="n">biblio_metadata</span><span class="p">.</span><span class="n">metadata</span><span class="p">,</span> <span class="s1">'//datafield[@tag="245"]/subfield[@code="b"]'</span><span class="p">),</span>  
+    <span class="n">ExtractValue</span><span class="p">(</span><span class="n">biblio_metadata</span><span class="p">.</span><span class="n">metadata</span><span class="p">,</span> <span class="s1">'//datafield[@tag="245"]/subfield[@code="p"]'</span><span class="p">),</span>  
+    <span class="n">ExtractValue</span><span class="p">(</span><span class="n">biblio_metadata</span><span class="p">.</span><span class="n">metadata</span><span class="p">,</span> <span class="s1">'//datafield[@tag="245"]/subfield[@code="n"]'</span><span class="p">)</span>
+  <span class="p">)</span> <span class="k">AS</span> <span class="n">FULL_TITLE</span><span class="p">,</span>
+  <span class="n">biblioitems</span><span class="p">.</span><span class="n">publicationyear</span><span class="p">,</span>
+  <span class="n">biblioitems</span><span class="p">.</span><span class="n">isbn</span><span class="p">,</span>
+  <span class="n">ExtractValue</span><span class="p">(</span><span class="n">biblio_metadata</span><span class="p">.</span><span class="n">metadata</span><span class="p">,</span> <span class="s1">'//datafield[@tag="022"]/subfield[@code="a"]'</span><span class="p">)</span> <span class="k">AS</span> <span class="n">ISSN</span><span class="p">,</span>
+  <span class="n">ExtractValue</span><span class="p">(</span><span class="n">biblio_metadata</span><span class="p">.</span><span class="n">metadata</span><span class="p">,</span> <span class="s1">'//datafield[@tag="024"]/subfield[@code="a"]'</span><span class="p">)</span> <span class="k">AS</span> <span class="n">UPC</span><span class="p">,</span>
+  <span class="n">items</span><span class="p">.</span><span class="n">dateaccessioned</span><span class="p">,</span>
+  <span class="n">items</span><span class="p">.</span><span class="n">datelastborrowed</span><span class="p">,</span>
+  <span class="n">items</span><span class="p">.</span><span class="n">datelastseen</span><span class="p">,</span>
+  <span class="n">items</span><span class="p">.</span><span class="n">issues</span><span class="p">,</span>
+  <span class="n">items</span><span class="p">.</span><span class="n">renewals</span><span class="p">,</span>
+  <span class="k">Sum</span><span class="p">((</span><span class="n">Coalesce</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">issues</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">+</span> <span class="p">(</span><span class="n">Coalesce</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">renewals</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span> <span class="k">AS</span>
+  <span class="n">CHECKOUTS_PLUS_RENEWALS</span><span class="p">,</span>
+  <span class="n">If</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">onloan</span> <span class="k">IS</span> <span class="k">NULL</span><span class="p">,</span> <span class="s1">'No'</span><span class="p">,</span> <span class="s1">'Yes'</span><span class="p">)</span> <span class="k">AS</span> <span class="n">CHECKED_OUT_NOW</span><span class="p">,</span>
+  <span class="n">not_loans</span><span class="p">.</span><span class="n">lib</span> <span class="k">AS</span> <span class="n">NOT_FOR_LOAN</span><span class="p">,</span>
+  <span class="n">If</span><span class="p">(</span><span class="k">Sum</span><span class="p">(</span><span class="n">Coalesce</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">damaged</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">Coalesce</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">itemlost</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span>
+  <span class="n">Coalesce</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">withdrawn</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'No'</span><span class="p">,</span> <span class="s1">'Yes'</span><span class="p">)</span> <span class="k">AS</span> <span class="n">STATUS_PROBLEMS</span><span class="p">,</span>
+  <span class="n">Concat_Ws</span><span class="p">(</span><span class="s1">''</span><span class="p">,</span>
+    <span class="n">If</span><span class="p">(</span><span class="n">Coalesce</span><span class="p">(</span><span class="n">damageds</span><span class="p">.</span><span class="n">lib</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="s1">''</span><span class="p">,</span> <span class="s1">''</span><span class="p">,</span> <span class="n">Concat</span><span class="p">(</span><span class="n">damageds</span><span class="p">.</span><span class="n">lib</span><span class="p">,</span> <span class="s1">' ('</span><span class="p">,</span> <span class="n">Date_Format</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">damaged_on</span><span class="p">,</span> <span class="nv">"%Y.%m.%d"</span><span class="p">),</span> <span class="s1">') / '</span><span class="p">)),</span>
+    <span class="n">If</span><span class="p">(</span><span class="n">Coalesce</span><span class="p">(</span><span class="n">losts</span><span class="p">.</span><span class="n">lib</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="s1">''</span><span class="p">,</span> <span class="s1">''</span><span class="p">,</span> <span class="n">Concat</span><span class="p">(</span><span class="n">losts</span><span class="p">.</span><span class="n">lib</span><span class="p">,</span> <span class="s1">' ('</span><span class="p">,</span> <span class="n">Date_Format</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">itemlost_on</span><span class="p">,</span> <span class="nv">"%Y.%m.%d"</span><span class="p">),</span> <span class="s1">') / '</span><span class="p">)),</span>
+    <span class="n">If</span><span class="p">(</span><span class="n">Coalesce</span><span class="p">(</span><span class="n">withdrawns</span><span class="p">.</span><span class="n">lib</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="s1">''</span><span class="p">,</span> <span class="s1">''</span><span class="p">,</span> <span class="n">Concat</span><span class="p">(</span><span class="n">withdrawns</span><span class="p">.</span><span class="n">lib</span><span class="p">,</span> <span class="s1">' ('</span><span class="p">,</span> <span class="n">Date_Format</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">withdrawn_on</span><span class="p">,</span> <span class="nv">"%Y.%m.%d"</span><span class="p">),</span> <span class="s1">')'</span><span class="p">))</span>
+  <span class="p">)</span> <span class="k">AS</span> <span class="n">STATUSSES</span><span class="p">,</span>
+  <span class="n">items</span><span class="p">.</span><span class="n">itemnotes</span><span class="p">,</span>
+  <span class="n">items</span><span class="p">.</span><span class="n">itemnotes_nonpublic</span><span class="p">,</span>
+  <span class="n">items</span><span class="p">.</span><span class="n">copynumber</span><span class="p">,</span>
+  <span class="n">items</span><span class="p">.</span><span class="n">replacementprice</span><span class="p">,</span>
+  <span class="n">localcounts</span><span class="p">.</span><span class="n">Count_itemnumber</span> <span class="k">AS</span> <span class="n">LOCAL_COPIES</span><span class="p">,</span>
+  <span class="n">systemcounts</span><span class="p">.</span><span class="n">Count_itemnumber</span> <span class="k">AS</span> <span class="n">SYSTEM_COPIES</span><span class="p">,</span>
+  <span class="n">Concat</span><span class="p">(</span>
+    <span class="s1">'&lt;a class="btn btn-default"'</span><span class="p">,</span>
+    <span class="s1">'href=</span><span class="se">\"</span><span class="s1">/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber='</span><span class="p">,</span>
+    <span class="n">items</span><span class="p">.</span><span class="n">biblionumber</span><span class="p">,</span>
+    <span class="s1">'&amp;itemnumber='</span><span class="p">,</span>
+    <span class="n">items</span><span class="p">.</span><span class="n">itemnumber</span><span class="p">,</span>
+    <span class="s1">'#edititem</span><span class="se">\"</span><span class="s1">'</span><span class="p">,</span>
+    <span class="s1">'target="_blank"&gt;Edit item&lt;/a&gt;'</span>
+  <span class="p">)</span> <span class="k">AS</span> <span class="n">EDIT_ITEM</span>
+<span class="k">FROM</span>
+  <span class="n">biblio</span> <span class="k">JOIN</span>
+  <span class="n">biblio_metadata</span> <span class="k">ON</span> <span class="n">biblio_metadata</span><span class="p">.</span><span class="n">biblionumber</span> <span class="o">=</span> <span class="n">biblio</span><span class="p">.</span><span class="n">biblionumber</span> <span class="k">JOIN</span>
+  <span class="n">items</span> <span class="k">ON</span> <span class="n">items</span><span class="p">.</span><span class="n">biblionumber</span> <span class="o">=</span> <span class="n">biblio</span><span class="p">.</span><span class="n">biblionumber</span> <span class="k">LEFT</span> <span class="k">JOIN</span>
+  <span class="p">(</span><span class="k">SELECT</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">category</span><span class="p">,</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">authorised_value</span><span class="p">,</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">lib</span><span class="p">,</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">lib_opac</span>
+    <span class="k">FROM</span>
+      <span class="n">authorised_values</span>
+    <span class="k">WHERE</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">category</span> <span class="o">=</span> <span class="s1">'LOC'</span><span class="p">)</span> <span class="n">perm_locs</span> <span class="k">ON</span>
+      <span class="n">perm_locs</span><span class="p">.</span><span class="n">authorised_value</span> <span class="o">=</span> <span class="n">items</span><span class="p">.</span><span class="n">permanent_location</span> <span class="k">LEFT</span> <span class="k">JOIN</span>
+  <span class="p">(</span><span class="k">SELECT</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">category</span><span class="p">,</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">authorised_value</span><span class="p">,</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">lib</span><span class="p">,</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">lib_opac</span>
+    <span class="k">FROM</span>
+      <span class="n">authorised_values</span>
+    <span class="k">WHERE</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">category</span> <span class="o">=</span> <span class="s1">'LOC'</span><span class="p">)</span> <span class="n">current_locs</span> <span class="k">ON</span>
+      <span class="n">current_locs</span><span class="p">.</span><span class="n">authorised_value</span> <span class="o">=</span> <span class="n">items</span><span class="p">.</span><span class="k">location</span> <span class="k">LEFT</span> <span class="k">JOIN</span>
+  <span class="n">itemtypes</span> <span class="k">ON</span> <span class="n">itemtypes</span><span class="p">.</span><span class="n">itemtype</span> <span class="o">=</span> <span class="n">items</span><span class="p">.</span><span class="n">itype</span> <span class="k">LEFT</span> <span class="k">JOIN</span>
+  <span class="p">(</span><span class="k">SELECT</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">category</span><span class="p">,</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">authorised_value</span><span class="p">,</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">lib</span><span class="p">,</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">lib_opac</span>
+    <span class="k">FROM</span>
+      <span class="n">authorised_values</span>
+    <span class="k">WHERE</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">category</span> <span class="o">=</span> <span class="s1">'CCODE'</span><span class="p">)</span> <span class="n">ccodes</span> <span class="k">ON</span> <span class="n">ccodes</span><span class="p">.</span><span class="n">authorised_value</span> <span class="o">=</span>
+      <span class="n">items</span><span class="p">.</span><span class="n">ccode</span> <span class="k">JOIN</span>
+  <span class="n">biblioitems</span> <span class="k">ON</span> <span class="n">biblioitems</span><span class="p">.</span><span class="n">biblionumber</span> <span class="o">=</span> <span class="n">biblio</span><span class="p">.</span><span class="n">biblionumber</span> <span class="k">LEFT</span> <span class="k">JOIN</span>
+  <span class="p">(</span><span class="k">SELECT</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">category</span><span class="p">,</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">authorised_value</span><span class="p">,</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">lib</span><span class="p">,</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">lib_opac</span>
+    <span class="k">FROM</span>
+      <span class="n">authorised_values</span>
+    <span class="k">WHERE</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">category</span> <span class="o">=</span> <span class="s1">'NOT_LOAN'</span><span class="p">)</span> <span class="n">not_loans</span> <span class="k">ON</span>
+      <span class="n">not_loans</span><span class="p">.</span><span class="n">authorised_value</span> <span class="o">=</span> <span class="n">items</span><span class="p">.</span><span class="n">notforloan</span> <span class="k">LEFT</span> <span class="k">JOIN</span>
+  <span class="p">(</span><span class="k">SELECT</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">category</span><span class="p">,</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">authorised_value</span><span class="p">,</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">lib</span><span class="p">,</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">lib_opac</span>
+    <span class="k">FROM</span>
+      <span class="n">authorised_values</span>
+    <span class="k">WHERE</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">category</span> <span class="o">=</span> <span class="s1">'damaged'</span><span class="p">)</span> <span class="n">damageds</span> <span class="k">ON</span>
+      <span class="n">damageds</span><span class="p">.</span><span class="n">authorised_value</span> <span class="o">=</span> <span class="n">items</span><span class="p">.</span><span class="n">damaged</span> <span class="k">LEFT</span> <span class="k">JOIN</span>
+  <span class="p">(</span><span class="k">SELECT</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">category</span><span class="p">,</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">authorised_value</span><span class="p">,</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">lib</span><span class="p">,</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">lib_opac</span>
+    <span class="k">FROM</span>
+      <span class="n">authorised_values</span>
+    <span class="k">WHERE</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">category</span> <span class="o">=</span> <span class="s1">'lost'</span><span class="p">)</span> <span class="n">losts</span> <span class="k">ON</span> <span class="n">losts</span><span class="p">.</span><span class="n">authorised_value</span> <span class="o">=</span>
+      <span class="n">items</span><span class="p">.</span><span class="n">itemlost</span> <span class="k">LEFT</span> <span class="k">JOIN</span>
+  <span class="p">(</span><span class="k">SELECT</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">category</span><span class="p">,</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">authorised_value</span><span class="p">,</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">lib</span><span class="p">,</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">lib_opac</span>
+    <span class="k">FROM</span>
+      <span class="n">authorised_values</span>
+    <span class="k">WHERE</span>
+      <span class="n">authorised_values</span><span class="p">.</span><span class="n">category</span> <span class="o">=</span> <span class="s1">'withdrawn'</span><span class="p">)</span> <span class="n">withdrawns</span> <span class="k">ON</span>
+      <span class="n">withdrawns</span><span class="p">.</span><span class="n">authorised_value</span> <span class="o">=</span> <span class="n">items</span><span class="p">.</span><span class="n">withdrawn</span> <span class="k">LEFT</span> <span class="k">JOIN</span>
+  <span class="p">(</span><span class="k">SELECT</span>
+      <span class="n">items</span><span class="p">.</span><span class="n">biblionumber</span><span class="p">,</span>
+      <span class="n">items</span><span class="p">.</span><span class="n">homebranch</span><span class="p">,</span>
+      <span class="k">Count</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">itemnumber</span><span class="p">)</span> <span class="k">AS</span> <span class="n">Count_itemnumber</span>
+    <span class="k">FROM</span>
+      <span class="n">items</span>
+    <span class="k">WHERE</span>
+      <span class="cm">/* "ZBRAN" is a custom authoirzed value set in my system */</span>
+      <span class="n">items</span><span class="p">.</span><span class="n">homebranch</span> <span class="k">LIKE</span> <span class="o">&lt;&lt;</span><span class="n">Item</span> <span class="n">home</span> <span class="n">library</span><span class="o">|</span><span class="n">ZBRAN</span><span class="o">&gt;&gt;</span>
+    <span class="k">GROUP</span> <span class="k">BY</span>
+      <span class="n">items</span><span class="p">.</span><span class="n">biblionumber</span><span class="p">,</span>
+      <span class="n">items</span><span class="p">.</span><span class="n">homebranch</span><span class="p">)</span> <span class="n">localcounts</span> <span class="k">ON</span> <span class="n">localcounts</span><span class="p">.</span><span class="n">biblionumber</span> <span class="o">=</span>
+      <span class="n">items</span><span class="p">.</span><span class="n">biblionumber</span> <span class="k">AND</span>
+      <span class="n">localcounts</span><span class="p">.</span><span class="n">homebranch</span> <span class="o">=</span> <span class="n">items</span><span class="p">.</span><span class="n">homebranch</span> <span class="k">LEFT</span> <span class="k">JOIN</span>
+  <span class="p">(</span><span class="k">SELECT</span>
+      <span class="n">items</span><span class="p">.</span><span class="n">biblionumber</span><span class="p">,</span>
+      <span class="k">Count</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">itemnumber</span><span class="p">)</span> <span class="k">AS</span> <span class="n">Count_itemnumber</span>
+    <span class="k">FROM</span>
+      <span class="n">items</span>
+    <span class="k">GROUP</span> <span class="k">BY</span>
+      <span class="n">items</span><span class="p">.</span><span class="n">biblionumber</span><span class="p">)</span> <span class="n">systemcounts</span> <span class="k">ON</span> <span class="n">systemcounts</span><span class="p">.</span><span class="n">biblionumber</span> <span class="o">=</span>
+      <span class="n">items</span><span class="p">.</span><span class="n">biblionumber</span>
+<span class="k">WHERE</span>
+  <span class="cm">/* "ZBRAN," "LLOC," "LITYPES," "LCCODE," and "LNOT_LOAN" are custom authorized values in my system */</span>
+  <span class="n">items</span><span class="p">.</span><span class="n">homebranch</span> <span class="k">LIKE</span> <span class="o">&lt;&lt;</span><span class="n">Item</span> <span class="n">home</span> <span class="n">library</span><span class="o">|</span><span class="n">ZBRAN</span><span class="o">&gt;&gt;</span> <span class="k">AND</span>
+  <span class="n">Coalesce</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">permanent_location</span><span class="p">,</span> <span class="nv">"-"</span><span class="p">)</span> <span class="k">LIKE</span> <span class="o">&lt;&lt;</span><span class="n">Item</span> <span class="n">permanent</span> <span class="n">shelving</span> <span class="k">location</span><span class="o">|</span><span class="n">LLOC</span><span class="o">&gt;&gt;</span> <span class="k">AND</span>
+  <span class="n">Coalesce</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">itype</span><span class="p">,</span> <span class="nv">"PUNC"</span><span class="p">)</span> <span class="k">LIKE</span> <span class="o">&lt;&lt;</span><span class="n">Item</span> <span class="k">type</span><span class="o">|</span><span class="n">LITYPES</span><span class="o">&gt;&gt;</span> <span class="k">AND</span>
+  <span class="n">Coalesce</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">ccode</span><span class="p">,</span> <span class="nv">"XXX"</span><span class="p">)</span> <span class="k">LIKE</span> <span class="o">&lt;&lt;</span><span class="n">Item</span> <span class="n">collection</span> <span class="n">code</span><span class="o">|</span><span class="n">LCCODE</span><span class="o">&gt;&gt;</span> <span class="k">AND</span>
+  <span class="n">Coalesce</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">itemcallnumber</span><span class="p">,</span> <span class="nv">"-"</span><span class="p">)</span> <span class="k">LIKE</span> <span class="n">Concat</span><span class="p">(</span><span class="o">&lt;&lt;</span><span class="n">Enter</span> <span class="k">first</span> <span class="n">part</span> <span class="k">of</span> <span class="k">call</span> <span class="n">number</span> <span class="k">or</span> <span class="n">a</span> <span class="o">%</span> <span class="n">symbol</span><span class="o">&gt;&gt;</span><span class="p">,</span> <span class="nv">"%"</span><span class="p">)</span> <span class="k">AND</span>
+  <span class="n">Coalesce</span><span class="p">(</span><span class="n">not_loans</span><span class="p">.</span><span class="n">lib_opac</span><span class="p">,</span> <span class="nv">"-"</span><span class="p">)</span> <span class="k">LIKE</span> <span class="o">&lt;&lt;</span><span class="k">Not</span> <span class="k">for</span> <span class="n">loan</span> <span class="n">status</span><span class="o">|</span><span class="n">LNOT_LOAN</span><span class="o">&gt;&gt;</span> <span class="k">AND</span>
+  <span class="p">(</span><span class="n">If</span><span class="p">(</span>
+    <span class="n">Coalesce</span><span class="p">(</span><span class="nb">Year</span><span class="p">(</span><span class="n">Coalesce</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">dateaccessioned</span><span class="p">)),</span> <span class="s1">'1999'</span><span class="p">)</span> <span class="o">&lt;</span> <span class="s1">'2000'</span><span class="p">,</span>
+    <span class="s1">'2000-01-02'</span><span class="p">,</span>
+    <span class="n">items</span><span class="p">.</span><span class="n">dateaccessioned</span>
+  <span class="p">)</span> <span class="k">BETWEEN</span> <span class="o">&lt;&lt;</span><span class="n">Item</span> <span class="n">added</span> <span class="k">between</span> <span class="n">date1</span><span class="o">|</span><span class="nb">date</span><span class="o">&gt;&gt;</span> <span class="k">AND</span> <span class="o">&lt;&lt;</span><span class="k">and</span> <span class="n">date2</span><span class="o">|</span><span class="nb">date</span><span class="o">&gt;&gt;</span><span class="p">)</span> <span class="k">AND</span>
+  <span class="n">If</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">onloan</span> <span class="k">IS</span> <span class="k">NULL</span><span class="p">,</span> <span class="s1">'No'</span><span class="p">,</span> <span class="s1">'Yes'</span><span class="p">)</span> <span class="k">LIKE</span> <span class="s1">'%'</span> <span class="k">AND</span>
+  <span class="p">(</span><span class="n">If</span><span class="p">(</span>
+    <span class="n">Coalesce</span><span class="p">(</span><span class="nb">Year</span><span class="p">(</span><span class="n">Coalesce</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">datelastborrowed</span><span class="p">)),</span> <span class="s1">'1999'</span><span class="p">)</span> <span class="o">&lt;</span> <span class="s1">'2000'</span><span class="p">,</span>
+    <span class="s1">'2000-01-02'</span><span class="p">,</span>
+    <span class="n">items</span><span class="p">.</span><span class="n">datelastborrowed</span>
+  <span class="p">)</span> <span class="k">BETWEEN</span> <span class="o">&lt;&lt;</span><span class="n">Item</span> <span class="k">last</span> <span class="n">borrowed</span> <span class="k">between</span> <span class="n">date1</span><span class="o">|</span><span class="nb">date</span><span class="o">&gt;&gt;</span> <span class="k">AND</span> <span class="o">&lt;&lt;</span><span class="k">and</span>  <span class="n">date2</span><span class="o">|</span><span class="nb">date</span><span class="o">&gt;&gt;</span><span class="p">)</span> <span class="k">AND</span>
+  <span class="p">(</span><span class="n">If</span><span class="p">(</span>
+    <span class="n">Coalesce</span><span class="p">(</span><span class="nb">Year</span><span class="p">(</span><span class="n">Coalesce</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">datelastseen</span><span class="p">)),</span> <span class="s1">'1999'</span><span class="p">)</span> <span class="o">&lt;</span> <span class="s1">'2000'</span><span class="p">,</span>
+    <span class="s1">'2000-01-02'</span><span class="p">,</span>
+    <span class="n">items</span><span class="p">.</span><span class="n">datelastseen</span>
+  <span class="p">)</span> <span class="k">BETWEEN</span> <span class="o">&lt;&lt;</span><span class="n">Item</span> <span class="k">last</span> <span class="n">seen</span> <span class="k">between</span> <span class="n">date1</span><span class="o">|</span><span class="nb">date</span><span class="o">&gt;&gt;</span> <span class="k">AND</span> <span class="o">&lt;&lt;</span><span class="k">and</span>   <span class="n">date2</span><span class="o">|</span><span class="nb">date</span><span class="o">&gt;&gt;</span><span class="p">)</span> <span class="k">AND</span>
+  <span class="n">localcounts</span><span class="p">.</span><span class="n">Count_itemnumber</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="k">AND</span>
+  <span class="n">systemcounts</span><span class="p">.</span><span class="n">Count_itemnumber</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+<span class="k">GROUP</span> <span class="k">BY</span>
+  <span class="n">biblio</span><span class="p">.</span><span class="n">biblionumber</span><span class="p">,</span>
+  <span class="n">items</span><span class="p">.</span><span class="n">itemnumber</span>
+<span class="k">HAVING</span>
+  <span class="cm">/* "ZNUMBERS," "ZYES_NO," and "YNUMBER" are custom authorized values in my system */</span>
+  <span class="n">CHECKOUTS_PLUS_RENEWALS</span> <span class="o">&lt;=</span> <span class="o">&lt;&lt;</span><span class="k">With</span> <span class="n">X</span> <span class="k">or</span> <span class="n">fewer</span> <span class="n">checkouts</span><span class="o">|</span><span class="n">ZNUMBERS</span><span class="o">&gt;&gt;</span> <span class="k">AND</span>
+  <span class="n">CHECKED_OUT_NOW</span> <span class="k">LIKE</span> <span class="o">&lt;&lt;</span><span class="n">Display</span> <span class="k">checked</span> <span class="k">out</span> <span class="n">items</span><span class="o">|</span><span class="n">ZYES_NO</span><span class="o">&gt;&gt;</span> <span class="k">AND</span>
+  <span class="n">STATUS_PROBLEMS</span> <span class="k">LIKE</span> <span class="o">&lt;&lt;</span><span class="n">Display</span> <span class="n">lost</span><span class="p">,</span> <span class="n">missing</span><span class="p">,</span> <span class="k">and</span> <span class="n">withdrawn</span> <span class="n">items</span><span class="o">|</span><span class="n">ZYES_NO</span><span class="o">&gt;&gt;</span> <span class="k">AND</span>
+  <span class="n">LOCAL_COPIES</span> <span class="o">&gt;=</span> <span class="o">&lt;&lt;</span><span class="k">With</span> <span class="n">X</span> <span class="k">or</span> <span class="k">more</span> <span class="n">copies</span> <span class="k">at</span> <span class="n">this</span> <span class="n">library</span><span class="o">|</span><span class="n">YNUMBER</span><span class="o">&gt;&gt;</span> <span class="k">AND</span>
+  <span class="n">SYSTEM_COPIES</span> <span class="o">&gt;=</span> <span class="o">&lt;&lt;</span><span class="k">With</span> <span class="n">X</span> <span class="k">or</span> <span class="k">more</span> <span class="n">copies</span> <span class="k">at</span> <span class="n">throughout</span> <span class="n">the</span> <span class="k">catalog</span><span class="o">|</span><span class="n">YNUMBER</span><span class="o">&gt;&gt;</span>
+<span class="k">ORDER</span> <span class="k">BY</span>
+  <span class="n">items</span><span class="p">.</span><span class="n">homebranch</span><span class="p">,</span>
+  <span class="n">PERMANENT_LOCATION</span><span class="p">,</span>
+  <span class="n">ITYPE</span><span class="p">,</span>
+  <span class="n">CCODE</span><span class="p">,</span>
+  <span class="n">items</span><span class="p">.</span><span class="n">itemcallnumber</span><span class="p">,</span>
+  <span class="n">biblio</span><span class="p">.</span><span class="n">author</span><span class="p">,</span>
+  <span class="n">FULL_TITLE</span>
+
+</code></pre></div></div>
+
+<h3 id="teaching-the-first-report-to-run-the-second-report">Teaching the first report to run the second report</h3>
+
+<p>The first step in linking the two reports is to run the second one to get the URL.  In this case I ran the report doing a full shelflist for our library in Atchison, KS.</p>
+
+<p>This is the URL:</p>
+
+<p>/cgi-bin/koha/reports/guided_reports.pl?reports=2731&amp;phase=Run+this+report&amp;param_name=Item+home+library%7CZBRAN&amp;sql_params=ATCHISON&amp;param_name=Item+permanent+shelving+location%7CLLOC&amp;sql_params=%25&amp;param_name=Item+type%7CLITYPES&amp;sql_params=%25&amp;param_name=Item+collection+code%7CLCCODE&amp;sql_params=%25&amp;param_name=Enter+first+part+of+call+number+or+a+%25+symbol&amp;sql_params=%25&amp;param_name=Not+for+loan+status%7CLNOT_LOAN&amp;sql_params=%25&amp;param_name=Item+added+between+date1%7Cdate&amp;sql_params=01%2F01%2F2000&amp;param_name=and+date2%7Cdate&amp;sql_params=07%2F25%2F2022&amp;param_name=Item+last+borrowed+between+date1%7Cdate&amp;sql_params=01%2F01%2F2000&amp;param_name=and++date2%7Cdate&amp;sql_params=07%2F25%2F2022&amp;param_name=Item+last+seen+between+date1%7Cdate&amp;sql_params=01%2F01%2F2000&amp;param_name=and+++date2%7Cdate&amp;sql_params=07%2F25%2F2022&amp;param_name=With+X+or+fewer+checkouts%7CZNUMBERS&amp;sql_params=999999999999&amp;param_name=Display+checked+out+items%7CZYES_NO&amp;sql_params=%25&amp;param_name=Display+lost%2C+missing%2C+and+withdrawn+items%7CZYES_NO&amp;sql_params=%25&amp;param_name=With+X+or+more+copies+at+this+library%7CYNUMBER&amp;sql_params=0&amp;param_name=With+X+or+more+copies+at+throughout+the+catalog%7CYNUMBER&amp;sql_params=0</p>
+
+<p>Since this is a big long URL, I find the easy way to look at it sensibly is to add a break before each instance of the string “&amp;param_name”</p>
+
+<p>/cgi-bin/koha/reports/guided_reports.pl?reports=2731&amp;phase=Run+this+report
+&amp;param_name=Item+home+library%7CZBRAN&amp;sql_params=ATCHISON
+&amp;param_name=Item+permanent+shelving+location%7CLLOC&amp;sql_params=%25
+&amp;param_name=Item+type%7CLITYPES&amp;sql_params=%25
+&amp;param_name=Item+collection+code%7CLCCODE&amp;sql_params=%25
+&amp;param_name=Enter+first+part+of+call+number+or+a+%25+symbol&amp;sql_params=%25
+&amp;param_name=Not+for+loan+status%7CLNOT_LOAN&amp;sql_params=%25
+&amp;param_name=Item+added+between+date1%7Cdate&amp;sql_params=01%2F01%2F2000
+&amp;param_name=and+date2%7Cdate&amp;sql_params=07%2F25%2F2022
+&amp;param_name=Item+last+borrowed+between+date1%7Cdate&amp;sql_params=01%2F01%2F2000
+&amp;param_name=and++date2%7Cdate&amp;sql_params=07%2F25%2F2022
+&amp;param_name=Item+last+seen+between+date1%7Cdate&amp;sql_params=01%2F01%2F2000
+&amp;param_name=and+++date2%7Cdate&amp;sql_params=07%2F25%2F2022
+&amp;param_name=With+X+or+fewer+checkouts%7CZNUMBERS&amp;sql_params=999999999999
+&amp;param_name=Display+checked+out+items%7CZYES_NO&amp;sql_params=%25
+&amp;param_name=Display+lost%2C+missing%2C+and+withdrawn+items%7CZYES_NO&amp;sql_params=%25
+&amp;param_name=With+X+or+more+copies+at+this+library%7CYNUMBER&amp;sql_params=0
+&amp;param_name=With+X+or+more+copies+at+throughout+the+catalog%7CYNUMBER&amp;sql_params=0</p>
+
+<p>Every tieme you see “%25” at the end of a string, that’s the ASCII code for a “%” which is an SQL wildcard.  Similarly “%2f” represents a space.</p>
+
+<p>For the most part the end of each line represents a runtime parameter.  The only one I set when I ran the report was “ATCHISO” to limit the results to the library in Atchison, KS.  The other parameter I’m going to manipulate is the one for the item type.  I’ve put comments directly into the HTML below.</p>
+
+<p>I can take the URL from above and use the SQL “CONCAT” command to build a dynamic URL in the report results.</p>
+
+<pre><code class="language-SQL">
+SELECT
+  branchtypes.branchname,
+  branchtypes.description AS "ITEM TYPE",
+  itemss.Count_itemnumber AS "TOTAL ITEMS",
+  adultitems.Count_itemnumber AS "ADULT ITEMS",
+  juvenileitems.Count_itemnumber AS "JUVENILE ITEMS",
+  yaitems.Count_itemnumber AS "YOUNG ADULT ITEMS",
+  Concat(
+    '&lt;a class="btn btn-default"',
+    'href=\"',
+    '/cgi-bin/koha/reports/guided_reports.pl?reports=',
+
+    /* The report I want to run is report 2731 in my system */
+    '2731',
+
+    '&amp;phase=Run+this+report',
+    '&amp;param_name=Item+home+library%7CZBRAN&amp;sql_params=',
+
+    /* substituting "branchtypes.branchcode" for "ATCHISON" the branchode I ran the report with to generate the URL */
+    branchtypes.branchcode,
+
+    '&amp;param_name=Item+permanent+shelving+location%7CLLOC&amp;sql_params=%25',
+    '&amp;param_name=Item+type%7CLITYPES&amp;sql_params=',
+
+    /* substituting "branchtypes.itemtype" for "%25" (%25 is the ASCII equivalent of the % wildcard that I ran the report with to generate the URL) */
+    branchtypes.itemtype,
+
+    '&amp;param_name=Item+collection+code%7CLCCODE&amp;sql_params=%25',
+    '&amp;param_name=Enter+first+part+of+call+number+or+a+%25+symbol&amp;sql_params=%25',
+    '&amp;param_name=Not+for+loan+status%7CLNOT_LOAN&amp;sql_params=%25',
+    '&amp;param_name=Item+added+between+date1%7Cdate&amp;sql_params=01%2F01%2F1900',
+    '&amp;param_name=and+date2%7Cdate&amp;sql_params=12%2F31%2F2099',
+    '&amp;param_name=Item+last+borrowed+between+date1%7Cdate&amp;sql_params=01%2F01%2F1900',
+    '&amp;param_name=and++date2%7Cdate&amp;sql_params=12%2F31%2F2099',
+    '&amp;param_name=Item+last+seen+between+date1%7Cdate&amp;sql_params=01%2F01%2F1900',
+    '&amp;param_name=and+++date2%7Cdate&amp;sql_params=12%2F31%2F2099',
+    '&amp;param_name=With+X+or+fewer+checkouts%7CZNUMBERS&amp;sql_params=999999999999',
+    '&amp;param_name=Display+checked+out+items%7CZYES_NO&amp;sql_params=%25',
+    '&amp;param_name=Display+lost%2C+missing%2C+and+withdrawn+items%7CZYES_NO&amp;sql_params=%25',
+    '&amp;param_name=With+X+or+more+copies+at+this+library%7CYNUMBER&amp;sql_params=0',
+    '&amp;param_name=With+X+or+more+copies+at+throughout+the+catalog%7CYNUMBER&amp;sql_params=0" ',
+    'target="_blank"&gt;',
+    'Shelflist for these items&lt;/a&gt;'
+  ) AS SHELFLIST
+FROM
+  (SELECT
+      branches.branchcode,
+      branches.branchname,
+      itemtypes.itemtype,
+      itemtypes.description
+    FROM
+      itemtypes,
+      branches) branchtypes LEFT JOIN
+  (SELECT
+      items.homebranch,
+      If(items.itype IS NULL, "XXX", items.itype) AS itype,
+      Count(items.itemnumber) AS Count_itemnumber
+    FROM
+      items
+    GROUP BY
+      items.homebranch,
+      If(items.itype IS NULL, "XXX", items.itype)) itemss ON itemss.homebranch =
+      branchtypes.branchcode AND
+      itemss.itype = branchtypes.itemtype LEFT JOIN
+  (SELECT
+      items.homebranch,
+      If(items.itype IS NULL, "XXX", items.itype) AS itype,
+      Count(items.itemnumber) AS Count_itemnumber
+    FROM
+      items
+    WHERE
+      (items.permanent_location LIKE '%ADULT%' OR
+        items.permanent_location = 'CART' OR
+        items.permanent_location = 'CATALOGING' OR
+        items.permanent_location = 'PROC' OR
+        items.permanent_location IS NULL)
+    GROUP BY
+      items.homebranch,
+      If(items.itype IS NULL, "XXX", items.itype)) adultitems ON
+      adultitems.homebranch = branchtypes.branchcode AND
+      adultitems.itype = branchtypes.itemtype LEFT JOIN
+  (SELECT
+      items.homebranch,
+      If(items.itype IS NULL, "XXX", items.itype) AS itype,
+      Count(items.itemnumber) AS Count_itemnumber
+    FROM
+      items
+    WHERE
+      items.permanent_location LIKE "%CHILD%"
+    GROUP BY
+      items.homebranch,
+      If(items.itype IS NULL, "XXX", items.itype)) juvenileitems ON
+      juvenileitems.homebranch = branchtypes.branchcode AND
+      juvenileitems.itype = branchtypes.itemtype LEFT JOIN
+  (SELECT
+      items.homebranch,
+      If(items.itype IS NULL, "XXX", items.itype) AS itype,
+      Count(items.itemnumber) AS Count_itemnumber
+    FROM
+      items
+    WHERE
+      items.permanent_location LIKE "%YA%"
+    GROUP BY
+      items.homebranch,
+      If(items.itype IS NULL, "XXX", items.itype)) yaitems ON
+      yaitems.homebranch = branchtypes.branchcode AND
+      yaitems.itype = branchtypes.itemtype
+WHERE
+  branchtypes.branchcode LIKE &lt;&lt;Choose your library and leave item type as "All"|branches:all&gt;&gt; AND
+  branchtypes.itemtype LIKE &lt;&lt;Or leave library as "All" and choose an item type|itemtypes:all&gt;&gt;
+GROUP BY
+  branchtypes.branchname,
+  branchtypes.description
+ORDER BY
+  branchtypes.branchname,
+  branchtypes.description
+LIMIT 500
+
+</code></pre>
+
+<p>By using “branchtypes.branchcode” and “branchtypes.itemtype” to represent the branch and item type, when you run the report it will build the link for each row to match the branch and item type codes for the results in that row.  This means that clicking the link will run the Shelfilst report just for that library and just for that item type when it’s clicked.</p>
+
+
+      </section>
+
+    </div>
+
+    
+  </body>
+</html>

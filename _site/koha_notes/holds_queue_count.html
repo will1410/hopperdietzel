@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Adding holds queue count to the home Page | Untitled self-indulgent website</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Adding holds queue count to the home Page" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Website for George H. Williams" />
+<meta property="og:description" content="Website for George H. Williams" />
+<link rel="canonical" href="http://localhost:4000/koha_notes/holds_queue_count.html" />
+<meta property="og:url" content="http://localhost:4000/koha_notes/holds_queue_count.html" />
+<meta property="og:site_name" content="Untitled self-indulgent website" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Adding holds queue count to the home Page" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Website for George H. Williams","headline":"Adding holds queue count to the home Page","url":"http://localhost:4000/koha_notes/holds_queue_count.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="/assets/js/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="/assets/css/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <!--<li class="fork"><a href="">View On GitHub</a></li>-->
+          
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Untitled self-indulgent website</h1>
+          <p>Website for George H. Williams</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href=""></a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/mattgraham">mattgraham</a></span>
+        </div>
+
+        <h2 id="adding-holds-queue-count-to-the-home-page">Adding holds queue count to the home Page</h2>
+
+<p>We have 51 libraries in Next Search Catalog and one of the responsibilities at each library is to run their holds queue report and pull items with requests on them at least once a day.  In order to do this there is the built-in holds queue report on the circulation page and we also have several other variants on the holds queue report in our reports library.</p>
+
+<p>Recently it came to my attention that one of my libraries hadn’t pulled any requested materials from their shelves since the end of August.</p>
+
+<p>My thought was to find a way to put a holds queue counter on the home page in the staff interface so that staff would not have to run a report (built in or otherwise) in order to be reminded that there were items in their holds queue.  What I came up with is a big button above the news area on the staff interface’s home page that not only tells them how many items are currently in their holds queue, but also acts as a link to our “Priority holds reqport.”</p>
+
+<ol>
+  <li>
+    <p>Create a report with this SQL and note the report number to create the “Priority holds report” and note the report number</p>
+
+    <ul>
+      <li>
+        <p>Our priority holds report was designed for several of our libraries where the courier often can’t pick up all of the materials due to the volume of shipping.  It reports the same information as the built in holds queue report but it marks items with one of the following designations:</p>
+
+        <ul>
+          <li>Highest priority = the request is for a borrower at this library</li>
+          <li>High priority = the request is for a borrower at another library <em>but</em> this is the <em>only</em> copy available to fill the request</li>
+          <li>“Blank” or normal = the request is for a borrower at another library and there are multiple copies available to fill the request</li>
+        </ul>
+      </li>
+      <li>
+        <p>The report orders the data in order of Priority &gt; Shelving location&gt;Item type &gt; Collection code &gt; Call number &gt; Author &gt; Title</p>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<pre><code class="language-SQL">
+SELECT
+  Concat_Ws(
+    '&lt;br /&gt;',
+    If(
+      LOCATIONS.lib = PERM_LOCATIONS.lib,
+      LOCATIONS.lib,
+      Concat(PERM_LOCATIONS.lib, " (", LOCATIONS.lib, ")")
+    ),
+    ITEMTYPESS.description,
+    CCODES.lib,
+    items.itemcallnumber,
+    items.copynumber,
+    If(
+      hold_fill_targets.source_branchcode = priority.branchcode,
+      "&lt;span style='font-weight: bold;'&gt;(Highest priority)&lt;/span&gt;",
+      If(
+        hold_fill_targets.item_level_request = 1,
+        "&lt;span style='font-weight: bold;'&gt;(Highest priority)&lt;/span&gt;",
+        If(
+          priority.Count_itemnumber = 1,
+          "&lt;span&gt;(High priority)&lt;/span&gt;",
+          ""
+        )
+      )
+    ),
+    Concat('Accessioned date: ', items.dateaccessioned),
+    (Concat(
+      '&lt;br /&gt;',
+      '&lt;a class="btn btn-default noprint" href=\"/cgi-bin/koha/catalogue/detail.pl?biblionumber=',
+      biblio.biblionumber,
+      '\" target="_blank"&gt;Go to biblio&lt;/a&gt;'
+      )
+    )
+  ) AS CALL_NUMBER,
+  Concat_Ws(
+    '&lt;br /&gt;',
+    biblio.author,
+    Concat_Ws(
+      ' ',
+      biblio.title,
+      '&lt;br /&gt;',
+      IF(
+        ExtractValue(biblio_metadata.metadata, '//datafield[@tag="245"]/subfield[@code="h"]') = '',
+        '',
+        Concat(
+          ExtractValue(biblio_metadata.metadata, '//datafield[@tag="245"]/subfield[@code="h"]'),
+          '&lt;br /&gt;'
+        )
+      ),
+      IF(
+        ExtractValue(biblio_metadata.metadata, '//datafield[@tag="245"]/subfield[@code="b"]') = '',
+        '',
+        Concat(
+          ExtractValue(biblio_metadata.metadata, '//datafield[@tag="245"]/subfield[@code="b"]'),
+          '&lt;br /&gt;'
+        )
+      ),
+      IF(
+        ExtractValue(biblio_metadata.metadata, '//datafield[@tag="245"]/subfield[@code="n"]') = '',
+        '',
+        Concat(
+          ExtractValue(biblio_metadata.metadata, '//datafield[@tag="245"]/subfield[@code="n"]'),
+          '&lt;br /&gt;'
+        )
+      ),
+      IF(
+        ExtractValue(biblio_metadata.metadata, '//datafield[@tag="245"]/subfield[@code="p"]') = '',
+        '',
+        Concat(
+          ExtractValue(biblio_metadata.metadata, '//datafield[@tag="245"]/subfield[@code="p"]'),
+          '&lt;br /&gt;'
+        )
+      )
+    )
+  ) AS AUTHOR_TITLE,
+  Concat_Ws(
+    '&lt;br /&gt;',
+    Concat(
+      '&lt;img src="/cgi-bin/koha/svc/barcode?barcode=',
+      '*',
+      Upper(items.barcode),
+      '*',
+      '&amp;type=Code39"&gt;&lt;/img&gt;'
+    ),
+    items.barcode
+  ) AS BARCODE
+FROM
+  biblio LEFT JOIN
+  ((hold_fill_targets LEFT JOIN
+  items ON hold_fill_targets.itemnumber = items.itemnumber) LEFT JOIN
+  biblio_metadata ON items.biblionumber = biblio_metadata.biblionumber) ON
+      biblio.biblionumber = biblio_metadata.biblionumber LEFT JOIN
+  (
+    SELECT
+      authorised_values.category,
+      authorised_values.authorised_value,
+      authorised_values.lib
+    FROM
+      authorised_values
+    WHERE
+      authorised_values.category = 'CCODE'
+  ) CCODES
+  ON CCODES.authorised_value =
+    items.ccode LEFT JOIN
+  (
+    SELECT
+      authorised_values.category,
+      authorised_values.authorised_value,
+      authorised_values.lib
+    FROM
+      authorised_values
+    WHERE
+      authorised_values.category = 'LOC'
+  ) PERM_LOCATIONS
+  ON PERM_LOCATIONS.authorised_value = items.permanent_location LEFT JOIN
+  (
+    SELECT
+      authorised_values.category,
+      authorised_values.authorised_value,
+      authorised_values.lib
+    FROM
+      authorised_values
+    WHERE
+      authorised_values.category = 'LOC'
+  ) LOCATIONS
+  ON LOCATIONS.authorised_value = items.location LEFT JOIN
+  (
+    SELECT
+      itemtypes.itemtype,
+      itemtypes.description
+    FROM
+      itemtypes
+  ) ITEMTYPESS
+  ON ITEMTYPESS.itemtype = items.itype JOIN
+  (
+    SELECT
+      hold_fill_targets.reserve_id,
+      reserves.branchcode,
+      icounts.Count_itemnumber
+    FROM
+      hold_fill_targets JOIN
+      reserves ON reserves.reserve_id = hold_fill_targets.reserve_id LEFT JOIN
+      (
+        SELECT
+          items.biblionumber,
+          Count(DISTINCT items.itemnumber) AS Count_itemnumber
+        FROM
+          items
+        WHERE
+          (items.notforloan IS NOT NULL OR
+            items.notforloan &lt;&gt; 0) AND
+          (items.damaged IS NOT NULL OR
+            items.damaged &lt;&gt; 0) AND
+          (items.itemlost IS NOT NULL OR
+            items.itemlost &lt;&gt; 0) AND
+          (items.withdrawn IS NOT NULL OR
+            items.withdrawn &lt;&gt; 0) AND
+          items.onloan IS NULL
+        GROUP BY
+          items.biblionumber
+    ) icounts
+    ON icounts.biblionumber = hold_fill_targets.biblionumber
+  ) priority
+  ON priority.reserve_id = hold_fill_targets.reserve_id
+WHERE
+  hold_fill_targets.source_branchcode LIKE &lt;&lt;Choose your library|ZBRAN&gt;&gt;
+GROUP BY
+  hold_fill_targets.itemnumber
+ORDER BY
+  If(
+    hold_fill_targets.source_branchcode = priority.branchcode,
+    "1",
+    If(
+      hold_fill_targets.item_level_request = 1,
+      "1",
+      If(
+        priority.Count_itemnumber = 1,
+        "2",
+        "3"
+      )
+    )
+  ),
+  items.homebranch,
+  PERM_LOCATIONS.lib,
+  ITEMTYPESS.description,
+  CCODES.lib,
+  items.itemcallnumber,
+  biblio.author,
+  biblio.title,
+  items.barcode
+
+</code></pre>
+
+<ol>
+  <li>
+    <p>Create a report with this SQL to create the button for the home page and note the report number</p>
+
+    <ul>
+      <li>
+        <p>This report creates and styles the button that will eventually appear on the home page in the staff interface</p>
+      </li>
+      <li>
+        <p>This report could easily be re-written to run a different report or to point to the built-in holds queue report</p>
+      </li>
+      <li>
+        <p>Replace “<em>priority_holds_report_number</em>” with the number you noted in step 1</p>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="the-following-sql-is-for-koha-versions-up-to-2305-maybe-2311">The following SQL is for Koha versions up to 23.05 (maybe 23.11)</h2>
+
+<pre><code class="language-SQL">
+Select
+  CONCAT(
+    '&lt;a class="btn btn-lg btn-info btn-block noprint" ',
+    'style="font-size: 1.75em; color: white;" ',
+    'href="/cgi-bin/koha/reports/guided_reports.pl?phase=Run+this+report&amp;reports=_priority_holds_report_number_&amp;sql_params=',
+    branches.branchcode,
+    '&amp;param_name=Choose+your+library|ZBRAN&amp;limit=500" ',
+    'target="_blank"&gt; ',
+    '&lt;i class="fa fa-tasks"&gt;&lt;/i&gt; Holds queue &lt;br /&gt;&lt;span style="font-weight: bold;"&gt;(',
+    Count(Distinct request_counts.itemnumber),
+    '&lt;/span&gt; items)&lt;/a&gt;'
+  ) As COUNT
+From
+  branches Left Join
+  (
+    Select
+      hold_fill_targets.source_branchcode,
+      hold_fill_targets.itemnumber
+    From
+      hold_fill_targets
+    Group By
+      hold_fill_targets.source_branchcode,
+      hold_fill_targets.itemnumber
+  ) request_counts On request_counts.source_branchcode = branches.branchcode
+Where
+    branches.branchcode = &lt;&lt;Enter branchcode&gt;&gt;
+Group By
+    branches.branchcode
+
+</code></pre>
+
+<h2 id="the-following-sql-is-for-koha-versions-2405-and-after-and-maybe-2311">The following SQL is for Koha versions 24.05 and after (and maybe 23.11)</h2>
+
+<p>There was a change to report links in Koha version 24.05 (or maybe 23.11 - I’m not sure because our library skipped Koha 23.11).  That change required an update in the SQL for this second report.</p>
+
+<pre><code class="language-SQL">
+Select
+  CONCAT(
+    '&lt;a class="btn btn-lg btn-info btn-block noprint" ',
+    'style="font-size: 1.75em; color: white;" ',
+    'href="/cgi-bin/koha/reports/guided_reports.pl?id=',
+    '_priority_holds_report_number_',
+    '&amp;param_name=Choose+your+library|branches&amp;sql_params=',
+    branches.branchcode,
+    '&amp;limit=1000&amp;op=run" ',
+    'target="_blank"&gt; ',
+    '&lt;i class="fa fa-tasks"&gt;&lt;/i&gt; Holds queue &lt;br /&gt;&lt;span style="font-weight: bold;"&gt;(',
+    Count(Distinct request_counts.itemnumber),
+    '&lt;/span&gt; items)&lt;/a&gt;'
+  ) As COUNT
+From
+  branches Left Join
+  (
+    Select
+      hold_fill_targets.source_branchcode,
+      hold_fill_targets.itemnumber
+    From
+      hold_fill_targets
+    Group By
+      hold_fill_targets.source_branchcode,
+      hold_fill_targets.itemnumber
+  ) request_counts On request_counts.source_branchcode = branches.branchcode
+Where
+    branches.branchcode = &lt;&lt;Enter branchcode&gt;&gt;
+Group By
+    branches.branchcode
+
+</code></pre>
+
+<ol>
+  <li>
+    <p>Add this jQuery to IntranetUserJS</p>
+
+    <ul>
+      <li>
+        <p>This jQuery gathers the data from the report and puts it on the home page in the staff interface</p>
+      </li>
+      <li>
+        <p>replace “<em>holds_count_button_report_number</em>” with the number you noted in Step 2</p>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">if</span> <span class="p">(</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#main_intranet-main</span><span class="dl">'</span><span class="p">).</span><span class="nx">length</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">queuebranch</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">.logged-in-branch-code</span><span class="dl">'</span><span class="p">).</span><span class="nx">html</span><span class="p">().</span><span class="nx">trim</span><span class="p">();</span>
+  <span class="nx">$</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="dl">'</span><span class="s1">/cgi-bin/koha/svc/report?id=_holds_count_button_report_number_&amp;phase=Run+this+report&amp;param_name=Enter+branchcode&amp;sql_params=</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">queuebranch</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">jsonqueue</span> <span class="o">=</span> <span class="nx">value</span>
+      <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#container-main .col-sm-3 #area-news</span><span class="dl">'</span><span class="p">).</span><span class="nx">prepend</span><span class="p">(</span><span class="dl">'</span><span class="s1">&lt;div style="background-color: #e9edf0;"&gt;&lt;h3 style="padding: 0.3em;"&gt;Holds queue&lt;/h3&gt;</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">jsonqueue</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&lt;/div&gt;</span><span class="dl">'</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+
+      </section>
+
+    </div>
+
+    
+  </body>
+</html>

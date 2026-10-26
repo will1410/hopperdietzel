@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Using GitHub to backup data from Koha | Untitled self-indulgent website</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Using GitHub to backup data from Koha" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Website for George H. Williams" />
+<meta property="og:description" content="Website for George H. Williams" />
+<link rel="canonical" href="http://localhost:4000/koha_notes/github_backups.html" />
+<meta property="og:url" content="http://localhost:4000/koha_notes/github_backups.html" />
+<meta property="og:site_name" content="Untitled self-indulgent website" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Using GitHub to backup data from Koha" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Website for George H. Williams","headline":"Using GitHub to backup data from Koha","url":"http://localhost:4000/koha_notes/github_backups.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="/assets/js/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="/assets/css/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <!--<li class="fork"><a href="">View On GitHub</a></li>-->
+          
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Untitled self-indulgent website</h1>
+          <p>Website for George H. Williams</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href=""></a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/mattgraham">mattgraham</a></span>
+        </div>
+
+        <h2 id="using-github-to-backup-data-from-koha">Using GitHub to backup data from Koha</h2>
+
+<p>At the 2018 KohaCon in Portland, Oregon, Joy Nelson and I were talking about data and how she had used the term “data lakes” in a presentation she had done.  I told her that I was using GitHub as a “data pond” for storing things that I wanted to back up outside of Koha.  Here’s the exact situation I was trying to deal with.</p>
+
+<p>In 2016 I started working for Northeast Kansas Library System and one of the things I inherited in the Koha that NEKLS is using for our shared catalog was over 1800 reports.  The way that we ended up with 1800 reports is simple.  Next Search Catalog used to have 4 or 5 people managing Koha on behalf of the 40+ member libraries.  A staff member from one of the libraries (let’s say ATCHISON) would call the NEKLS office and speak to Jim and ask “Could you write a report that shows me all of the items at our library that have never checked out” and Jim would write that report (or ask ByWater Solutions to write that report for him).  The report would get added to Koha and Jim would give it a name like “Report for ATCHISON.”  Then, a week later a different library (let’s say OTTAW) would call the office and speak to Heather and ask “Could you write a report that shows me all of the items at our library that have never checked out” and Heather would write that report and give it a title like “Report for OTTAWA.”  So when I arrived at NEKLS, I inherited 1800 reports that mostly had no notes and no titles that said anything about what the report did and were written by 5 or 6 different people.</p>
+
+<p>My solution was to go through the reports table and look for any reports that had not been run in a significantly long time and then I’d delete them.  I also tried to give names to existing reports and to write descriptions that made sense.  I’m not joking when I say that one of the reports I deleted was called “Not sure” and had a description of “?”  I never did figure out what that one was supposed to have done.</p>
+
+<p>Invariably what happened is that I would delete a report that hadn’t been run in 2 years and that didn’t make any sense and then 2 days later I would get a phone call from someone saying “What happened to my super special report that Liz wrote for me in 2009?  I need to run that report every time we have a month that has an ‘R’ and five Tuesdays in it.  Do you know what happened to my super-special report?”  Then I’d have to go and figure out how to re-write that report.</p>
+
+<p>Like many ideas I come up with, my path to solving the problem I was having was to write a report.  I figured that I could write a Koha report that gathers all of the SQL I have stored in Koha and put that data into a csv file.  Then, I could use a visual basic macro in Excel to take the data from my new report and save the data I was collecting into text files that I could open and easily understand and share with other people.  And the venue I found for storing that data outside of Koha was by creating, not a big data lake, but a smaller data pond using GitHub.</p>
+
+<p>I started off with backing up SQL reports once a month or so, then I added Notices and Slips not too long afterwards because we have over 1000 notices at NEKLS.  Most recently I added system preferences.  And these backups have changed over time.  In addition to backing up all of my raw SQL I now also back up my authorised values tables along with my SQL data.</p>
+
+<p>You can find two of these repositories at:</p>
+
+<p><a href="https://github.com/northeast-kansas-library-system/nextkansas.sql">SQL</a></p>
+
+<p><a href="https://github.com/northeast-kansas-library-system/nextkansas-notices-and-slips">Notices and slips</a></p>
+
+<p>For both of these repositories, if you scroll down to the readme.md files, you’ll find the instructions for how to run these backups.</p>
+
+<p>My system preference backups are not accessible to the public, though.  System preferences contain some confidential information.  Specifically in my case there is some confidential usernames and passwords in the enhanced content preferences.</p>
+
+<p>Instead of including a link to those instructions, I’m including those instructions here:</p>
+
+<hr />
+
+<h1 id="system_preference_backup">system_preference_backup</h1>
+<p>Backup files for Next Search Catalog’s Koha system preferences</p>
+
+<h2 id="special-note">Special note</h2>
+<p>The system preferences may contain confidential information such as confidential URLs and usernames and passwords for third party resources such as Overdrive or Syndetics.  If you are using Github to store backups, you should only store your backups in a private repository.</p>
+
+<h2 id="instructions">Instructions</h2>
+
+<p>Create a folder on your c:\ drive called “git”</p>
+
+<p>Run this SQL (Next Search Catalog report 3596), save it as a csv spreadsheet, open the file in Excel</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">SELECT</span>
+  <span class="n">Concat</span><span class="p">(</span><span class="n">If</span><span class="p">(</span><span class="k">Length</span><span class="p">(</span><span class="n">systempreferences</span><span class="p">.</span><span class="n">value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">30000</span><span class="p">,</span> <span class="nv">"XX."</span><span class="p">,</span> <span class="nv">"SP."</span><span class="p">),</span> <span class="k">Replace</span><span class="p">(</span><span class="n">systempreferences</span><span class="p">.</span><span class="k">variable</span><span class="p">,</span> <span class="nv">":"</span><span class="p">,</span> <span class="nv">"_"</span><span class="p">))</span> <span class="k">AS</span> <span class="n">FILE_NAME</span><span class="p">,</span>
+  <span class="n">Concat_Ws</span><span class="p">(</span><span class="nv">""</span><span class="p">,</span>
+    <span class="n">Concat</span><span class="p">(</span><span class="n">If</span><span class="p">(</span><span class="k">Length</span><span class="p">(</span><span class="n">systempreferences</span><span class="p">.</span><span class="n">value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">30000</span><span class="p">,</span> <span class="nv">"XX."</span><span class="p">,</span> <span class="nv">"SP."</span><span class="p">),</span> <span class="n">systempreferences</span><span class="p">.</span><span class="k">variable</span><span class="p">,</span> <span class="nv">".txt"</span><span class="p">),</span>
+    <span class="nb">Char</span><span class="p">(</span><span class="mi">13</span><span class="p">),</span> <span class="nb">Char</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="nb">Char</span><span class="p">(</span><span class="mi">13</span><span class="p">),</span> <span class="nb">Char</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="nv">"----------"</span><span class="p">,</span>
+    <span class="nb">Char</span><span class="p">(</span><span class="mi">13</span><span class="p">),</span> <span class="nb">Char</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="nb">Char</span><span class="p">(</span><span class="mi">13</span><span class="p">),</span> <span class="nb">Char</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="nv">"Preference name: "</span><span class="p">,</span> <span class="n">systempreferences</span><span class="p">.</span><span class="k">variable</span><span class="p">,</span>
+    <span class="nb">Char</span><span class="p">(</span><span class="mi">13</span><span class="p">),</span> <span class="nb">Char</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="nb">Char</span><span class="p">(</span><span class="mi">13</span><span class="p">),</span> <span class="nb">Char</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="nv">"Type: "</span><span class="p">,</span> <span class="n">systempreferences</span><span class="p">.</span><span class="k">type</span><span class="p">,</span>
+    <span class="nb">Char</span><span class="p">(</span><span class="mi">13</span><span class="p">),</span> <span class="nb">Char</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="nb">Char</span><span class="p">(</span><span class="mi">13</span><span class="p">),</span> <span class="nb">Char</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="nv">"Options: "</span><span class="p">,</span> <span class="n">systempreferences</span><span class="p">.</span><span class="k">options</span><span class="p">,</span>
+    <span class="nb">Char</span><span class="p">(</span><span class="mi">13</span><span class="p">),</span> <span class="nb">Char</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="nb">Char</span><span class="p">(</span><span class="mi">13</span><span class="p">),</span> <span class="nb">Char</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="nv">"----------"</span><span class="p">,</span>
+    <span class="nb">Char</span><span class="p">(</span><span class="mi">13</span><span class="p">),</span> <span class="nb">Char</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="nb">Char</span><span class="p">(</span><span class="mi">13</span><span class="p">),</span> <span class="nb">Char</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="nv">"Preference value: "</span><span class="p">,</span>
+    <span class="nb">Char</span><span class="p">(</span><span class="mi">13</span><span class="p">),</span> <span class="nb">Char</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="nb">Char</span><span class="p">(</span><span class="mi">13</span><span class="p">),</span> <span class="nb">Char</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+  <span class="p">)</span> <span class="k">AS</span> <span class="n">INFO</span><span class="p">,</span>
+  <span class="k">SubString</span><span class="p">(</span><span class="n">systempreferences</span><span class="p">.</span><span class="n">value</span> <span class="k">FROM</span> <span class="mi">1</span> <span class="k">FOR</span> <span class="mi">30000</span> <span class="p">)</span> <span class="k">AS</span> <span class="n">PART_ONE</span><span class="p">,</span>
+  <span class="n">If</span><span class="p">(</span><span class="k">Length</span><span class="p">(</span><span class="n">systempreferences</span><span class="p">.</span><span class="n">value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">30000</span><span class="p">,</span> <span class="nv">"||AAAAA||"</span><span class="p">,</span> <span class="nv">""</span><span class="p">)</span> <span class="k">AS</span> <span class="n">SEP_ONE</span><span class="p">,</span>
+  <span class="k">SubString</span><span class="p">(</span><span class="n">systempreferences</span><span class="p">.</span><span class="n">value</span> <span class="k">FROM</span> <span class="mi">30001</span> <span class="k">FOR</span> <span class="mi">30000</span> <span class="p">)</span> <span class="k">AS</span> <span class="n">PART_TWO</span><span class="p">,</span>
+  <span class="n">If</span><span class="p">(</span><span class="k">Length</span><span class="p">(</span><span class="n">systempreferences</span><span class="p">.</span><span class="n">value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">60000</span><span class="p">,</span> <span class="nv">"||AAAAA||"</span><span class="p">,</span> <span class="nv">""</span><span class="p">)</span> <span class="k">AS</span> <span class="n">SEP_TWO</span><span class="p">,</span>
+  <span class="k">SubString</span><span class="p">(</span><span class="n">systempreferences</span><span class="p">.</span><span class="n">value</span> <span class="k">FROM</span> <span class="mi">60001</span> <span class="k">FOR</span> <span class="mi">30000</span> <span class="p">)</span> <span class="k">AS</span> <span class="n">PART_THREE</span><span class="p">,</span>
+  <span class="n">If</span><span class="p">(</span><span class="k">Length</span><span class="p">(</span><span class="n">systempreferences</span><span class="p">.</span><span class="n">value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">90000</span><span class="p">,</span> <span class="nv">"||AAAAA||"</span><span class="p">,</span> <span class="nv">""</span><span class="p">)</span> <span class="k">AS</span> <span class="n">SEP_THREE</span><span class="p">,</span>
+  <span class="k">SubString</span><span class="p">(</span><span class="n">systempreferences</span><span class="p">.</span><span class="n">value</span> <span class="k">FROM</span> <span class="mi">90001</span> <span class="k">FOR</span> <span class="mi">30000</span> <span class="p">)</span> <span class="k">AS</span> <span class="n">PART_FOUR</span><span class="p">,</span>
+  <span class="n">If</span><span class="p">(</span><span class="k">Length</span><span class="p">(</span><span class="n">systempreferences</span><span class="p">.</span><span class="n">value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">120000</span><span class="p">,</span> <span class="nv">"||AAAAA||"</span><span class="p">,</span> <span class="nv">""</span><span class="p">)</span> <span class="k">AS</span> <span class="n">SEP_FOUR</span><span class="p">,</span>
+  <span class="k">SubString</span><span class="p">(</span><span class="n">systempreferences</span><span class="p">.</span><span class="n">value</span> <span class="k">FROM</span> <span class="mi">120001</span> <span class="k">FOR</span> <span class="mi">30000</span> <span class="p">)</span> <span class="k">AS</span> <span class="n">PART_FIVE</span>
+<span class="k">FROM</span>
+  <span class="n">systempreferences</span>
+<span class="k">GROUP</span> <span class="k">BY</span>
+  <span class="n">systempreferences</span><span class="p">.</span><span class="k">variable</span>
+
+</code></pre></div></div>
+
+<p>With the csv file open in Excel, run this VBA macro:</p>
+
+<pre><code class="language-vba">
+Sub WriteToTxt()
+
+Const forReading = 1, forAppending = 3, fsoForWriting = 2
+Dim fs, objTextStream, sText As String
+Dim lLastRow As Long, lRowLoop As Long, lLastCol As Long, lColLoop As Long
+
+lLastRow = Cells(Rows.Count, 1).End(xlUp).Row
+
+For lRowLoop = 1 To lLastRow
+
+    Set fs = CreateObject("Scripting.FileSystemObject")
+    Set objTextStream = fs.opentextfile("c:\git\" &amp; Cells(lRowLoop, 1) &amp; ".txt", fsoForWriting, True)
+
+    sText = ""
+
+    For lColLoop = 2 To 15
+        sText = sText &amp; Cells(lRowLoop, lColLoop) &amp; Chr(10) &amp; Chr(10)
+    Next lColLoop
+
+    objTextStream.writeline (Left(sText, Len(sText) - 1))
+
+
+    objTextStream.Close
+    Set objTextStream = Nothing
+    Set fs = Nothing
+
+Next lRowLoop
+
+End Sub
+
+</code></pre>
+
+<p>This macro should save the contents of coulmn B, C, D, E, F, G, H, I, J, K, L, M, N, O, and P in a text file in c:\git.  The title of each file should be based on column A.  All filenames should start with the letters “SP” unless the system preference has more than 30,000 characters.  In cases were the system preference value is longer than 30,000 characters, the preference value will be broken up into 30,000 character long segments seperated by the text "||AAAAA||" and the filename will start with the letters “XX.”</p>
+
+<p>After this process has run, you will need to find any files that start with “XX” and remove the spaces created by the "||AAAAA||" placeholders and any whitespace that Excel has bounded them with.</p>
+
+<p>Move the contents of c:\git to the local folder for your repository and then use git to sync the updated information with your repository.  NEKLS uses separate folders in the git repository for the production server and the test server.</p>
+
+
+      </section>
+
+    </div>
+
+    
+  </body>
+</html>

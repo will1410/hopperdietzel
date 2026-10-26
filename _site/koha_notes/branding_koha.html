@@ -1,0 +1,1305 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Adding local branding to the Koha staff interface | Untitled self-indulgent website</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Adding local branding to the Koha staff interface" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Website for George H. Williams" />
+<meta property="og:description" content="Website for George H. Williams" />
+<link rel="canonical" href="http://localhost:4000/koha_notes/branding_koha.html" />
+<meta property="og:url" content="http://localhost:4000/koha_notes/branding_koha.html" />
+<meta property="og:site_name" content="Untitled self-indulgent website" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Adding local branding to the Koha staff interface" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Website for George H. Williams","headline":"Adding local branding to the Koha staff interface","url":"http://localhost:4000/koha_notes/branding_koha.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="/assets/js/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="/assets/css/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <!--<li class="fork"><a href="">View On GitHub</a></li>-->
+          
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Untitled self-indulgent website</h1>
+          <p>Website for George H. Williams</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href=""></a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/mattgraham">mattgraham</a></span>
+        </div>
+
+        <h1 id="adding-local-branding-to-the-koha-staff-interface">Adding local branding to the Koha staff interface</h1>
+
+<p>Koha 22.11 brings a whole new look to the Koha staff interface.</p>
+
+<p>The changes mainly involve color choices and the positioning and style of the header search bar.  The Koha logo has also moved, and there is a move towards incorporating more icons in the search bar.</p>
+
+<p>Here are some example screenshots from the 22.05 and 22.11 staff interface home pages:</p>
+
+<p><img src="/koha_notes/images/branding_koha-22_05_home.png" alt="22.05 home page" class="img-responsive" /></p>
+
+<p><img src="/koha_notes/images/branding_koha-22_11_home.png" alt="22.11 home page" class="img-responsive" /></p>
+
+<p>One of the things I’ve always been happy about regarding the older style of Koha’s staff interface is the fact that it was already aligned fairly well with the brand colors that we’ve been using for Next Search Catalog since 2018.  Even before that when our consortium was still called “NExpress,” the branding colors in Koha were not too far off from the branding we were using.  Light blues with some greens in a few places.</p>
+
+<p>The new colors are firmly in the realm of greens, though, so I wanted to come up with a way of using the “intranetcolorstylesheet,” “intranetstylesheet,” or “IntranetUserCSS” to substitute colors that are part of our logo into the staff interface in Koha.  I also wanted to make sure that the colors I chose were accessible to people who might have issues with color blindness.  I also took this project as an opportunity to work extensively with a Firefox plugin called “Stylus” for the first time.  So, here’s what I did:</p>
+
+<h2 id="1-adding-a11y--color-blindness-empathy-test-extension">1. Adding A11Y- Color blindness empathy test extension</h2>
+
+<p>I almost exclusively use Firefox when I work with Koha.  I have Chrome, Opera, and Edge installed on my computer for testing purposes, but I almost always use Firefox.</p>
+
+<p>For Firefox, the color blindness extension I found that I like is <a href="https://addons.mozilla.org/en-US/firefox/addon/a11y-color-blindness-test/" target="_blank">A11Y - Color blindness empathy test</a>, so it’s the one I’ve been using.  I’ve been told that for Chrome, <a href="https://chrome.google.com/webstore/detail/colorblindly/floniaahmccleoclneebhhmnjgdfijgg" target="_blank">Colorblindly</a> is the best option.  Both are offered under an MIT license.</p>
+
+<p>After the A11Y extension is installed, you can select from the drop-down to see how the changes you are making will look to users with different types of color blindness.</p>
+
+<p><img src="/koha_notes/images/branding_koha-a11y.png" alt="A11Y - Color blindness empathy test dropdown" class="img-responsive" /></p>
+
+<h2 id="2-adding-stylus">2. Adding Stylus</h2>
+
+<p>Stylus is an extension I have used a little bit in the past that allows you to add local CSS to any web site, changing that site’s appearance instantly.</p>
+
+<p>Stylus is released under a Mozilla Public License and can be found at the  <a href="https://add0n.com/stylus.html" target="_blank">Stylus extension home page</a></p>
+
+<p>Like I said, I’ve used it before, but I used it almost exclusively to develop the CSS for this project.</p>
+
+<h2 id="3-developing-the-color-pallette">3. Developing the color pallette</h2>
+
+<p>I made use of Venngage’s <a href="https://add0n.com/stylus.html" target="_blank">Accessible color palette generator</a> to generate the colors I wanted to use.</p>
+
+<p>I knew starting off that our logo’s main color is #1f9bde and that it has a dark accent, #0157b9.  I started building my color palette by deciding I wanted three basic colors: light, medium, and dark and I decided that I’d use CSS variables to make changing the palette simpler if it became necessary.</p>
+
+<p>The first thing I did was go to the accessible color palette generator and generate contrasting monochromatic colors for #1f9bde and for #0157b9.  Then I decided to use the lightest color palette match for #1f9bde as my light color.</p>
+
+<p>My basic color variables became:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Color</th>
+      <th>variable name</th>
+      <th>Color ID</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>dark color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_dark</code></td>
+      <td>#0157b9</td>
+    </tr>
+    <tr>
+      <td>medium color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_medium</code></td>
+      <td>#1f9bde</td>
+    </tr>
+    <tr>
+      <td>light color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_light</code></td>
+      <td>#d7ebff</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Then I added a the contrasting text color for each selection to my set of variables:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Color</th>
+      <th>variable name</th>
+      <th>Color ID</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>dark color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_dark</code></td>
+      <td>#0157b9</td>
+    </tr>
+    <tr>
+      <td>dark text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_dark</code></td>
+      <td>#FFFFFF</td>
+    </tr>
+    <tr>
+      <td>medium color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_medium</code></td>
+      <td>#1f9bde</td>
+    </tr>
+    <tr>
+      <td>medium text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_medium</code></td>
+      <td>#FFFFFF</td>
+    </tr>
+    <tr>
+      <td>light color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_light</code></td>
+      <td>#d7ebff</td>
+    </tr>
+    <tr>
+      <td>light text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_light</code></td>
+      <td>#000000</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Then I wanted to add variables for contrasting colors when elements were hovered over.  I simplified this by deciding that when the light elements were hovered over, they’d toggle to the medium colors and the medium colors would toggle to dark on hover.  To create colors for the dark hover, I went back to the accessible color palette generator and picked the darkest monochromatic color that matched with #0157b9.</p>
+
+<p>This gave me:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Color</th>
+      <th>variable name</th>
+      <th>Color ID</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>dark color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_dark</code></td>
+      <td>#0157b9</td>
+    </tr>
+    <tr>
+      <td>dark text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_dark</code></td>
+      <td>#FFFFFF</td>
+    </tr>
+    <tr>
+      <td>dark hover color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_dark</code></td>
+      <td>#04368e</td>
+    </tr>
+    <tr>
+      <td>dark hover text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_dark</code></td>
+      <td>#FFFFFF</td>
+    </tr>
+    <tr>
+      <td>medium color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_medium</code></td>
+      <td>#1f9bde</td>
+    </tr>
+    <tr>
+      <td>medium text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_medium</code></td>
+      <td>#FFFFFF</td>
+    </tr>
+    <tr>
+      <td>medium hover color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_medium</code></td>
+      <td>#0157b9</td>
+    </tr>
+    <tr>
+      <td>medium hover text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_medium</code></td>
+      <td>#FFFFFF</td>
+    </tr>
+    <tr>
+      <td>light color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_light</code></td>
+      <td>#d7ebff</td>
+    </tr>
+    <tr>
+      <td>light text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_light</code></td>
+      <td>#000000</td>
+    </tr>
+    <tr>
+      <td>light hover color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_light</code></td>
+      <td>#1f9bde</td>
+    </tr>
+    <tr>
+      <td>light hover text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_light</code></td>
+      <td>#FFFFFF</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Next I decided that I wanted the overall text color on all pages to be darker and I wanted to change the green color of all of the links.</p>
+
+<p>This lead to:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Color</th>
+      <th>variable name</th>
+      <th>Color ID</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>dark color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_dark</code></td>
+      <td>#0157b9</td>
+    </tr>
+    <tr>
+      <td>dark text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_dark</code></td>
+      <td>#FFFFFF</td>
+    </tr>
+    <tr>
+      <td>dark hover color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_dark_hov</code></td>
+      <td>#04368e</td>
+    </tr>
+    <tr>
+      <td>dark hover text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_dark_hov</code></td>
+      <td>#FFFFFF</td>
+    </tr>
+    <tr>
+      <td>medium color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_medium</code></td>
+      <td>#1f9bde</td>
+    </tr>
+    <tr>
+      <td>medium text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_medium</code></td>
+      <td>#FFFFFF</td>
+    </tr>
+    <tr>
+      <td>medium hover color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_medium_hov</code></td>
+      <td>#0157b9</td>
+    </tr>
+    <tr>
+      <td>medium hover text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_medium_hov</code></td>
+      <td>#FFFFFF</td>
+    </tr>
+    <tr>
+      <td>light color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_light</code></td>
+      <td>#d7ebff</td>
+    </tr>
+    <tr>
+      <td>light text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_light</code></td>
+      <td>#000000</td>
+    </tr>
+    <tr>
+      <td>light hover color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_light_hov</code></td>
+      <td>#1f9bde</td>
+    </tr>
+    <tr>
+      <td>light hover text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_light_hov</code></td>
+      <td>#FFFFFF</td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td>general text color</td>
+      <td><code class="language-plaintext highlighter-rouge">--general_text</code></td>
+      <td>#000000</td>
+    </tr>
+    <tr>
+      <td>general link color</td>
+      <td><code class="language-plaintext highlighter-rouge">--general_link</code></td>
+      <td>#04368e</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Then I wanted to change the header from white on black to black on white.  If I was going to work on a re-theme for Koha that worked as a “Dark” mode, I’d want the header to be white on black.  With our existing colors, though, I found the white on black to be a little oppressive, so I came up with some colors for the header:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Color</th>
+      <th>variable name</th>
+      <th>Color ID</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>dark color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_dark</code></td>
+      <td>#0157b9</td>
+    </tr>
+    <tr>
+      <td>dark text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_dark</code></td>
+      <td>#FFFFFF</td>
+    </tr>
+    <tr>
+      <td>dark hover color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_dark_hov</code></td>
+      <td>#04368e</td>
+    </tr>
+    <tr>
+      <td>dark hover text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_dark_hov</code></td>
+      <td>#FFFFFF</td>
+    </tr>
+    <tr>
+      <td>medium color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_medium</code></td>
+      <td>#1f9bde</td>
+    </tr>
+    <tr>
+      <td>medium text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_medium</code></td>
+      <td>#FFFFFF</td>
+    </tr>
+    <tr>
+      <td>medium hover color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_medium_hov</code></td>
+      <td>#0157b9</td>
+    </tr>
+    <tr>
+      <td>medium hover text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_medium_hov</code></td>
+      <td>#FFFFFF</td>
+    </tr>
+    <tr>
+      <td>light color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_light</code></td>
+      <td>#d7ebff</td>
+    </tr>
+    <tr>
+      <td>light text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_light</code></td>
+      <td>#000000</td>
+    </tr>
+    <tr>
+      <td>light hover color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_light_hov</code></td>
+      <td>#1f9bde</td>
+    </tr>
+    <tr>
+      <td>light hover text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_light_hov</code></td>
+      <td>#FFFFFF</td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td>general text color</td>
+      <td><code class="language-plaintext highlighter-rouge">--general_text</code></td>
+      <td>#000000</td>
+    </tr>
+    <tr>
+      <td>general link color</td>
+      <td><code class="language-plaintext highlighter-rouge">--general_link</code></td>
+      <td>#04368e</td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td>header color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_head</code></td>
+      <td>#FFFFFF</td>
+    </tr>
+    <tr>
+      <td>header text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_head</code></td>
+      <td>#000000</td>
+    </tr>
+    <tr>
+      <td>header hover color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_head_hov</code></td>
+      <td>#e0e0e0</td>
+    </tr>
+    <tr>
+      <td>header hover text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_head_hov</code></td>
+      <td>#000000</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Finally, to help me with testing, I added two more variables to help with testing:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Color</th>
+      <th>variable name</th>
+      <th>Color ID</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>dark color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_dark</code></td>
+      <td>#0157b9</td>
+    </tr>
+    <tr>
+      <td>dark text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_dark</code></td>
+      <td>#FFFFFF</td>
+    </tr>
+    <tr>
+      <td>dark hover color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_dark_hov</code></td>
+      <td>#04368e</td>
+    </tr>
+    <tr>
+      <td>dark hover text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_dark_hov</code></td>
+      <td>#FFFFFF</td>
+    </tr>
+    <tr>
+      <td>medium color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_medium</code></td>
+      <td>#1f9bde</td>
+    </tr>
+    <tr>
+      <td>medium text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_medium</code></td>
+      <td>#FFFFFF</td>
+    </tr>
+    <tr>
+      <td>medium hover color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_medium_hov</code></td>
+      <td>#0157b9</td>
+    </tr>
+    <tr>
+      <td>medium hover text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_medium_hov</code></td>
+      <td>#FFFFFF</td>
+    </tr>
+    <tr>
+      <td>light color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_light</code></td>
+      <td>#d7ebff</td>
+    </tr>
+    <tr>
+      <td>light text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_light</code></td>
+      <td>#000000</td>
+    </tr>
+    <tr>
+      <td>light hover color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_light_hov</code></td>
+      <td>#1f9bde</td>
+    </tr>
+    <tr>
+      <td>light hover text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_light_hov</code></td>
+      <td>#FFFFFF</td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td>general text color</td>
+      <td><code class="language-plaintext highlighter-rouge">--general_text</code></td>
+      <td>#000000</td>
+    </tr>
+    <tr>
+      <td>general link color</td>
+      <td><code class="language-plaintext highlighter-rouge">--general_link</code></td>
+      <td>#04368e</td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td>header color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_head</code></td>
+      <td>#FFFFFF</td>
+    </tr>
+    <tr>
+      <td>header text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_head</code></td>
+      <td>#000000</td>
+    </tr>
+    <tr>
+      <td>header hover color</td>
+      <td><code class="language-plaintext highlighter-rouge">--c_head_hov</code></td>
+      <td>#e0e0e0</td>
+    </tr>
+    <tr>
+      <td>header hover text</td>
+      <td><code class="language-plaintext highlighter-rouge">--t_head_hov</code></td>
+      <td>#000000</td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td>test color</td>
+      <td><code class="language-plaintext highlighter-rouge">--testt</code></td>
+      <td>black</td>
+    </tr>
+    <tr>
+      <td>test text</td>
+      <td><code class="language-plaintext highlighter-rouge">--testc</code></td>
+      <td>red</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="4-the-css">4. The CSS</h2>
+
+<p>The CSS I wrote for this project is the first time that I’ve really extensively used CSS variables.  This simplifies the modifications because, instead of having to remember a dozen hexidecimal color codes, I just had to remember whether this is something I want light, medium, or dark, whether it’s something that changes on hover, and whether it’s in the background or a piece of text.  And if I am having troulbe finding the right selector, I can use <code class="language-plaintext highlighter-rouge">var(--testt)</code> or <code class="language-plaintext highlighter-rouge">var(--testc)</code> to manipulate things on the page until I find the selector that works the way I want it to.</p>
+
+<p>To use the colors I selected, the first part of the CSS is a “root” statement that declares the variables that are available for all pages</p>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+  <span class="c">/* root section sets Brand colors */</span>
+
+  <span class="nd">:root</span> <span class="p">{</span>
+
+    <span class="c">/* Dark */</span>
+    <span class="py">--c_dark</span><span class="p">:</span> <span class="m">#0157b9</span><span class="p">;</span>
+    <span class="py">--t_dark</span><span class="p">:</span> <span class="m">#FFFFFF</span><span class="p">;</span>
+
+    <span class="py">--c_dark_hov</span><span class="p">:</span> <span class="m">#04368e</span><span class="p">;</span>
+    <span class="py">--t_dark_hov</span><span class="p">:</span> <span class="m">#FFFFFF</span><span class="p">;</span>
+
+    <span class="c">/* Medium */</span>
+    <span class="py">--c_medium</span><span class="p">:</span> <span class="m">#1f9bde</span><span class="p">;</span>
+    <span class="py">--t_medium</span><span class="p">:</span> <span class="m">#FFFFFF</span><span class="p">;</span>
+
+    <span class="py">--c_medium_hov</span><span class="p">:</span> <span class="m">#0157b9</span><span class="p">;</span>
+    <span class="py">--t_medium_hov</span><span class="p">:</span> <span class="m">#FFFFFF</span><span class="p">;</span>
+
+    <span class="c">/* Light */</span>
+    <span class="py">--c_light_hov</span><span class="p">:</span> <span class="m">#1f9bde</span><span class="p">;</span>
+    <span class="py">--t_light_hov</span><span class="p">:</span> <span class="m">#FFFFFF</span><span class="p">;</span>
+
+    <span class="py">--c_light</span><span class="p">:</span> <span class="m">#d7ebff</span><span class="p">;</span>
+    <span class="py">--t_light</span><span class="p">:</span> <span class="m">#000000</span><span class="p">;</span>
+
+
+    <span class="c">/* Colors for header */</span>
+    <span class="py">--c_head</span><span class="p">:</span> <span class="m">#FFFFFF</span><span class="p">;</span>
+    <span class="py">--t_head</span><span class="p">:</span> <span class="m">#000000</span><span class="p">;</span>
+
+    <span class="py">--c_head_hov</span><span class="p">:</span> <span class="m">#e0e0e0</span><span class="p">;</span>
+    <span class="py">--t_head_hov</span><span class="p">:</span> <span class="m">#000000</span><span class="p">;</span>
+
+    <span class="c">/* Text colors */</span>
+
+    <span class="py">--general_text</span><span class="p">:</span> <span class="m">#000000</span><span class="p">;</span>
+    <span class="py">--general_link</span><span class="p">:</span> <span class="m">#04368e</span><span class="p">;</span>
+
+    <span class="c">/* test colors */</span>
+    <span class="py">--testt</span><span class="p">:</span> <span class="no">red</span><span class="p">;</span>
+    <span class="py">--textcolor</span><span class="p">:</span> <span class="no">black</span><span class="p">;</span>
+
+  <span class="p">}</span>
+
+
+</code></pre></div></div>
+
+<p>Once those variables are set, anytime I want to change a color in Koha to the medium color, instead of using “#1f9bde”, all I have to do is insert <code class="language-plaintext highlighter-rouge">var(--c_medium)</code>.</p>
+
+<p>The big advantage of this is that if I decide I want to use a different color as my medium color, I can change the variable, and all of the CSS that uses <code class="language-plaintext highlighter-rouge">var(--c_medium)</code> will be changed and I won’t have to dig through the CSS and change every instance of “#1f9bde”.</p>
+
+<h2 id="5--the-more-or-less-complete-css">5.  The (more-or-less) complete CSS</h2>
+
+<p>I’m calling this “more-or-less” complete because I am currently only running this code on my test server.  I’m the only one who has been using it, so there may be places in Koha where the colors are still the Koha 22.11 default colors and I just haven’t found them yet.  For as far as it’s been tested, though, this appears to work quite well.</p>
+
+<p>I have tried to use CSS comments to indicate what each piece of this code does in Koha.</p>
+
+<h3 id="--updated-for-koha-2505">- Updated for Koha 25.05</h3>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">/* -- BEGIN Re-brand the Koha staff interface - Updated for Koha 25.05 -- */</span> 
+
+<span class="c">/* Set colors for re-branding */</span>
+  <span class="nd">:root</span> <span class="p">{</span> 
+
+    <span class="c">/* Dark */</span> 
+      <span class="py">--c_dark</span><span class="p">:</span> <span class="m">#0157b9</span><span class="p">;</span> 
+      <span class="py">--t_dark</span><span class="p">:</span> <span class="m">#FFFFFF</span><span class="p">;</span> 
+
+      <span class="py">--c_dark_hov</span><span class="p">:</span> <span class="m">#04368e</span><span class="p">;</span> 
+      <span class="py">--t_dark_hov</span><span class="p">:</span> <span class="m">#FFFFFF</span><span class="p">;</span> 
+
+    <span class="c">/* Medium */</span> 
+      <span class="py">--c_medium</span><span class="p">:</span> <span class="m">#1f9bde</span><span class="p">;</span> 
+      <span class="py">--t_medium</span><span class="p">:</span> <span class="m">#FFFFFF</span><span class="p">;</span> 
+
+      <span class="py">--c_medium_hov</span><span class="p">:</span> <span class="m">#0157b9</span><span class="p">;</span> 
+      <span class="py">--t_medium_hov</span><span class="p">:</span> <span class="m">#FFFFFF</span><span class="p">;</span> 
+
+    <span class="c">/* Light */</span> 
+      <span class="py">--c_light</span><span class="p">:</span> <span class="m">#d7ebff</span><span class="p">;</span> 
+      <span class="py">--t_light</span><span class="p">:</span> <span class="m">#000000</span><span class="p">;</span> 
+
+      <span class="py">--c_light_hov</span><span class="p">:</span> <span class="m">#1f9bde</span><span class="p">;</span> 
+      <span class="py">--t_light_hov</span><span class="p">:</span> <span class="m">#FFFFFF</span><span class="p">;</span> 
+
+    <span class="c">/* Colors for header */</span> 
+      <span class="py">--c_head</span><span class="p">:</span> <span class="m">#FFFFFF</span><span class="p">;</span> 
+      <span class="py">--t_head</span><span class="p">:</span> <span class="m">#000000</span><span class="p">;</span> 
+
+      <span class="py">--c_head_hov</span><span class="p">:</span> <span class="m">#e0e0e0</span><span class="p">;</span> 
+      <span class="py">--t_head_hov</span><span class="p">:</span> <span class="m">#000000</span><span class="p">;</span> 
+
+    <span class="c">/* Text colors */</span> 
+      <span class="py">--general_text</span><span class="p">:</span> <span class="m">#000000</span><span class="p">;</span> 
+      <span class="py">--general_link</span><span class="p">:</span> <span class="m">#04368e</span><span class="p">;</span> 
+
+  <span class="p">}</span>
+
+<span class="c">/* All pages - highlighting */</span> 
+  <span class="nd">::-moz-selection</span><span class="o">,</span>  <span class="nd">::selection</span> <span class="p">{</span> 
+    <span class="nl">background</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_medium</span><span class="p">);</span> 
+    <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_medium</span><span class="p">);</span> 
+  <span class="p">}</span>
+
+<span class="c">/* -- All pages - header -- */</span> 
+ 
+  <span class="c">/* Styles the header */</span> 
+    <span class="nc">.navbar</span><span class="o">,</span> 
+    <span class="nf">#header</span> <span class="nt">li</span> <span class="nt">a</span> <span class="p">{</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_head</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="nl">border</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_head</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_head</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+    <span class="p">}</span> 
+ 
+  <span class="c">/* Styles header options on hover and focus */</span> 
+    <span class="nf">#header</span> <span class="nf">#toplevelmenu</span> <span class="o">&gt;</span> <span class="nt">li</span><span class="nd">:nth-child</span><span class="o">(</span><span class="nt">n</span><span class="o">)</span><span class="nd">:nth-child</span><span class="o">(</span><span class="nt">-n</span><span class="o">+</span><span class="err">3</span><span class="o">)</span><span class="nd">:nth-child</span><span class="o">(</span><span class="nt">-n</span><span class="o">+</span><span class="err">2</span><span class="o">)</span> <span class="nt">a</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nf">#header</span> <span class="nf">#toplevelmenu</span> <span class="o">&gt;</span> <span class="nt">li</span><span class="nd">:nth-child</span><span class="o">(</span><span class="nt">n</span><span class="o">)</span><span class="nd">:nth-child</span><span class="o">(</span><span class="nt">-n</span><span class="o">+</span><span class="err">3</span><span class="o">)</span><span class="nd">:nth-child</span><span class="o">(</span><span class="nt">-n</span><span class="o">+</span><span class="err">2</span><span class="o">)</span> <span class="nt">a</span><span class="nd">:focus</span><span class="o">,</span> 
+    <span class="nf">#header</span> <span class="nf">#toplevelmenu</span> <span class="o">&gt;</span> <span class="nt">li</span><span class="nd">:nth-child</span><span class="o">(</span><span class="nt">n</span><span class="o">)</span><span class="nd">:nth-child</span><span class="o">(</span><span class="nt">n</span><span class="o">+</span><span class="err">5</span><span class="o">)</span> <span class="nt">a</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nf">#header</span> <span class="nf">#toplevelmenu</span> <span class="o">&gt;</span> <span class="nt">li</span><span class="nd">:nth-child</span><span class="o">(</span><span class="nt">n</span><span class="o">)</span><span class="nd">:nth-child</span><span class="o">(</span><span class="nt">n</span><span class="o">+</span><span class="err">5</span><span class="o">)</span> <span class="nt">a</span><span class="nd">:focus</span><span class="o">,</span> 
+    <span class="nf">#header</span> <span class="nf">#logged-in-menu</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nf">#header</span> <span class="nf">#logged-in-menu</span><span class="nd">:focus</span><span class="o">,</span> 
+    <span class="nf">#header</span> <span class="nc">.dropdown-menu</span> <span class="nt">li</span> <span class="nt">a</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nf">#header</span> <span class="nc">.dropdown-menu</span> <span class="nt">li</span> <span class="nt">a</span><span class="nd">:focus</span> <span class="p">{</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_head_hov</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_head_hov</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="nl">border-radius</span><span class="p">:</span> <span class="m">16px</span><span class="p">;</span> 
+    <span class="p">}</span> 
+ 
+  <span class="c">/* Styles "Search" option and adjacent dropdown as one */</span> 
+  <span class="c">/* Removes black line separator between "Search" and caret */</span> 
+    <span class="nf">#header</span> <span class="nf">#catalog-search-link</span> <span class="nf">#catalog-search-dropdown</span><span class="o">,</span> 
+    <span class="nf">#header</span> <span class="nf">#catalog-search-link</span><span class="o">,</span> 
+    <span class="nf">#header</span> <span class="nf">#catalog-search-link</span> <span class="nc">.dropdown-toggle</span> <span class="p">{</span> 
+      <span class="nl">border</span><span class="p">:</span> <span class="m">0px</span><span class="p">;</span> 
+    <span class="p">}</span> 
+ 
+  <span class="c">/* Styles the "Search" link */</span> 
+    <span class="nf">#header</span> <span class="nf">#catalog-search-link</span> <span class="o">*</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nf">#header</span> <span class="nf">#catalog-search-link</span> <span class="o">*</span><span class="nd">:focus</span> <span class="p">{</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_head_hov</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_head_hov</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="nl">border-top-left-radius</span><span class="p">:</span> <span class="m">16px</span><span class="p">;</span> 
+      <span class="nl">border-bottom-left-radius</span><span class="p">:</span> <span class="m">16px</span><span class="p">;</span> 
+      <span class="nl">border-right</span><span class="p">:</span> <span class="m">0px</span><span class="p">;</span> 
+    <span class="p">}</span> 
+ 
+  <span class="c">/* Styles the down-caret link on hover over the "Search" link */</span> 
+    <span class="nf">#header</span> <span class="nf">#catalog-search-dropdown</span><span class="o">&gt;</span><span class="nt">a</span><span class="nc">.catalog-search-dropdown-hover</span><span class="o">,</span> 
+    <span class="nf">#header</span> <span class="nf">#catalog-search-dropdown</span><span class="o">&gt;</span><span class="nt">a</span><span class="nc">.catalog-search-dropdown-hover</span><span class="nd">:focus</span> <span class="p">{</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_head_hov</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="nl">border-top-right-radius</span><span class="p">:</span> <span class="m">16px</span><span class="p">;</span> 
+      <span class="nl">border-bottom-right-radius</span><span class="p">:</span> <span class="m">16px</span><span class="p">;</span> 
+      <span class="nl">border-left</span><span class="p">:</span> <span class="m">0px</span><span class="p">;</span> 
+    <span class="p">}</span> 
+ 
+  <span class="c">/* Styles the search down-caret on hover  */</span> 
+    <span class="nf">#header</span> <span class="nf">#catalog-search-dropdown</span><span class="o">&gt;</span><span class="nt">a</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nf">#header</span> <span class="nf">#catalog-search-dropdown</span><span class="o">&gt;</span><span class="nt">a</span><span class="nd">:focus</span> <span class="p">{</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_head_hov</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="nl">border-top-right-radius</span><span class="p">:</span> <span class="m">16px</span><span class="p">;</span> 
+      <span class="nl">border-bottom-right-radius</span><span class="p">:</span> <span class="m">16px</span><span class="p">;</span> 
+    <span class="p">}</span> 
+ 
+  <span class="c">/* Styles dropdown menus in header on hover */</span> 
+    <span class="nf">#header</span> <span class="nc">.dropdown-menu</span> <span class="nt">a</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nf">#header</span> <span class="nc">.dropdown-menu</span> <span class="nt">a</span><span class="nd">:focus</span> <span class="p">{</span> 
+      <span class="nl">border-radius</span><span class="p">:</span> <span class="m">0px</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="nl">border</span><span class="p">:</span> <span class="m">0px</span><span class="p">;</span> 
+    <span class="p">}</span> 
+ 
+<span class="c">/* --- All pages - Search bar changes --- */</span> 
+ 
+  <span class="c">/* Highlights input box in black on focus */</span> 
+    <span class="nf">#header_search</span> <span class="nc">.form-content</span><span class="nd">:focus-within</span> <span class="p">{</span> 
+      <span class="nl">box-shadow</span><span class="p">:</span> <span class="nb">inset</span> <span class="m">0px</span> <span class="m">0px</span> <span class="m">0px</span> <span class="m">4px</span> <span class="m">#000000</span><span class="p">;</span> 
+    <span class="p">}</span> 
+ 
+  <span class="c">/* Adds padding to search bar to embiggen */</span> 
+    <span class="nf">#header_search</span> <span class="p">{</span> 
+      <span class="nl">padding</span><span class="p">:</span> <span class="m">.75em</span><span class="p">;</span> 
+    <span class="p">}</span> 
+ 
+  <span class="c">/* Styles search bar title area */</span> 
+    <span class="nf">#header_search</span> <span class="nc">.form-title</span> <span class="p">{</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_dark</span><span class="p">);</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_dark</span><span class="p">);</span> 
+      <span class="nl">padding</span><span class="p">:</span> <span class="m">5px</span> <span class="m">16px</span> <span class="m">5px</span> <span class="m">16px</span><span class="p">;</span> 
+      <span class="nl">border-top-left-radius</span><span class="p">:</span> <span class="m">16px</span><span class="p">;</span> 
+      <span class="nl">border-bottom-left-radius</span><span class="p">:</span> <span class="m">16px</span><span class="p">;</span> 
+    <span class="p">}</span> 
+ 
+  <span class="c">/* Styles search bar title */</span> 
+    <span class="nf">#header_search</span> <span class="nc">.form-title</span> <span class="nt">label</span> <span class="p">{</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_dark</span><span class="p">);</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_dark</span><span class="p">);</span> 
+      <span class="nl">margin</span><span class="p">:</span> <span class="m">0</span> <span class="nb">auto</span><span class="p">;</span> 
+    <span class="p">}</span> 
+ 
+  <span class="c">/* Styles header search area */</span> 
+    <span class="nf">#header_search</span> <span class="p">{</span> 
+      <span class="nl">border</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_medium</span><span class="p">);</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_medium</span><span class="p">);</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_medium</span><span class="p">);</span> 
+    <span class="p">}</span> 
+ 
+  <span class="c">/* Styles header search area buttons */</span> 
+    <span class="nf">#header_search</span> <span class="nt">ul</span> <span class="p">{</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_medium</span><span class="p">);</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_medium</span><span class="p">);</span> 
+    <span class="p">}</span> 
+ 
+  <span class="c">/* Styles search type buttons */</span> 
+    <span class="nf">#header_search</span> <span class="nc">.nav-tabs</span><span class="o">&gt;</span><span class="nt">li</span><span class="o">&gt;</span><span class="nt">a</span> <span class="p">{</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_medium</span><span class="p">);</span> 
+      <span class="nl">border</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_medium</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_medium</span><span class="p">);</span> 
+      <span class="nl">text-decoration</span><span class="p">:</span> <span class="nb">none</span><span class="p">;</span> 
+      <span class="nl">border-radius</span><span class="p">:</span> <span class="m">16px</span><span class="p">;</span> 
+      <span class="nl">padding</span><span class="p">:</span> <span class="m">0.5em</span> <span class="m">.8em</span> <span class="cp">!important</span><span class="p">;</span> 
+    <span class="p">}</span> 
+ 
+  <span class="c">/* Styles search type buttons on hover or focus */</span> 
+    <span class="nf">#header_search</span> <span class="nc">.nav-tabs</span><span class="o">&gt;</span><span class="nt">li</span><span class="o">&gt;</span><span class="nt">a</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nf">#header_search</span> <span class="nc">.nav-tabs</span><span class="o">&gt;</span><span class="nt">li</span><span class="o">&gt;</span><span class="nt">a</span><span class="nd">:focus</span><span class="o">,</span> 
+    <span class="nf">#header_search</span> <span class="nt">a</span><span class="nc">.nav-link.active</span> <span class="p">{</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_medium_hov</span><span class="p">);</span> 
+      <span class="nl">border</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_medium_hov</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_medium_hov</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+        <span class="nl">text-decoration</span><span class="p">:</span> <span class="nb">none</span><span class="p">;</span> 
+      <span class="nl">border-radius</span><span class="p">:</span> <span class="m">16px</span><span class="p">;</span> 
+      <span class="nl">padding</span><span class="p">:</span> <span class="m">0.5em</span> <span class="m">.8em</span><span class="p">;</span> 
+    <span class="p">}</span> 
+ 
+  <span class="c">/* Styles the submit button */</span> 
+    <span class="nf">#header_search</span> <span class="nt">button</span> <span class="p">{</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_light</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_light</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+    <span class="p">}</span> 
+ 
+  <span class="c">/* Styles the submit button on hover */</span> 
+    <span class="nf">#header_search</span> <span class="nt">button</span><span class="nd">:hover</span> <span class="p">{</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_dark_hov</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_dark_hov</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+    <span class="p">}</span> 
+ 
+  <span class="c">/* Styles the filter icon on hover */</span> 
+    <span class="nt">div</span><span class="nf">#header_search</span> <span class="nt">div</span><span class="nc">.tab-content</span> <span class="nt">button</span><span class="nc">.form-extra-content-toggle</span> <span class="p">{</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="nb">transparent</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="no">black</span> <span class="cp">!important</span><span class="p">;</span> 
+    <span class="p">}</span> 
+ 
+  <span class="c">/* Styles drop-down list on search catalog */</span> 
+    <span class="nf">#header_search</span> <span class="nc">.form-extra-content</span> <span class="nf">#idx</span> <span class="p">{</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="no">black</span> <span class="cp">!important</span> 
+    <span class="p">}</span> 
+
+<span class="c">/* -- All pages - general stuff -- */</span> 
+ 
+  <span class="c">/* Styles all default text in "--general_text" color */</span> 
+    <span class="nt">h1</span><span class="o">,</span> 
+    <span class="nt">h2</span><span class="o">,</span> 
+    <span class="nt">h3</span><span class="o">,</span> 
+    <span class="nt">h4</span><span class="o">,</span> 
+    <span class="nt">h5</span><span class="o">,</span> 
+    <span class="nt">h6</span><span class="o">,</span> 
+    <span class="nt">p</span><span class="o">,</span> 
+    <span class="nt">h1</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nt">h2</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nt">h3</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nt">h4</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nt">h5</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nt">h6</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nt">p</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nt">a</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nt">h1</span><span class="nd">:focus</span><span class="o">,</span> 
+    <span class="nt">h2</span><span class="nd">:focus</span><span class="o">,</span> 
+    <span class="nt">h3</span><span class="nd">:focus</span><span class="o">,</span> 
+    <span class="nt">h4</span><span class="nd">:focus</span><span class="o">,</span> 
+    <span class="nt">h5</span><span class="nd">:focus</span><span class="o">,</span> 
+    <span class="nt">h6</span><span class="nd">:focus</span><span class="o">,</span> 
+    <span class="nt">p</span><span class="nd">:focus</span><span class="o">,</span> 
+    <span class="nt">a</span><span class="nd">:focus</span> <span class="p">{</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--general_text</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+    <span class="p">}</span> 
+
+  <span class="c">/* Styles all links in "--general_link" + underlines all links */</span> 
+    <span class="nt">a</span> <span class="p">{</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--general_link</span><span class="p">);</span> 
+      <span class="nl">text-decoration</span><span class="p">:</span> <span class="nb">underline</span><span class="p">;</span> 
+    <span class="p">}</span> 
+ 
+  <span class="c">/* Styles links on hover */</span> 
+    <span class="nt">a</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nt">a</span><span class="nd">:focus</span> <span class="p">{</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_light</span><span class="p">);</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_light</span><span class="p">);</span> 
+      <span class="nl">text-decoration</span><span class="p">:</span> <span class="nb">none</span><span class="p">;</span> 
+    <span class="p">}</span> 
+ 
+  <span class="c">/* Excludes logo and "Home" icon from link styles */</span> 
+    <span class="nf">#logo</span><span class="o">,</span> 
+    <span class="nf">#breadcrumbs</span> <span class="nt">ol</span> <span class="nt">li</span><span class="nd">:nth-child</span><span class="o">(</span><span class="err">1</span><span class="o">)</span> <span class="nt">a</span><span class="o">,</span> 
+    <span class="nf">#breadcrumbs</span> <span class="nt">ol</span> <span class="nt">li</span><span class="nd">:nth-child</span><span class="o">(</span><span class="err">1</span><span class="o">)</span> <span class="nt">a</span><span class="nd">:hover</span> <span class="p">{</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="nb">transparent</span><span class="p">;</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--general_link</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="nl">text-decoration</span><span class="p">:</span> <span class="nb">none</span><span class="p">;</span> 
+      <span class="nl">border</span><span class="p">:</span> <span class="m">0px</span><span class="p">;</span> 
+    <span class="p">}</span> 
+
+<span class="c">/* -- Things that affect multiple pages -- */</span> 
+<span class="c">/* (/cgi-bin/koha/virtualshelves/shelves.pl), (/cgi-bin/koha/authorities/authorities.pl?authid=n), (/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=n) */</span> 
+ 
+  <span class="c">/* -- Tabs on tables -- */</span> 
+    <span class="c">/* Style table tabs */</span> 
+      <span class="nc">.nav-tabs</span> <span class="nc">.nav-link</span> <span class="p">{</span> 
+        <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_light</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+        <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_light</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+        <span class="nl">border</span><span class="p">:</span> <span class="m">2px</span> <span class="nb">solid</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_light</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="p">}</span> 
+    <span class="c">/* Style table tabs on hover */</span> 
+      <span class="nc">.nav-tabs</span> <span class="nc">.nav-link</span><span class="nd">:hover</span> <span class="p">{</span> 
+        <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_light_hov</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+        <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_light_hov</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+        <span class="nl">border</span><span class="p">:</span> <span class="m">2px</span> <span class="nb">solid</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_light_hov</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="p">}</span> 
+    <span class="c">/* Style active table tab */</span> 
+      <span class="nc">.nav-tabs</span> <span class="nc">.nav-link.active</span><span class="o">,</span> 
+      <span class="nc">.nav-tabs</span> <span class="nc">.nav-link.active</span><span class="nd">:focus</span> <span class="p">{</span> 
+        <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_dark</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+        <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_dark</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+        <span class="nl">border</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="no">black</span> <span class="cp">!important</span><span class="p">;</span> 
+        <span class="nl">border-bottom</span><span class="p">:</span> <span class="m">0px</span><span class="p">;</span> 
+      <span class="p">}</span> 
+
+<span class="c">/* -- Pages with sub-module bottons (circ/circulation-home.pl) (cataloguing/cataloging-home.pl) -- */</span> 
+  <span class="c">/* Style sub-module buttons */</span> 
+    <span class="nc">.buttons-list</span> <span class="nt">li</span> <span class="nt">a</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nc">.buttons-list</span> <span class="nt">li</span> <span class="nt">a</span><span class="nd">:focus</span> <span class="p">{</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_light_hov</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_light_hov</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+    <span class="p">}</span> 
+  
+<span class="c">/* Home page (koha/mainpage.pl) */</span> 
+  <span class="c">/* Home page - make module buttons Medium color on hover */</span> 
+    <span class="nt">ul</span><span class="nc">.biglinks-list</span> <span class="nt">li</span> <span class="nt">a</span><span class="nc">.icon_general</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nt">ul</span><span class="nc">.biglinks-list</span> <span class="nt">li</span> <span class="nt">a</span><span class="nc">.icon_general</span><span class="nd">:focus</span> <span class="p">{</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_light_hov</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_light_hov</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+    <span class="p">}</span> 
+
+<span class="c">/* -- Pages with left side menu -- */</span> 
+  <span class="c">/* Home Administration * --- */</span>
+  <span class="c">/* Home  &gt; Acquisitions * --- */</span>
+  <span class="c">/* Home Circulation  &gt; * --- */</span>
+  <span class="c">/* Home Reports Guided reports * --- */</span>
+  <span class="c">/* Home  &gt; Serials --- */</span>
+  <span class="c">/* Home Tools  &gt; * --- */</span>
+  
+  <span class="c">/* Styles title and heading left menu */</span> 
+    <span class="nc">.sidebar_menu</span> <span class="nt">h5</span> <span class="p">{</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--general_text</span><span class="p">);</span> 
+    <span class="p">}</span> 
+  <span class="c">/* Styles dormant links in left menu */</span> 
+    <span class="nc">.sidebar_menu</span> <span class="nt">ul</span> <span class="nt">li</span> <span class="nt">a</span> <span class="p">{</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--general_link</span><span class="p">);</span> 
+    <span class="p">}</span> 
+  <span class="c">/* Styles currently selected left menu link */</span> 
+    <span class="nc">.sidebar_menu</span> <span class="nt">ul</span> <span class="nt">li</span><span class="nc">.active</span><span class="o">&gt;</span><span class="nt">a</span><span class="o">,</span> 
+    <span class="nc">.sidebar_menu</span> <span class="nt">ul</span> <span class="nt">li</span> <span class="nt">a</span><span class="nc">.current</span> <span class="p">{</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--general_link</span><span class="p">);</span> 
+      <span class="nl">border-left</span><span class="p">:</span> <span class="nb">solid</span> <span class="m">15px</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_medium</span><span class="p">);</span> 
+    <span class="p">}</span> 
+  <span class="c">/* Styles left menu links on hover */</span> 
+    <span class="nc">.sidebar_menu</span> <span class="nt">ul</span> <span class="nt">li</span> <span class="nt">a</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nc">.sidebar_menu</span> <span class="nt">ul</span> <span class="nt">li</span> <span class="nt">a</span><span class="nd">:focus</span><span class="o">,</span> 
+    <span class="nc">.sidebar_menu</span> <span class="nt">ul</span> <span class="nt">li</span><span class="nc">.active</span> <span class="nc">.pref_sublink</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nc">.sidebar_menu</span> <span class="nt">ul</span> <span class="nt">li</span><span class="nc">.active</span> <span class="nc">.pref_sublink</span><span class="nd">:focus</span> <span class="p">{</span> 
+      <span class="nl">border-left</span><span class="p">:</span> <span class="nb">solid</span> <span class="m">20px</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_dark_hov</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_light</span><span class="p">);</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_light</span><span class="p">);</span> 
+      <span class="nl">font-weight</span><span class="p">:</span> <span class="nb">bold</span> <span class="cp">!important</span><span class="p">;</span> 
+    <span class="p">}</span> 
+  <span class="c">/* Styles sub-menu links on left menu */</span> 
+  <span class="c">/* This seems to only be on (admin/preferences.pl) */</span> 
+    <span class="nc">.sidebar_menu</span> <span class="nt">ul</span> <span class="nt">li</span><span class="nc">.active</span> <span class="nc">.pref_sublink</span> <span class="p">{</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--general_link</span><span class="p">);</span> 
+      <span class="nl">border-left</span><span class="p">:</span> <span class="nb">solid</span> <span class="m">10px</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_medium</span><span class="p">);</span> 
+    <span class="p">}</span> 
+
+<span class="c">/* -- Pages with flatpickr */</span> 
+  <span class="c">/* Style links in flatpickr */</span> 
+    <span class="nc">.shortcut-buttons-flatpickr-button</span> <span class="p">{</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_dark</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+    <span class="p">}</span> 
+  <span class="c">/* Style flatpickr border */</span> 
+    <span class="nc">.flatpickr-calendar</span> <span class="p">{</span> 
+      <span class="nl">border</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_dark</span><span class="p">);</span> 
+    <span class="p">}</span> 
+
+<span class="c">/* -- Pages with datatables -- */</span> 
+<span class="c">/* --- /cgi-bin/koha/virtualshelves/shelves.pl for example --- */</span> 
+  <span class="c">/* Styles "Processing" pop-up message */</span> 
+    <span class="c">/* Colors the border */</span> 
+      <span class="nc">.dt-processing</span> <span class="p">{</span> 
+        <span class="nl">border</span><span class="p">:</span> <span class="m">2px</span> <span class="nb">solid</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_medium</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="p">}</span> 
+    <span class="c">/* Colors the revolving dots */</span> 
+      <span class="nc">.dt-processing</span> <span class="nt">div</span> <span class="o">*</span> <span class="p">{</span> 
+        <span class="nl">background</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_medium</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="p">}</span> 
+
+  <span class="c">/* Styles pagination controls for datatables*/</span> 
+    <span class="c">/* Styles active links and numbers */</span> 
+      <span class="nc">.dt-paging</span> <span class="nc">.dt-paging-button</span> <span class="p">{</span> 
+        <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--general_link</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="p">}</span> 
+    <span class="c">/* Styles links and numbers on hover */</span> 
+      <span class="nc">.dt-paging</span> <span class="nc">.dt-paging-button</span><span class="nd">:not</span><span class="o">(</span><span class="nc">.disabled</span><span class="o">)</span><span class="nd">:not</span><span class="o">(</span><span class="nc">.current</span><span class="o">)</span><span class="nd">:hover</span> <span class="p">{</span> 
+        <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_light_hov</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+        <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_light_hov</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+        <span class="nl">border-radius</span><span class="p">:</span> <span class="m">6px</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="p">}</span> 
+    <span class="c">/* Styles disabled links and numbers on hover */</span> 
+      <span class="nc">.dt-paging</span> <span class="nc">.dt-paging-button.disabled</span><span class="nd">:hover</span><span class="o">,</span> 
+      <span class="nc">.dt-paging</span> <span class="nc">.dt-paging-button.current</span><span class="nd">:hover</span> <span class="p">{</span> 
+        <span class="nl">text-decoration</span><span class="p">:</span> <span class="nb">none</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="p">}</span> 
+    <span class="c">/* Styles background color on currently selected number  */</span> 
+      <span class="nc">.dt-paging</span> <span class="nc">.dt-paging-button.current</span> <span class="p">{</span> 
+        <span class="nl">background</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_light</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+        <span class="nl">border-radius</span><span class="p">:</span> <span class="m">6px</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="p">}</span> 
+      
+  <span class="c">/* Style number box (members/members-home.pl) */</span> 
+    <span class="c">/* Styles modification count */</span> 
+      <span class="nc">.pending-info</span> <span class="nt">span</span><span class="o">,</span> 
+      <span class="nc">.pending-info</span> <span class="nt">span</span> <span class="o">*</span> <span class="p">{</span> 
+        <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_light</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+        <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_light</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+        <span class="nl">text-decoration</span><span class="p">:</span> <span class="nb">none</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="p">}</span> 
+    <span class="c">/* Styles modification count on hover */</span> 
+      <span class="nc">.pending-info</span> <span class="nt">span</span><span class="nd">:hover</span><span class="o">,</span> 
+      <span class="nc">.pending-info</span> <span class="nt">span</span><span class="nd">:hover</span> <span class="o">*</span> <span class="p">{</span> 
+        <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_light_hov</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+        <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_light_hov</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+        <span class="nl">text-decoration</span><span class="p">:</span> <span class="nb">none</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="p">}</span>
+      
+  <span class="c">/* Style link buttons in link text */</span> 
+    <span class="c">/* Select all and clear all buttons on (members/members-home.pl) */</span> 
+    <span class="c">/* Options buttons on (catalogue/search.pl) */</span> 
+      <span class="nc">.btn.btn-link</span><span class="o">,</span>
+      <span class="nf">#searchheader</span> <span class="nt">a</span> <span class="p">{</span> 
+        <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--general_link</span><span class="p">);</span> 
+      <span class="p">}</span> 
+ 
+  <span class="c">/* Style block pagination (authorities/authorities-home.pl?op=do_search . . . ) */</span> 
+    <span class="c">/* Style page numbers */</span> 
+      <span class="nt">div</span><span class="nc">.pages</span> <span class="nt">a</span><span class="nd">:link</span><span class="o">,</span> 
+      <span class="nt">div</span><span class="nc">.pages</span> <span class="nt">a</span><span class="nd">:visited</span> <span class="p">{</span> 
+        <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_light</span><span class="p">);</span> 
+        <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_light</span><span class="p">);</span> 
+      <span class="p">}</span> 
+    <span class="c">/* Style page numbers on hover */</span> 
+      <span class="nt">div</span><span class="nc">.pages</span> <span class="nt">a</span><span class="nd">:hover</span><span class="o">,</span> 
+      <span class="nt">div</span><span class="nc">.pages</span> <span class="nt">a</span><span class="nd">:active</span> <span class="p">{</span> 
+        <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_light_hov</span><span class="p">);</span> 
+        <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_light_hov</span><span class="p">)</span> 
+      <span class="p">}</span> 
+    <span class="c">/* Style current page number */</span> 
+      <span class="nt">div</span><span class="nc">.pages</span> <span class="nc">.current</span><span class="o">,</span> 
+      <span class="nt">div</span><span class="nc">.pages</span> <span class="nc">.currentPage</span> <span class="p">{</span> 
+        <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_dark</span><span class="p">);</span> 
+        <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_dark</span><span class="p">);</span> 
+      <span class="p">}</span> 
+
+<span class="c">/* Check out (circ/circulation.pl?borrowernumber=) */</span> 
+  <span class="c">/* Style claims returned badges */</span> 
+    <span class="nf">#return-claims-count-resolved</span><span class="o">,</span> 
+    <span class="nf">#return-claims-count-unresolved</span> <span class="p">{</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_light</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_light</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="nl">line-height</span><span class="p">:</span> <span class="m">1</span><span class="p">;</span> 
+      <span class="nl">font-size</span><span class="p">:</span> <span class="m">100%</span><span class="p">;</span> 
+      <span class="nl">font-weight</span><span class="p">:</span> <span class="nb">bold</span><span class="p">;</span> 
+      <span class="nl">border</span><span class="p">:</span> <span class="m">1px</span> <span class="no">black</span> <span class="nb">solid</span><span class="p">;</span> 
+    <span class="p">}</span> 
+
+<span class="c">/* Authorities detail for . . . (authorities/detail.pl?authid=n) */</span> 
+  <span class="c">/* Style tag number  */</span> 
+    <span class="nf">#authoritiestabs</span> <span class="nc">.tag_num</span> <span class="p">{</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--general_text</span><span class="p">);</span> 
+    <span class="p">}</span> 
+  <span class="c">/* Style authority link spyglass (catalogue/detail.pl?biblionumber=n) */</span> 
+    <span class="nc">.authlink</span> <span class="p">{</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_light</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+    <span class="p">}</span> 
+  <span class="c">/* Styles "Clear search form" on Z39.50 search (cataloguing/z3950_auth_search.pl) */</span> 
+    <span class="nf">#resetZ3950Search</span> <span class="p">{</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--general_link</span><span class="p">);</span> 
+    <span class="p">}</span> 
+    
+  <span class="c">/* Patron lists */</span> 
+  <span class="c">/* Also affects (tags/review.pl?approved=) - added "Select all pending" */</span> 
+  <span class="c">/* Also affects (z3950_auth_search.pl) */</span> 
+    <span class="c">/* Style "Select all" and "Clear all" buttons on Patron lists &gt; NAME &gt; Add patrons (patron_lists/list.pl?patron_list_id=n) */</span> 
+      <span class="nf">#CheckAll</span><span class="o">,</span> 
+      <span class="nf">#CheckNone</span><span class="o">,</span> 
+      <span class="nf">#CheckPending</span> <span class="p">{</span> 
+        <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--general_link</span><span class="p">);</span> 
+      <span class="p">}</span> 
+
+<span class="c">/* Check-in modal (circ/returns.pl) */</span> 
+  <span class="c">/* Styles modal header and footer */</span> 
+  <span class="nc">.modal-header</span><span class="o">,</span> 
+  <span class="nc">.modal-footer</span> <span class="p">{</span> 
+    <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_light</span><span class="p">);</span> 
+    <span class="nl">border-bottom</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_light_hov</span><span class="p">);</span> 
+    <span class="nl">border-top</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="n">var</span><span class="p">(</span><span class="n">--clight_hov</span><span class="p">)</span> 
+  <span class="p">}</span> 
+
+<span class="c">/* Advanced catalog editor (cataloguing/editor.pl#catalog/n) */</span> 
+  <span class="c">/* Style text */</span> 
+    <span class="nf">#cat_addbiblio</span> <span class="nc">.CodeMirror-code</span> <span class="o">*</span> <span class="p">{</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--general_link</span><span class="p">);</span> 
+    <span class="p">}</span> 
+  <span class="c">/* Style dropdown borders */</span> 
+    <span class="nc">.CodeMirror-widget</span> <span class="nc">.subfield-widget</span> <span class="p">{</span> 
+      <span class="nl">border</span><span class="p">:</span> <span class="nb">solid</span> <span class="m">2px</span> <span class="n">var</span><span class="p">(</span><span class="n">--general_link</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+    <span class="p">}</span> 
+  <span class="c">/* Style select outline */</span> 
+    <span class="nc">.CodeMirror-widget</span> <span class="nc">.subfield-widget</span> <span class="nt">select</span><span class="nd">:focus</span> <span class="p">{</span> 
+      <span class="nl">outline</span><span class="p">:</span> <span class="m">0px</span> <span class="n">var</span><span class="p">(</span><span class="n">--general_link</span><span class="p">)</span> <span class="nb">solid</span> <span class="cp">!important</span><span class="p">;</span> 
+    <span class="p">}</span> 
+  <span class="c">/* Style the status bar underneath the advanced editor window */</span> 
+    <span class="nf">#statusbar</span> <span class="p">{</span> 
+      <span class="nl">border</span><span class="p">:</span> <span class="nb">solid</span> <span class="m">2px</span> <span class="n">var</span><span class="p">(</span><span class="n">--general_link</span><span class="p">);</span> 
+    <span class="p">}</span> 
+  <span class="c">/* Style the advanced editor slider */</span> 
+    <span class="nf">#toggle-editor</span> <span class="nc">.switch</span> <span class="nt">input</span><span class="nd">:checked</span><span class="o">+</span><span class="nc">.slider</span> <span class="p">{</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_medium</span><span class="p">);</span> 
+    <span class="p">}</span> 
+
+<span class="c">/* Catalog search results  */</span> 
+  <span class="c">/* Style search facets heading */</span> 
+    <span class="nf">#search-facets</span> <span class="nt">h4</span> <span class="p">{</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_medium</span><span class="p">);</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_medium</span><span class="p">);</span> 
+    <span class="p">}</span> 
+  <span class="c">/* Style "Hightlight"/"Unhighlight" */</span> 
+    <span class="nc">.highlight_toggle</span> <span class="p">{</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--general_link</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+    <span class="p">}</span> 
+  <span class="c">/* Style "Hightlight"/"Unhighlight" on hover */</span> 
+    <span class="nc">.highlight_toggle</span><span class="nd">:hover</span> <span class="p">{</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_light</span><span class="p">);</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">-t_light</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="nl">border-radius</span><span class="p">:</span> <span class="m">6px</span><span class="p">;</span> 
+    <span class="p">}</span> 
+    
+<span class="c">/* Search results (catalogue/search.pl?q=x) */</span> 
+  <span class="c">/* Style page numbers */</span> 
+    <span class="nc">.pagination</span><span class="o">&gt;</span><span class="nt">li</span><span class="o">&gt;</span><span class="nt">a</span><span class="o">,</span> 
+    <span class="nc">.pagination</span><span class="o">&gt;</span><span class="nt">li</span><span class="o">&gt;</span><span class="nt">span</span> <span class="p">{</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_light</span><span class="p">);</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_light</span><span class="p">);</span> 
+    <span class="p">}</span> 
+  <span class="c">/* Style page numbers on hover */</span> 
+    <span class="nc">.pagination</span><span class="o">&gt;</span><span class="nt">li</span><span class="o">&gt;</span><span class="nt">a</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nc">.pagination</span><span class="o">&gt;</span><span class="nt">li</span><span class="o">&gt;</span><span class="nt">span</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nc">.pagination</span><span class="o">&gt;</span><span class="nt">li</span><span class="o">&gt;</span><span class="nt">a</span><span class="nd">:focus</span><span class="o">,</span> 
+    <span class="nc">.pagination</span><span class="o">&gt;</span><span class="nt">li</span><span class="o">&gt;</span><span class="nt">span</span><span class="nd">:focus</span> <span class="p">{</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_light_hov</span><span class="p">);</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_light_hov</span><span class="p">);</span> 
+    <span class="p">}</span> 
+  <span class="c">/* Style selected page number */</span> 
+    <span class="nc">.pagination</span><span class="o">&gt;</span><span class="nc">.active</span><span class="o">&gt;</span><span class="nt">a</span><span class="o">,</span> 
+    <span class="nc">.pagination</span><span class="o">&gt;</span><span class="nc">.active</span><span class="o">&gt;</span><span class="nt">span</span><span class="o">,</span> 
+    <span class="nc">.pagination</span><span class="o">&gt;</span><span class="nc">.active</span><span class="o">&gt;</span><span class="nt">a</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nc">.pagination</span><span class="o">&gt;</span><span class="nc">.active</span><span class="o">&gt;</span><span class="nt">span</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nc">.pagination</span><span class="o">&gt;</span><span class="nc">.active</span><span class="o">&gt;</span><span class="nt">a</span><span class="nd">:focus</span><span class="o">,</span> 
+    <span class="nc">.pagination</span><span class="o">&gt;</span><span class="nc">.active</span><span class="o">&gt;</span><span class="nt">span</span><span class="nd">:focus</span> <span class="p">{</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_dark</span><span class="p">);</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_dark</span><span class="p">);</span> 
+      <span class="nl">border-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_dark</span><span class="p">);</span> 
+    <span class="p">}</span> 
+
+<span class="c">/* Home &gt; Catalog &gt; TITLE &gt; Details */</span> 
+<span class="c">/* (/cgi-bin/koha/catalogue/detail.pl?biblionumber=[BIBLIONUMBER]) */</span> 
+  <span class="c">/* Browse results border */</span> 
+    <span class="nf">#browse-return-to-results</span> <span class="p">{</span> 
+      <span class="nl">border</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_medium</span><span class="p">);</span> 
+    <span class="p">}</span> 
+  <span class="c">/* Browse results button border */</span> 
+    <span class="nc">.browse-button</span> <span class="p">{</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">rgba</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span> 
+      <span class="nl">border</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_medium</span><span class="p">);</span> 
+    <span class="p">}</span> 
+  <span class="c">/* Browse results buttons */</span> 
+    <span class="nt">a</span><span class="nc">.browse-button</span><span class="o">,</span> 
+    <span class="nt">span</span><span class="nc">.browse-button</span> <span class="p">{</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_medium</span><span class="p">);</span> 
+    <span class="p">}</span> 
+ 
+  <span class="c">/* Styles dropdown lists in link text */</span> 
+    <span class="nf">#toolbar</span> <span class="nt">ul</span> <span class="nt">li</span> <span class="nt">a</span> <span class="p">{</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--general_link</span><span class="p">);</span> 
+    <span class="p">}</span> 
+
+  <span class="c">/* Styles dropdown lists when active */</span> 
+    <span class="nf">#toolbar</span> <span class="nt">ul</span> <span class="nt">li</span> <span class="nt">a</span><span class="nd">:active</span> <span class="p">{</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_light_hov</span><span class="p">);</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_light_hov</span><span class="p">);</span>
+    <span class="p">}</span> 
+
+<span class="c">/* Home &gt; Administration */</span> 
+<span class="c">/* (/cgi-bin/koha/admin/admin-home.pl) */</span> 
+  <span class="c">/* Styles message modal after saving prefrences */</span> 
+    <span class="nc">.humanMsg</span> <span class="nt">p</span><span class="o">,</span> 
+    <span class="nf">#humanMsgLog</span> <span class="nc">.launcher</span> <span class="p">{</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_medium</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+    <span class="p">}</span> 
+
+<span class="c">/* Multiple pages including /cgi-bin/koha/catalogue/search.pl, /cgi-bin/koha/members/members-home.pl */</span> 
+  <span class="c">/* Styles border color of input and text area boxes when focused */</span> 
+    <span class="nt">input</span><span class="nd">:focus</span><span class="o">,</span> 
+    <span class="nt">textarea</span><span class="nd">:focus</span> <span class="p">{</span> 
+      <span class="nl">border-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_medium</span><span class="p">);</span> 
+    <span class="p">}</span> 
+
+<span class="c">/* Home &gt; Circulation &gt; Checkouts &gt; NAME (CARDNUMBER)*/</span> 
+<span class="c">/* (/cgi-bin/koha/circ/circulation.pl?borrowernumber=[BORROWERNUMBER]) */</span> 
+  <span class="c">/* Style "Checked out" message */</span> 
+    <span class="nt">div</span><span class="nc">.lastchecked</span> <span class="p">{</span> 
+      <span class="nl">border</span><span class="p">:</span> <span class="m">2px</span> <span class="nb">solid</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_medium</span><span class="p">);</span> 
+    <span class="p">}</span> 
+  <span class="c">/* Style "Approve" checkmark icon wherever it appears */</span> 
+    <span class="nc">.approve</span> <span class="nt">i</span><span class="nc">.fa</span><span class="o">,</span> 
+    <span class="nc">.success</span> <span class="nt">i</span><span class="nc">.fa</span> <span class="p">{</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_dark</span><span class="p">);</span> 
+    <span class="p">}</span>
+
+<span class="c">/* Home &gt; Patrons &gt; NAME (CARDNUMBER) &gt; Make a payment &gt; Pay an individual charge */</span> 
+<span class="c">/* (/cgi-bin/koha/members/paycollect.pl?borrowernumber=[BORROWERNUMBER]. . . ) */</span> 
+  <span class="c">/* Colors text of "Pay" and "Write off buttons" */</span> 
+    <span class="nc">.nav-pills</span> <span class="nt">a</span> <span class="p">{</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--general_text</span><span class="p">);</span> 
+    <span class="p">}</span> 
+  <span class="c">/* Style buttons when paying fee (members/paycollect.pl) */</span> 
+    <span class="nc">.nav-pills</span> <span class="nc">.nav-link.active</span><span class="o">,</span> 
+    <span class="nc">.nav-pills</span> <span class="nc">.show</span><span class="o">&gt;</span><span class="nc">.nav-link</span> <span class="p">{</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_medium</span><span class="p">);</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_medium</span><span class="p">);</span> 
+    <span class="p">}</span> 
+  <span class="c">/* Style buttons when paying fee on hover */</span> 
+    <span class="nc">.nav-pills</span> <span class="nc">.nav-link.active</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nc">.nav-pills</span> <span class="nc">.show</span><span class="o">&gt;</span><span class="nc">.nav-link</span><span class="nd">:focus</span> <span class="p">{</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_medium_hov</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_medium_hov</span><span class="p">);</span> 
+    <span class="p">}</span> 
+
+<span class="c">/* Home &gt; About Koha (/cgi-bin/koha/about.pl) */</span> 
+  <span class="c">/* Super minor change - changes bootstrap blue "success" highlight to branded light color */</span> 
+    <span class="nc">.text-bg-info</span> <span class="p">{</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_light</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--t_light</span><span class="p">)</span> <span class="cp">!important</span><span class="p">;</span> 
+    <span class="p">}</span> 
+    
+
+<span class="c">/* Panels - various pages */</span> 
+<span class="c">/* Home &gt; Administration &gt; Table settings (/cgi-bin/koha/admin/columns_settings.pl) */</span> 
+<span class="c">/* Home &gt; Patrons &gt; Update patron records (/cgi-bin/koha/members/members-update.pl) */</span> 
+<span class="c">/* Home &gt; Tools &gt; BRANCHNAME calendar (/cgi-bin/koha/tools/holidays.pl) */</span> 
+  <span class="c">/* Style the panel border */</span> 
+    <span class="nc">.panel</span> <span class="p">{</span> 
+      <span class="nl">border</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_dark</span><span class="p">);</span> 
+      <span class="nl">background</span><span class="p">:</span> <span class="n">hsl</span><span class="p">(</span><span class="n">from</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_light</span><span class="p">)</span> <span class="n">h</span> <span class="n">s</span> <span class="n">calc</span><span class="p">(</span><span class="n">l</span> <span class="err">+</span> <span class="p">))</span> <span class="nb">none</span><span class="p">;</span> 
+    <span class="p">}</span> 
+  <span class="c">/* Styles panel title on focus  */</span> 
+    <span class="nc">.panel-title</span> <span class="nt">a</span><span class="nd">:focus-within</span> <span class="p">{</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="nb">inherit</span><span class="p">;</span> 
+      <span class="nl">border-radius</span><span class="p">:</span> <span class="m">0px</span> <span class="p">;</span> 
+    <span class="p">}</span> 
+  <span class="c">/* Styles panel on hover */</span> 
+    <span class="nc">.panel</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nc">.panel</span> <span class="nc">.panel-heading</span> <span class="nt">a</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nc">.panel</span><span class="nd">:focus-within</span><span class="o">,</span> 
+    <span class="nc">.panel</span> <span class="nc">.panel-heading</span> <span class="nt">a</span><span class="nd">:focus-within</span> <span class="p">{</span> 
+      <span class="nl">background</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_light</span><span class="p">)</span> <span class="nb">none</span> 
+    <span class="p">}</span> 
+ 
+<span class="c">/* Home &gt; Administration &gt; Did you mean? (/cgi-bin/koha/admin/didyoumean.pl) */</span> 
+  <span class="c">/* Styles plugin titles */</span> 
+    <span class="nc">.pluginname</span> <span class="p">{</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_light</span><span class="p">);</span> 
+    <span class="p">}</span> 
+ 
+<span class="c">/* Home &gt; Plugins &gt; ALL_PLUGINS (/cgi-bin/koha/plugins/. . . ) */</span> 
+  <span class="c">/* Styles the un-styled part of the breadcrumbs on the plugins pages*/</span> 
+    <span class="nf">#breadcrumbs</span> <span class="nt">a</span><span class="o">[</span><span class="nt">href</span><span class="o">=</span><span class="s1">"/cgi-bin/koha/mainpage.pl"</span><span class="o">]</span> <span class="p">{</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--c_medium_hov</span><span class="p">);</span> 
+    <span class="p">}</span> 
+
+<span class="c">/* Pages with toolbars */</span> 
+<span class="c">/* (members/moremember.pl) (cataloguing/cataloging-home.pl) (labels/label-home.pl) (tools/automatic_item_modification_by_age.pl) (tools/automatic_item_modification_by_age.pl?op=edit_form) */</span> 
+  <span class="c">/* Style toolbar buttons */</span> 
+    <span class="nf">#toolbar</span> <span class="nc">.btn.btn-default</span><span class="o">,</span> 
+    <span class="nc">.btn-toolbar</span> <span class="nc">.btn.btn-default</span> <span class="p">{</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--general_link</span><span class="p">);</span> 
+      <span class="nl">padding</span><span class="p">:</span> <span class="m">6px</span> <span class="m">12px</span><span class="p">;</span> 
+      <span class="nl">border</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">dotted</span> <span class="nb">transparent</span><span class="p">;</span> 
+    <span class="p">}</span> 
+  <span class="c">/* Style toolbar buttons on hover */</span> 
+    <span class="nf">#toolbar</span> <span class="nc">.btn.btn-default</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nf">#toolbar</span> <span class="nc">.btn.btn-default</span><span class="nd">:focus</span><span class="o">,</span> 
+    <span class="nc">.btn-toolbar</span> <span class="nc">.btn.btn-default</span><span class="nd">:hover</span><span class="o">,</span> 
+    <span class="nc">.btn-toolbar</span> <span class="nc">.btn.btn-default</span><span class="nd">:focus</span> <span class="p">{</span> 
+      <span class="nl">text-decoration</span><span class="p">:</span> <span class="nb">none</span><span class="p">;</span> 
+      <span class="nl">background-color</span><span class="p">:</span> <span class="m">#dadada</span><span class="p">;</span> 
+      <span class="nl">border</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">dotted</span> <span class="no">dimgray</span><span class="p">;</span> 
+      <span class="nl">color</span><span class="p">:</span> <span class="n">var</span><span class="p">(</span><span class="n">--general_text</span><span class="p">);</span> 
+      <span class="nl">padding</span><span class="p">:</span> <span class="m">6px</span> <span class="m">12px</span><span class="p">;</span> 
+    <span class="p">}</span> 
+
+<span class="c">/* -- END Re-brand the Koha staff interface -- */</span>
+
+</code></pre></div></div>
+
+
+      </section>
+
+    </div>
+
+    
+  </body>
+</html>

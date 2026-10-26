@@ -1,0 +1,97 @@
+   /* ========== Contact sheet for circulation page ========== */ 
+ 
+    $(document).ready(function () { 
+ 
+    //Home > Circulation 
+      //BEGIN - adds contact sheet to "Library contact information" tab in tabbed section of IntranetCirculationHomeHTML system preference 
+
+        /* Get the url and store it as a variable */
+        var circ_url = $(location).attr('href'); 
+
+        /* If the URL variable includes "circulation-home.pl" then get the JSON data from the api and build the table data. */
+        if (circ_url.indexOf("circulation-home.pl") != -1) { 
+ 
+          /* The "libraries" api gets the data for all libraries in Koha. */
+          $.getJSON("/api/v1/libraries", function (data) { 
+ 
+            /* creates an empty variable called "contact_sheet" */
+            var contact_sheet = ''; 
+ 
+            /* goes through each result from the api */
+            $.each(data, function (key, value) { 
+ 
+
+              /* These first two variables work together.  address4 is a new variable that either equals branches.address2 or is blank if branches.address2 is blank
+              Then it sets a new variable called physical address which equals address4 or (if address4 is balnk) branches.address1.  
+              This will populate the library "Physical address" as branches.address2 or branches.address1 if branches.address2 is blank.
+              
+              Why are 2 steps necessary here?  If you were to write this as "var physical_address = value.address2 || value.address1;" and 
+              "value.address2" is blank, Javascript doesn't see it as blank -- it sees it as an error.  Then you have a situation where "physical_address"
+              would always be either the value of branches.address2 or an error message.  You would never be able to fall back on address1 if address2 was blank.
+              So, first  you have to say "var address4 = value.address2 || '';" so that Javascript can see that if "value.address2" 
+              is an error then it sets address4 "" i.e. blank.  Then you can create the "physical_address" variable and set is so that if address4= "", 
+              then "physical_address" = branches.address1. */
+              var address4 = value.address2 || ''; 
+              var physical_address = address4 || value.address1; 
+
+              /* This variable sets the fax machine value to branches.fax or blank if branches.fax is blank. */
+              var fax_machine = value.fax || ''; 
+
+              /* This trims the zip code to 5 digits. */
+              var zipcode = value.postal_code.substr(0, 5); 
+
+              /* I use the branches.address3 field to include our libraries Director, ILL, and Library Type information and I separate those values with a pipe.
+              This next variable converts those pipes into paragraph breaks so that they can be built as separate lines in the table. */
+              var director = value.address3.replace(" | ", "</span></p><p><span>").replace(" | ", "</span></p><p><span>").replace(" | ", "</span></p>"); 
+
+              /* This table includes links to a report.  This line creates a "report_branch" variable that converts our 4 branch library in Doniphan County
+              and our 5 branch school district into values that will allow the report link to run the report for all of those branches at once instead
+              of seaparting the report into a report limited just to a single library. */
+              var report_branch = value.library_id.replace(/(DONI)\w+/, 'DONI%').replace(/(PH)\w+/, 'PH%'); 
+ 
+              /* This starts the table row and adds a "filterme" class to each row in the table which allows the table to be filtered with a searchbox.  
+              The code for the searchbox is lower down on this page. */
+              contact_sheet += '<tr class="filterme">'; 
+ 
+              /* This builds the "Library" td for the table. */
+              contact_sheet += '<td><p style="font-size: 1.5em">' + value.name + '</p><p><ins>Mailing address:</ins></p><p>' + value.address1 + '<br />' + value.city + ', ' + value.state + ' ' + zipcode + '</p><p><ins>Physical address:</ins></p><p>' + physical_address + '<br />' + value.city + ', ' + value.state + '</p><p><ins>Branch code: </ins>' + value.library_id + '</p></td>'; 
+ 
+              /* This builds the "Contact information" td. */
+              contact_sheet += '<td>' + '<p>Phone: ' + value.phone + '</p><p>Fax: ' + fax_machine + '</p><p>e-mail: ' + value.email + '</p><p>Courier route #: ' + value.notes + '</p><br /><p><a class="btn btn-sm btn-success" style="color: white;" href="' + value.url + '" target="_blank">Website</a></p>' + '</td>'; 
+ 
+              /* This builds the "Staff contacts/report link" td. */
+              contact_sheet += '<td><p><span style="font-size: 1.5em;">' + director + '</span></p><br /><p><a class="btn btn-lg btn-info" style="color: white;" href="/cgi-bin/koha/reports/guided_reports.pl?reports=3716&phase=Run+this+report&param_name=Choose+your+library|ZBRAN&sql_params=' + report_branch + '" target="_blank">Quick data for this library</a></p></td>'; 
+ 
+              /* I have logos/photos for each library stored in the branches.opac_info field in Koha.  This builds the "Logo/photo" td. */
+              contact_sheet += '<td><p>' + value.opac_info + '</span></p></td>';  
+ 
+              /* This ends the row. */
+              contact_sheet += '</tr>'; 
+ 
+            }); 
+
+            /* This pushes all of the data into the table created in the system preference "IntranetCirculationHomeHTML" system preference. */ 
+            $('#library_table th').parent().after(contact_sheet); 
+ 
+            /* This is optional - it pushes all of the contact_sheet data into the console which helped me write and debug the code. */
+            console.log(contact_sheet); 
+ 
+          }); 
+        } 
+ 
+        /* This adds the search/filter function to the searchbox created in the "IntranetCirculationHomeHTML" system preference. */
+        $("#myInput").on("keyup", function () { 
+          var value = $(this).val().toLowerCase(); 
+          $(".filtertable .filterme").filter(function () { 
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1); 
+          }); 
+        }); 
+ 
+        $(".clear").click(function(){ 
+          $("#myInput").val("").keyup(); 
+          return false; 
+        }); 
+ 
+    }); 
+ 
+    /* ==================== */ 

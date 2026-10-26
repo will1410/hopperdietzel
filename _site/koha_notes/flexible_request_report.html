@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Flexible requests history | Untitled self-indulgent website</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Flexible requests history" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Website for George H. Williams" />
+<meta property="og:description" content="Website for George H. Williams" />
+<link rel="canonical" href="http://localhost:4000/koha_notes/flexible_request_report.html" />
+<meta property="og:url" content="http://localhost:4000/koha_notes/flexible_request_report.html" />
+<meta property="og:site_name" content="Untitled self-indulgent website" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Flexible requests history" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Website for George H. Williams","headline":"Flexible requests history","url":"http://localhost:4000/koha_notes/flexible_request_report.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="/assets/js/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="/assets/css/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <!--<li class="fork"><a href="">View On GitHub</a></li>-->
+          
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Untitled self-indulgent website</h1>
+          <p>Website for George H. Williams</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href=""></a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/mattgraham">mattgraham</a></span>
+        </div>
+
+        <h1 id="flexible-requests-history">Flexible requests history</h1>
+
+<p>Request history is an area in Koha where there isn’t one place to go where you can easily get all of the information you might want.  There’s no easy way to enter a bibliographic record ID or an item barcode number that gives you access to which borrowers placed requests on that title/item, or what the in-tranist history of that request was or what happened in the action logs or any of that useful stuff.  Likewise it can be difficult to look at a borrower’s account and see what exactly happened to a title or item they requested.  You can look in their requests history if that’s turned on, but even if it is, questions like ‘Who placed the request?’ or ‘Was this item ever shipped?’ are unanswered by the requests history tab in a patron’s record.  So this report can act as a dashboard for information about requests.</p>
+
+<p>It requires a few things:</p>
+
+<ul>
+  <li>An authorized values table with progress information</li>
+  <li>An authorized values table with suspended request information</li>
+  <li>An authorized values table with active request information</li>
+  <li>A report to get action logs by request id</li>
+  <li>A report to get in-transit history</li>
+</ul>
+
+<h2 id="dependencies">Dependencies</h2>
+
+<h3 id="authorized-values-entries">Authorized values entries</h3>
+
+<h4 id="request-progress">Request progress</h4>
+
+<p>In my Koha, this set of authorized values is called LHOLDPROG</p>
+
+<p>If you add “Flexible requests history” to your Koha, you will need to add this authorized values table to your Koha</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>category</th>
+      <th>authorised_value</th>
+      <th>lib</th>
+      <th>lib_opac</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>LHOLDPROG</td>
+      <td>%</td>
+      <td>All requests</td>
+      <td>All requests</td>
+    </tr>
+    <tr>
+      <td>LHOLDPROG</td>
+      <td>%trans%</td>
+      <td>In transit</td>
+      <td>In transit</td>
+    </tr>
+    <tr>
+      <td>LHOLDPROG</td>
+      <td>%Fill%</td>
+      <td>Filled</td>
+      <td>Filled</td>
+    </tr>
+    <tr>
+      <td>LHOLDPROG</td>
+      <td>%Wait%</td>
+      <td>Waiting for pickup</td>
+      <td>Waiting for pickup</td>
+    </tr>
+    <tr>
+      <td>LHOLDPROG</td>
+      <td>%Can%</td>
+      <td>Cancelled</td>
+      <td>Cancelled</td>
+    </tr>
+    <tr>
+      <td>LHOLDPROG</td>
+      <td>%active%</td>
+      <td>Still active</td>
+      <td>Still active</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="suspended-request-information">Suspended request information</h4>
+
+<p>In my Koha, this set of authorized values is called LHOLDSUS</p>
+
+<p>If you add this Flexible requests history report to your Koha, you will need to add this authorized values table to your Koha</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>category</th>
+      <th>authorised_value</th>
+      <th>lib</th>
+      <th>lib_opac</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>LHOLDSUS</td>
+      <td>%</td>
+      <td>All requests</td>
+      <td>All requests</td>
+    </tr>
+    <tr>
+      <td>LHOLDSUS</td>
+      <td>Suspended</td>
+      <td>Suspended requests</td>
+      <td>Suspended requests</td>
+    </tr>
+    <tr>
+      <td>LHOLDSUS</td>
+      <td>-</td>
+      <td>All non-suspended requests</td>
+      <td>All non-suspended requests</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="activeinactive-request-information">Active/inactive request information</h4>
+
+<p>In my Koha, this set of authorized values is called LHOLDACT</p>
+
+<p>If you add “Flexible requests history” to your Koha, you will need to add this authorized values table to your Koha</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>category</th>
+      <th>authorised_value</th>
+      <th>lib</th>
+      <th>lib_opac</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>LHOLDACT</td>
+      <td>%</td>
+      <td>All requests</td>
+      <td>All requests</td>
+    </tr>
+    <tr>
+      <td>LHOLDACT</td>
+      <td>Active</td>
+      <td>Active requests</td>
+      <td>Active requests</td>
+    </tr>
+    <tr>
+      <td>LHOLDACT</td>
+      <td>Filled</td>
+      <td>Filled requests</td>
+      <td>Filled requests</td>
+    </tr>
+    <tr>
+      <td>LHOLDACT</td>
+      <td>Cancelled</td>
+      <td>Cancelled requests</td>
+      <td>Cancelled requests</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="connected-reports">Connected reports</h3>
+
+<h4 id="request-action-logs-by-request-id">Request action logs by request ID</h4>
+
+<p>In my Koha, this is report 3040</p>
+
+<p>If you add “Flexible requests history” to your Koha, you would need to change the reference to report 3040 to match the report number in your Koha</p>
+
+<pre><code class="language-SQL">SELECT
+  action_logs.action_id,
+  action_logs.timestamp,
+  action_logs.user,
+  action_logs.module,
+  action_logs.action,
+  action_logs.object,
+  REPLACE(
+    action_logs.info, 
+    ',', 
+    ',&lt;br /&gt;'
+  ) AS DESCRIPTION,
+  action_logs.interface,
+  CONCAT(
+    '&lt;a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=', 
+    action_logs.user, 
+    '" target="_blank"&gt;See who created/modified/cancelled the request&lt;/a&gt;'
+  ) AS LINK
+FROM
+  action_logs
+WHERE
+  action_logs.module = "HOLDS" AND
+  action_logs.object LIKE Concat('%', &lt;&lt;Enter request ID number&gt;&gt;, '%')
+GROUP BY
+  action_logs.action_id
+ORDER BY
+  action_logs.action_id
+  DESC
+</code></pre>
+
+<h4 id="item-in-transit-history">Item in-transit history</h4>
+
+<p>In my Koha, this is report 2784</p>
+
+<p>If you add “Flexible requests history” you would need to change the reference to report 2784 to match the report number in your Koha</p>
+
+<pre><code class="language-SQL">SELECT
+  UPPER(items.barcode) AS ITEM_BC,
+  branchtransfers.itemnumber,
+  branchtransfers.frombranch,
+  branchtransfers.datesent,
+  branchtransfers.tobranch,
+  branchtransfers.datecancelled,
+  branchtransfers.datearrived,
+  branchtransfers.comments,
+  branchtransfers.cancellation_reason,
+  branchtransfers.reason
+FROM
+  items
+  JOIN branchtransfers ON branchtransfers.itemnumber = items.itemnumber
+WHERE
+  items.barcode LIKE Concat("%", &lt;&lt;Enter item barcode number&gt;&gt;,"%")
+GROUP BY
+  branchtransfers.branchtransfer_id
+ORDER BY
+  branchtransfers.datesent DESC
+</code></pre>
+
+<h2 id="flexible-requests-history---the-final-report">Flexible requests history - The final report</h2>
+
+<pre><code class="language-SQL">SELECT 
+  requests.reserve_id, 
+  Concat( 
+    'Status: ', 
+    requests.statuss, 
+    '&lt;br /&gt; Progress: ', 
+    If( 
+      requests.cancellationdate IS NOT NULL, 
+      'Cancelled', 
+      If( 
+        requests.found = 'T', 
+        'In transit', 
+        If( 
+          requests.found = 'F', 
+          'Finished / Filled', 
+          If( 
+            requests.found = 'W', 
+            'Waiting for pickup', 
+            'Still active' 
+          ) 
+        ) 
+      ) 
+    ) 
+  ) AS STATUS, 
+  Concat('Patron BC: ', borrowers.cardnumber, '&lt;br /&gt;', 'Pickup at: ', requests.branchcode) AS PATRON_INFO, 
+  Concat_Ws('&lt;br /&gt;', 
+    Concat('Requested on: ', requests.reservedate), Concat('Waiting since: ', requests.waitingdate), 
+    Concat('Expires on: ', requests.expirationdate), Concat('Cancelled on: ', requests.cancellationdate), 
+    Concat('Updated on: ', requests.timestamp)) AS DATES, 
+  Concat_Ws( 
+    '&lt;br /&gt;', 
+    If(requests.suspend &lt;&gt; 0, 'Suspended', '-'), 
+    If( 
+      requests.suspend = 0, 
+      '-', 
+      If( 
+        requests.suspend_until IS NOT NULL, 
+        Concat('until ', Date_Format(requests.suspend_until, '%Y.%m.%d')), 
+        'indefinitely' 
+      ) 
+    ) 
+  ) AS SUSPENDED, 
+  requests.biblionumber AS BIBLIO_NUMBER, 
+  Concat_Ws('&lt;br /&gt;', 
+    Concat( 
+      'BC: ', 
+      Coalesce(Coalesce(items.barcode, '-'), Coalesce(deleteditems.barcode, '-')) 
+    ), 
+    Concat( 
+      'Home: ', 
+      Coalesce(Coalesce(items.homebranch, '-'), Coalesce(deleteditems.homebranch, '-')) 
+    ), 
+    Concat( 
+      'Location: ', 
+      Coalesce(Coalesce(items.location, '-'), Coalesce(deleteditems.location, '-')) 
+    ), 
+    Concat( 
+      'Type: ', 
+      Coalesce(Coalesce(items.itype, '-'), Coalesce(deleteditems.itype, '-')) 
+    ), 
+    Concat( 
+      'Collection: ', 
+      Coalesce(Coalesce(items.ccode, '-'), Coalesce(deleteditems.ccode, '-')) 
+    ), 
+    Concat( 
+      'Call#: ', 
+      Coalesce(Coalesce(items.itemcallnumber, '-'), Coalesce(deleteditems.itemcallnumber, '-')) 
+    ), 
+    Concat( 
+      'Author: ', 
+      Coalesce(Coalesce(biblio.author, '-'), Coalesce(deletedbiblio.author, '-')) 
+    ), 
+    Concat( 
+      'Title: ', 
+      Coalesce(Coalesce(biblio.title, '-'), Coalesce(deletedbiblio.title, '-')) 
+      ) 
+  ) AS ITEM_INFO, 
+  CONCAT_WS('&lt;br /&gt;', 
+    Concat( 
+      'Action logs: ', 
+      Concat( 
+        '&lt;a href="/cgi-bin/koha/reports/guided_reports.pl?id=', 
+        '3040', 
+        '&amp;param_name=Enter+request+ID+number&amp;sql_params=', 
+        requests.reserve_id, 
+        '&amp;op=run', 
+        '" target="_blank"&gt;see last 60 days of activity&lt;/a&gt;' 
+      ) 
+    ), 
+    Concat( 
+      'Link to patron: ', 
+      Concat('&lt;a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=', 
+      requests.borrowernumber, 
+      '" target="_blank"&gt;go to the borrower"s record&lt;/a&gt;' 
+      ) 
+    ), 
+    Concat( 
+      'Link to title: ', 
+      Concat('&lt;a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=', 
+      requests.biblionumber, 
+      '" target="_blank"&gt;go to the bibliographic record&lt;/a&gt;' 
+      ) 
+    ), 
+    Concat( 
+      'Link to item: ', 
+      Concat('&lt;a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=', 
+      items.itemnumber, 
+      '&amp;biblionumber=', 
+      biblio.biblionumber, 
+      '" target="_blank"&gt;go to the item record&lt;/a&gt;' 
+      ) 
+    ), 
+    Concat( 
+      'Item in transit history: ', 
+      Concat('&lt;a href="/cgi-bin/koha/reports/guided_reports.pl?id=', 
+        '2784', 
+        '&amp;param_name=Enter+item+barcode+number&amp;sql_params=', 
+        items.barcode, 
+        '&amp;op=run', 
+        '" target="_blank"&gt;see item transit history&lt;/a&gt;' 
+      ) 
+    ) 
+) AS LINKS 
+FROM 
+  borrowers 
+  JOIN (SELECT 
+        reserves.reserve_id, 
+        reserves.borrowernumber, 
+        reserves.reservedate, 
+        reserves.biblionumber, 
+        reserves.branchcode, 
+        reserves.notificationdate, 
+        reserves.reminderdate, 
+        reserves.cancellationdate, 
+        reserves.reservenotes, 
+        reserves.priority, 
+        reserves.found, 
+        reserves.timestamp, 
+        reserves.itemnumber, 
+        reserves.waitingdate, 
+        reserves.expirationdate, 
+        reserves.lowestPriority, 
+        reserves.suspend, 
+        reserves.suspend_until, 
+        reserves.itemtype, 
+        If(reserves.reserve_id IS NOT NULL, 'Active', '-') AS statuss 
+      FROM 
+        reserves 
+      UNION 
+      SELECT 
+        old_reserves.reserve_id, 
+        old_reserves.borrowernumber, 
+        old_reserves.reservedate, 
+        old_reserves.biblionumber, 
+        old_reserves.branchcode, 
+        old_reserves.notificationdate, 
+        old_reserves.reminderdate, 
+        old_reserves.cancellationdate, 
+        old_reserves.reservenotes, 
+        old_reserves.priority, 
+        old_reserves.found, 
+        old_reserves.timestamp, 
+        old_reserves.itemnumber, 
+        old_reserves.waitingdate, 
+        old_reserves.expirationdate, 
+        old_reserves.lowestPriority, 
+        old_reserves.suspend, 
+        old_reserves.suspend_until, 
+        old_reserves.itemtype, 
+        If(old_reserves.cancellationdate IS NOT NULL, 'Cancelled', 'Finished / Filled') AS statuss 
+      FROM 
+        old_reserves) requests ON borrowers.borrowernumber = requests.borrowernumber 
+  LEFT JOIN items ON requests.itemnumber = items.itemnumber 
+  LEFT JOIN deleteditems ON requests.itemnumber = deleteditems.itemnumber 
+  LEFT JOIN biblio ON requests.biblionumber = biblio.biblionumber 
+  LEFT JOIN deletedbiblio ON requests.biblionumber = deletedbiblio.biblionumber 
+WHERE 
+  requests.branchcode LIKE &lt;&lt;Choose pickup library|branches:all&gt;&gt; AND 
+  requests.statuss LIKE &lt;&lt;Choose request status|LHOLDACT&gt;&gt; AND 
+  If( 
+    requests.cancellationdate IS NOT NULL, 
+    'Cancelled', 
+    If( 
+      requests.found = 'T', 'In transit', 
+      If( 
+        requests.found = 'F', 'Finished', 
+        If( 
+          requests.found = 'W', 
+          'Waiting for pickup', 
+          'Still active' 
+        ) 
+      ) 
+    ) 
+  ) LIKE &lt;&lt;Choose request progress|LHOLDPROG&gt;&gt; AND 
+  If(requests.suspend &lt;&gt; 0, 'Suspended', '-') LIKE &lt;&lt;Choose suspended status|LHOLDSUS&gt;&gt; AND 
+  borrowers.cardnumber LIKE Concat('%', &lt;&lt;Enter library card number or a % symbol&gt;&gt;, '%') AND 
+  requests.biblionumber LIKE Concat('%', &lt;&lt;Enter title biblio number or a % symbol&gt;&gt;, '%') AND 
+  Coalesce( 
+    Coalesce(items.barcode, '-'), Coalesce(deleteditems.barcode, '-') 
+  ) LIKE Concat('%', &lt;&lt;Enter item barcode number or a % symbol&gt;&gt;, '%') 
+GROUP BY 
+  requests.reserve_id 
+ORDER BY 
+  requests.timestamp DESC 
+</code></pre>
+
+
+      </section>
+
+    </div>
+
+    
+  </body>
+</html>
