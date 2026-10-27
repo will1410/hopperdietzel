@@ -1,4 +1,4 @@
-# Presentations, Panels, and other conference activities by George H. Williams
+# Presentations, Panels, and other conference activities
 
 ## MPLA Conference - October 3, 2025, Grand Forks, North Dakota
 
